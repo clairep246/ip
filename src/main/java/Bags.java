@@ -107,8 +107,24 @@ public class Bags {
                         System.out.println(divider);
                     }
                 }
-            }
-            else {
+            } else if (output.startsWith("unmark")) {
+                String[] temp = output.split(" ");
+                if (temp.length == 1) {
+                    System.out.println("Missing task number");
+                    System.out.println(divider);
+                } else {
+                    int taskNumber = Integer.parseInt(temp[1]);
+
+                    if (taskNumber > taskCount || taskNumber <= 0) {
+                        System.out.println("Task does not exist");
+                        System.out.println(divider);
+                    } else {
+                        done[taskNumber - 1] = false;
+                        System.out.println("Marked task " + taskNumber + " as undone.");
+                        System.out.println(divider);
+                    }
+                }
+            } else {
                     System.out.println("I don't know that command.");
                     System.out.println(divider);
                 }
