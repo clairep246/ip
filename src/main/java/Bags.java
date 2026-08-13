@@ -15,6 +15,8 @@ public class Bags {
         String[] store = new String[100];
         int taskCount = 0;
 
+        boolean[] done = new boolean[100];
+
         // Printing
         System.out.println(divider);
         System.out.println(banner);
@@ -29,12 +31,12 @@ public class Bags {
         while (!output.equals("bye")) {
 
             if (output.equals("echo")) {
-                System.out.println("From now on I will echo your input, please enter your input. To exit enter done");
+                System.out.println("From now on I will echo your input, please enter your input. To exit enter exit");
                 System.out.println(divider);
 
                 String echo = scanner.nextLine();
 
-                while (!echo.equals("done")) {
+                while (!echo.equals("exit")) {
                     System.out.println(echo);
                     System.out.println(divider);
 
@@ -46,12 +48,12 @@ public class Bags {
 
             } else if (output.equals("add task")) {
 
-                System.out.println("Please enter your task. To exit editing mode, enter done");
+                System.out.println("Please enter your task. To exit editing mode, enter exit");
                 System.out.println(divider);
 
                 String task = scanner.nextLine();
 
-                while (!task.equals("done")) {
+                while (!task.equals("exit")) {
 
                     if (taskCount < store.length) {
                         store[taskCount] = task;
@@ -80,21 +82,43 @@ public class Bags {
                 } else {
                     System.out.println("Here are your tasks:");
                     for (int i = 0; i < taskCount; i++) {
-                        System.out.println((i + 1) + ". " + store[i] + "\n");
+                        if (!done[i]) {
+                            System.out.println( "[ ]" + store[i] + "\n");
+                        } else {
+                            System.out.println("[X]" + store[i] + "\n");
+                        }
                     }
                     System.out.println(divider);
                 }
-            } else {
-                System.out.println("I don't know that command.");
-                System.out.println(divider);
+            } else if (output.startsWith("mark")) {
+                String[] temp = output.split(" ");
+                if (temp.length == 1) {
+                    System.out.println("Missing task number");
+                    System.out.println(divider);
+                } else {
+                    int taskNumber = Integer.parseInt(temp[1]);
+
+                    if (taskNumber > taskCount || taskNumber <= 0) {
+                        System.out.println("Task does not exist");
+                        System.out.println(divider);
+                    } else {
+                        done[taskNumber - 1] = true;
+                        System.out.println("Marked task " + taskNumber + " as done.");
+                        System.out.println(divider);
+                    }
+                }
             }
+            else {
+                    System.out.println("I don't know that command.");
+                    System.out.println(divider);
+                }
 
-            // Ask for another command
-            System.out.println("What can I do for you?");
-            System.out.println(divider);
+                // Ask for another command
+                System.out.println("What can I do for you?");
+                System.out.println(divider);
 
-            output = scanner.nextLine();
-        }
+                output = scanner.nextLine();
+            }
 
         System.out.println("Bye. Hope to see you again soon!");
         System.out.println(divider);
