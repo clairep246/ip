@@ -1,13 +1,13 @@
-public class Task {
+public class ToDo {
     private String name;
-    private static int taskCount = 0;
+    private static int todoCount = 0;
+    private int todoId;
     private boolean isDone;
-    private int taskId;
 
-    public Task(String name) {
+    public ToDo(String name) {
         this.name = name;
-        taskCount ++;
-        this.taskId = taskCount;
+        todoCount++;
+        this.todoId = todoCount;
         this.isDone = false;
     }
 
@@ -19,8 +19,8 @@ public class Task {
         this.isDone = false;
     }
 
-    public int getTaskId(){
-        return this.taskId;
+    public int getTodoId() {
+        return this.todoId;
     }
 
     public String getName() {
@@ -28,10 +28,11 @@ public class Task {
     }
 
     public String getStatusIcon() {
-        return (isDone ? "X" : " "); // mark done task with X
+        return (isDone ? "X" : " ");
     }
 
-    public String getDeadline() {
-        return "";
+    @Override
+    public String toString() {
+        return "[T][" + getStatusIcon() + "] " + name;
     }
 }
