@@ -41,9 +41,13 @@ public class Bags {
 
                         String[] temp = output.split(" ");
 
-                        String name = temp[1];
+                        StringBuilder name = new StringBuilder();
 
-                        ToDo newTodo = new ToDo(name);
+                        for (int i = 1; i < temp.length; i++) {
+                            name.append(temp[i]).append(" ");
+                        }
+
+                        ToDo newTodo = new ToDo(name.toString());
                         store.add(newTodo);
 
                         System.out.println("Got it. I've added this task:");
@@ -143,7 +147,7 @@ public class Bags {
                 System.out.println("Exited editing mode");
                 System.out.println(divider);
             }
-           else if (output.equals("list")) {
+            else if (output.equals("list")) {
                 if (store.isEmpty()) {
                     System.out.println("Your task list is empty.");
                 } else {
@@ -154,7 +158,8 @@ public class Bags {
                 }
                 System.out.println(divider);
                 // MARK
-            } else if (output.startsWith("mark ")) {
+            }
+            else if (output.startsWith("mark ")) {
 
                 String[] temp = output.split(" ");
 
@@ -186,7 +191,8 @@ public class Bags {
                 System.out.println(divider);
 
                 // UNMARK
-            } else if (output.startsWith("unmark ")) {
+            }
+            else if (output.startsWith("unmark ")) {
                 String[] temp = output.split(" ");
                 if (temp.length == 1) {
                     System.out.println("Missing task number.");
@@ -215,7 +221,8 @@ public class Bags {
                 System.out.println(divider);
 
                 // ECHO
-            } else if (output.equals("echo")) {
+            }
+            else if (output.equals("echo")) {
 
                 System.out.println("From now on I will echo your input. To exit enter exit.");
                 System.out.println(divider);
@@ -233,7 +240,8 @@ public class Bags {
                 System.out.println(divider);
 
                 // UNKNOWN
-            } else {
+            }
+            else {
                 System.out.println("The command does not exist.");
                 System.out.println(divider);
             }
@@ -243,7 +251,7 @@ public class Bags {
 
             output = scanner.nextLine();
         }
-
+        //End of loop goodbye
         System.out.println("Bye. Hope to see you again soon!");
         System.out.println(divider);
 
