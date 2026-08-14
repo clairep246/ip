@@ -29,6 +29,17 @@ public class Bags {
         System.out.println(divider);
 
         while (!output.equals("bye")) {
+            if (output.trim().isEmpty()) {
+                System.out.println("Oops no command was entered. Please enter a command.");
+                System.out.println(divider);
+
+                System.out.println("What can I do for you?");
+                System.out.println(divider);
+
+                output = scanner.nextLine();
+                continue;
+            }
+
             if (output.equals("add task")) {
                 System.out.println("Enter your task. Specify type of task in front, add /by for deadline task, add /from and /to for event task. To exit enter exit.");
                 System.out.println(divider);
@@ -37,9 +48,11 @@ public class Bags {
 
                 while (!output.equals("exit")) {
                     //TODO
+                    String[] temp = output.split(" ");
+                    if (temp.length < 2) {
+                        System.out.print("Missing task description! ");
+                    }
                     if (output.startsWith("todo")) {
-
-                        String[] temp = output.split(" ");
 
                         StringBuilder name = new StringBuilder();
 
@@ -58,7 +71,6 @@ public class Bags {
                         // DEADLINE
                     } else if (output.startsWith("deadline")) {
 
-                        String[] temp = output.split(" ");
                         int byIndex = -1;
                         for (int i = 0; i < temp.length; i++) {
                             if (temp[i].equals("/by")) {
@@ -93,8 +105,6 @@ public class Bags {
 
                         // EVENT
                     } else if (output.startsWith("event")) {
-
-                        String[] temp = output.split(" ");
                         int fromIndex = -1;
                         int toIndex = -1;
 
@@ -138,7 +148,7 @@ public class Bags {
                             System.out.println(divider);
                         }
                     } else {
-                        System.out.println("Not a valid task type");
+                        System.out.println("Not a valid task type, only event, to do or deadline task. ");
                         System.out.println(divider);
                     }
 
@@ -217,7 +227,7 @@ public class Bags {
                 // UNKNOWN
             }
             else {
-                System.out.println("The command does not exist.");
+                System.out.println("The command does not exist. Please try again :(");
                 System.out.println(divider);
             }
 
