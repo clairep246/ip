@@ -5,7 +5,7 @@ public class Bags {
     private static final String divider =
             "____________________________________________________________";
     public static ArrayList<Task> store = new ArrayList<>();
-    //used AI to generate banner
+    //used ChatGPT to generate banner
     private static final String banner =
             " ____                  \n"
                     + "| __ )  __ _  __ _ ___ \n"
@@ -15,11 +15,13 @@ public class Bags {
                     + "               |___/";
 
     public static void main(String[] args) {
+        //@@author {clairep246}-reused
+        //Reused from https://www.w3schools.com/java/java_user_input.asp
         Scanner scanner = new Scanner(System.in);
-
         printWelcome();
 
         String output = scanner.nextLine();
+        //@@author
         System.out.println(divider);
 
         while (!output.equals("bye")) {
@@ -73,7 +75,7 @@ public class Bags {
         System.out.println("Bye. Hope to see you again soon!");
         System.out.println(divider);
     }
-
+    //Solution below adapted from https://stackoverflow.com/a/30467655
     private static Tasktype matchTaskType(String input) {
         if (input.startsWith("todo")) {
             return Tasktype.TODO;
@@ -271,6 +273,7 @@ public class Bags {
         }
 
         try {
+            //Solution below inspired by https://stackoverflow.com/a/5585800
             int taskNumber = Integer.parseInt(temp[1]);
             if (taskNumber <= 0 || taskNumber > store.size()) {
                 throw new BagsException("Task does not exist. Please only input number 1 to " + store.size());
@@ -293,6 +296,7 @@ public class Bags {
         }
 
         try {
+            //Solution inspired by https://stackoverflow.com/a/5585800
             int taskNumber = Integer.parseInt(temp[1]);
             if (taskNumber <= 0 || taskNumber > store.size()) {
                 throw new BagsException("Task does not exist.Enter value from 1 to " + store.size());
@@ -316,6 +320,7 @@ public class Bags {
         }
 
         try {
+            //Solution below inspired by https://stackoverflow.com/a/5585800
             int taskNumber = Integer.parseInt(temp[1]);
             if (taskNumber <= 0 || taskNumber > store.size()) {
                 throw new BagsException("Task does not exist. Enter value from 1 to " + store.size());
