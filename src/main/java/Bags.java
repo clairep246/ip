@@ -5,6 +5,7 @@ public class Bags {
     private static final String divider =
             "____________________________________________________________";
     public static ArrayList<Task> store = new ArrayList<>();
+    //used AI to generate banner
     private static final String banner =
             " ____                  \n"
                     + "| __ )  __ _  __ _ ___ \n"
