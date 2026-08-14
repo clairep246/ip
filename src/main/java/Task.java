@@ -1,13 +1,11 @@
-public class Task {
-    private String name;
-    private static int taskCount = 0;
-    private boolean isDone;
-    private int taskId;
+public abstract class Task {
+    protected String description;
+    protected boolean isDone;
+    protected Tasktype type;
 
-    public Task(String name) {
-        this.name = name;
-        taskCount ++;
-        this.taskId = taskCount;
+    public Task(String description, Tasktype type) {
+        this.description = description;
+        this.type = type;
         this.isDone = false;
     }
 
@@ -19,19 +17,24 @@ public class Task {
         this.isDone = false;
     }
 
-    public int getTaskId(){
-        return this.taskId;
+    public Tasktype getType() {
+        return this.type;
     }
 
-    public String getName() {
-        return this.name;
+    public String getDescription() {
+        return this.description;
     }
 
-    public String getStatusIcon() {
-        return (isDone ? "X" : " "); // mark done task with X
+    public boolean isDone() {
+        return this.isDone;
     }
 
-    public String getDeadline() {
-        return "";
+    protected String getStatusIcon() {
+        return this.isDone ? "X" : " ";
+    }
+
+    @Override
+    public String toString() {
+        return "[" + getStatusIcon() + "] " + description;
     }
 }

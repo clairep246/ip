@@ -1,12 +1,18 @@
-public class Deadlines extends Task{
+public class Deadlines extends Task {
     private String deadline;
-    public Deadlines(String name, String deadline) {
-        super(name);
+
+    public Deadlines(String description, String deadline) {
+        super(description, Tasktype.DEADLINE);
         this.deadline = deadline;
+    }
+
+    public String getDeadline() {
+        return this.deadline;
     }
 
     @Override
     public String toString() {
-        return "[D][" + super.getStatusIcon() + "] " + super.getName() + " (by: " + this.deadline + ")";
+        return "[D][" + super.getStatusIcon() + "] " + super.getDescription()
+                + " (by: " + this.deadline + ")";
     }
 }
