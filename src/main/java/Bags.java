@@ -207,9 +207,10 @@ public class Bags {
 
                         Task task = store.get(taskNumber - 1);
                         task.markDone();
-                        System.out.println("Marked task " + taskNumber + " as done.");
+                        System.out.println("Ok! I've marked this task as done: ");
+                        System.out.println(task.toString());
                     } catch (NumberFormatException e) {
-                        throw new BagsException("Invalid task number! Please enter a valid number.");
+                        throw new BagsException("Invalid task number! Please enter a valid number from 1 to " + store.size());
                     }
 
                     // UNMARK
@@ -228,9 +229,10 @@ public class Bags {
 
                         Task task = store.get(taskNumber - 1);
                         task.markUndone();
-                        System.out.println("Marked task " + taskNumber + " as undone.");
+                        System.out.println("Alright! I've marked this task as undone: ");
+                        System.out.println(task.toString());
                     } catch (NumberFormatException e) {
-                        throw new BagsException("Invalid task number. Please enter a valid number.");
+                        throw new BagsException("Invalid task number. Please enter a valid number from 1 to " + store.size());
                     }
 
                     // ECHO
@@ -253,7 +255,8 @@ public class Bags {
                     System.out.println("Exited echo mode.");
 
                     // UNKNOWN COMMAND
-                } else {
+                }
+                else {
                     throw new BagsException("The command does not exist. Please try again :(");
                 }
 
