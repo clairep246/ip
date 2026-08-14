@@ -85,7 +85,7 @@ public class Bags {
     }
 
     private static void addTask(Scanner scanner) {
-        System.out.println("Enter your task. \n Specify type of task in front, add /by for deadline task, add /from and /to for event task. \n To exit enter exit.");
+        System.out.println("Enter your task. \nSpecify type of task in front, add /by for deadline task, add /from and /to for event task. \nTo exit enter exit.");
         System.out.println(divider);
 
         String output = scanner.nextLine();
