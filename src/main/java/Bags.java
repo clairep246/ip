@@ -15,7 +15,7 @@ public class Bags {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        ArrayList<Object> store = new ArrayList<>();
+        ArrayList<Task> store = new ArrayList<>();
 
         System.out.println(divider);
         System.out.println(banner);
@@ -170,28 +170,15 @@ public class Bags {
                     if (taskNumber <= 0 || taskNumber > store.size()) {
                         System.out.println("Task does not exist.");
                     } else {
-                        Object task = store.get(taskNumber - 1);
-                        if (task instanceof ToDo) {
-                            ToDo toDo = (ToDo) task;
-                            toDo.markDone();
-
-                        } else if (task instanceof Deadlines) {
-                            Deadlines deadlines = (Deadlines) task;
-                            deadlines.markDone();
-
-                        } else if (task instanceof Event) {
-                            Event event = (Event) task;
-                            event.markDone();
-                        }
-
+                        Task task = store.get(taskNumber - 1);
+                        task.markDone();
                         System.out.println("Marked task " + taskNumber + " as done.");
                     }
                 }
 
                 System.out.println(divider);
-
-                // UNMARK
             }
+            //UNMARK
             else if (output.startsWith("unmark ")) {
                 String[] temp = output.split(" ");
                 if (temp.length == 1) {
@@ -201,20 +188,8 @@ public class Bags {
                     if (taskNumber <= 0 || taskNumber > store.size()) {
                         System.out.println("Task does not exist.");
                     } else {
-                        Object task = store.get(taskNumber - 1);
-                        if (task instanceof ToDo) {
-                            ToDo toDo = (ToDo) task;
-                            toDo.markUndone();
-
-                        } else if (task instanceof Deadlines) {
-                            Deadlines deadlines = (Deadlines) task;
-                            deadlines.markUndone();
-
-                        } else if (task instanceof Event) {
-                            Event event = (Event) task;
-                            event.markUndone();
-                        }
-
+                        Task task = store.get(taskNumber - 1);
+                        task.markUndone();
                         System.out.println("Marked task " + taskNumber + " as undone.");
                     }
                 }
