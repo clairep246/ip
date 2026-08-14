@@ -255,6 +255,28 @@ public class Bags {
                     System.out.println("Exited echo mode.");
 
                     // UNKNOWN COMMAND
+                } else if (output.startsWith("delete")){
+                    String[] temp = output.split(" ");
+
+                    if (temp.length < 2) {
+                        throw new BagsException("Missing task number. Enter value from 1 to " + store.size());
+                    }
+
+                    try {
+                        int taskNumber = Integer.parseInt(temp[1]);
+                        if (taskNumber <= 0 || taskNumber > store.size()) {
+                            throw new BagsException("Task does not exist. Enter value from 1 to " + store.size());
+                        }
+
+                        Task task = store.get(taskNumber - 1);
+                        store.remove(taskNumber - 1);
+                        System.out.println("Got it! I've deleted the following task: ");
+                        System.out.println(task.toString());
+                        System.out.println("You now have " + store.size() + " in your task list.");
+                    } catch (NumberFormatException e) {
+                        throw new BagsException("Invalid task number. Please enter a valid number from 1 to " + store.size());
+                    }
+
                 }
                 else {
                     throw new BagsException("The command does not exist. Please try again :(");
