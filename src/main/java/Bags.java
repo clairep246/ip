@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 public class Bags {
 
+    // Used by command-specific interactions that will move to Ui next.
     private static final String divider
             = "____________________________________________________________";
 
@@ -15,18 +16,10 @@ public class Bags {
     // Stores the formatted strings that will be written to Bags.txt
     public static ArrayList<String> readingFile = new ArrayList<>();
 
-    // Used ChatGPT to generate banner 
-    private static final String banner
-            = " ____                  \n"
-            + "| __ )  __ _  __ _ ___ \n"
-            + "|  _ \\ / _` |/ _` / __|\n"
-            + "| |_) | (_| | (_| \\__ \\\n"
-            + "|____/ \\__,_|\\__, |___/\n"
-            + "               |___/";
-
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
+        Ui ui = new Ui();
 
         try {
             loadTasks();
@@ -34,10 +27,10 @@ public class Bags {
             System.out.println("Error!! " + e.getMessage());
         }
 
-        printWelcome();
+        ui.showWelcome();
 
         String output = scanner.nextLine();
-        System.out.println(divider);
+        ui.showDivider();
 
         while (!output.startsWith("bye")) {
 
@@ -73,16 +66,14 @@ public class Bags {
                 System.out.println("Error!! " + e.getMessage());
             }
 
-            System.out.println(divider);
-            System.out.println("What can I do for you?");
-            System.out.println(divider);
+            ui.showPrompt();
 
             output = scanner.nextLine();
         }
 
         saveTasks();
 
-        printGoodbye();
+        ui.showGoodbye();
 
         scanner.close();
     }
@@ -109,26 +100,6 @@ public class Bags {
         }
 
     }
-
-    /*private static String parseTimeHelper(String dateAndTime) throws BagsException {
-
-        try {
-
-            DateTimeFormatter inputFormatter
-                    = DateTimeFormatter.ofPattern("dd/MM/yyyy h:mma");
-            LocalDateTime temp = LocalDateTime.parse(dateAndTime, inputFormatter);
-
-            DateTimeFormatter outputFormatter
-                    = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
-            return temp.format(outputFormatter);
-
-        } catch (DateTimeParseException e) {
-            throw new BagsException("Wrong date/time format! Please use yyyy-MM-dd HH:mm "
-                    + "(e.g. 2026-08-25 14:30)."
-            );
-        }
-    }*/
 
     //Convert String from File into Task objects
     private static Task parseTask(String taskString) throws BagsException {
@@ -194,23 +165,6 @@ public class Bags {
 
     private static void saveTasks() {
         FileReading.storeTaskContents(readingFile);
-    }
-
-    private static void printWelcome() {
-
-        System.out.println(divider);
-        System.out.println(banner);
-        System.out.println(divider);
-        System.out.println("Hello! I'm Bags. Nice to meet you!");
-        System.out.println(divider);
-        System.out.println("What can I do for you?");
-        System.out.println(divider);
-    }
-
-    private static void printGoodbye() {
-
-        System.out.println("Bye. Hope to see you again soon!");
-        System.out.println(divider);
     }
 
     //Match task type according to user input 
