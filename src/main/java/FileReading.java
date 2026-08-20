@@ -11,11 +11,27 @@ import java.util.Scanner;
 public class FileReading {
 
     private static final String FILE_PATH = "./data/Bags.txt";
+    private static final String LEGACY_FILE_PATH = "./src/main/java/data/Bags.txt";
+
+    /**
+     * Uses the normal runtime save location, while still opening an existing
+     * save created when the Java source folder was the working directory.
+     */
+    private static File getSaveFile() {
+        File saveFile = new File(FILE_PATH);
+        File legacyFile = new File(LEGACY_FILE_PATH);
+
+        if (!saveFile.exists() && legacyFile.exists()) {
+            return legacyFile;
+        }
+
+        return saveFile;
+    }
 
     //Stores the strings from readingFile into Bags.txt.
     public static void storeTaskContents(List<String> readingFile) {
 
-        File file = new File(FILE_PATH);
+        File file = getSaveFile();
 
         File parentDir = file.getParentFile();
 
@@ -42,7 +58,7 @@ public class FileReading {
 
         List<String> result = new ArrayList<>();
 
-        File file = new File(FILE_PATH);
+        File file = getSaveFile();
 
         try (Scanner s = new Scanner(file)) {
 

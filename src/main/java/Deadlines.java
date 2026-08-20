@@ -1,9 +1,11 @@
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class Deadlines extends Task {
 
+    private static final DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     private LocalDateTime deadline;
     private String formatted_deadline;
 
@@ -11,12 +13,11 @@ public class Deadlines extends Task {
         super(description, Tasktype.DEADLINE);
 
         try {
-        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        this.deadline = LocalDateTime.parse(deadline, inputFormatter);
-     
-        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy h:mma");
-        this.formatted_deadline = this.deadline.format(outputFormatter);
-        
+            this.deadline = LocalDateTime.parse(deadline, inputFormatter);
+
+            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy h:mma");
+            this.formatted_deadline = this.deadline.format(outputFormatter);
+
         } catch (DateTimeParseException e) {
             throw new BagsException("Please key in date in correct format: year-month-date hh:mm in 24h");
         }
@@ -34,6 +35,7 @@ public class Deadlines extends Task {
 
     @Override
     public String parseEvent() {
-        return "D | " + "[" + getStatusIcon() + "] | " + description + " | " + formatted_deadline;
+        return "D | " + "[" + getStatusIcon() + "] | " + description + " | "
+                + deadline.format(inputFormatter);
     }
 }
