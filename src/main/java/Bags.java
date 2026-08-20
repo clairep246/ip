@@ -12,6 +12,8 @@ public class Bags {
     // Stores Task objects 
     public static ArrayList<Task> store = new ArrayList<>();
 
+    private static final Storage storage = new Storage("./data/Bags.txt");
+
     // Stores the formatted strings that will be written to Bags.txt
     public static ArrayList<String> readingFile = new ArrayList<>();
 
@@ -82,7 +84,7 @@ public class Bags {
      */
     private static void loadTasks() throws BagsException {
 
-        List<String> savedTasks = FileReading.readFileContents();
+        List<String> savedTasks = storage.load();
 
         store.clear();
         readingFile.clear();
@@ -131,8 +133,6 @@ public class Bags {
             String description = parts[2].trim();
             String deadline = parts[3].trim();
 
-            //String formattedDeadline = parseTimeHelper(deadline);
-
             task = new Deadlines(description, deadline);
 
         } else if (type.equals("E")) {
@@ -144,9 +144,6 @@ public class Bags {
             String description = parts[2].trim();
             String from = parts[3].trim();
             String to = parts[4].trim();
-
-            //String formattedFrom = parseTimeHelper(from);
-            //String formattedTo = parseTimeHelper(to);
 
             task = new Event(description, from, to);
         }
@@ -162,7 +159,7 @@ public class Bags {
     }
 
     private static void saveTasks() {
-        FileReading.storeTaskContents(readingFile);
+        storage.save(readingFile);
     }
 
     //Match task type according to user input 

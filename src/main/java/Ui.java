@@ -3,6 +3,7 @@ import java.util.Scanner;
 /**
  * Handles the chatbot's general messages and prompts shown to the user.
  */
+//Use of AI to generate class and move UI related methods to UI class 
 public class Ui {
 
     private static final String DIVIDER

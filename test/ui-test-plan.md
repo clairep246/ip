@@ -4,7 +4,7 @@ The cases below cover each current user command. Each case records its aim, cons
 
 ```json
 {
-  "build_command": ["javac", "-d", ".test-ui-build", "src/main/java/Bags.java", "src/main/java/BagsException.java", "src/main/java/FileReading.java", "src/main/java/Tasktype.java", "src/main/java/Task.java", "src/main/java/ToDo.java", "src/main/java/Deadlines.java", "src/main/java/Event.java", "src/main/java/Ui.java"],
+  "build_command": ["javac", "-d", ".test-ui-build", "src/main/java/Bags.java", "src/main/java/BagsException.java", "src/main/java/Storage.java", "src/main/java/Tasktype.java", "src/main/java/Task.java", "src/main/java/ToDo.java", "src/main/java/Deadlines.java", "src/main/java/Event.java", "src/main/java/Ui.java"],
   "tests": [
     {
       "id": "empty-list-and-bye",
