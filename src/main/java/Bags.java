@@ -2,8 +2,8 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
 //Main chatbot class 
+
 public class Bags {
 
     private static final String divider
@@ -28,7 +28,11 @@ public class Bags {
 
         Scanner scanner = new Scanner(System.in);
 
-        loadTasks();
+        try {
+            loadTasks();
+        } catch (BagsException e) {
+            System.out.println("Error!! " + e.getMessage());
+        }
 
         printWelcome();
 
@@ -85,29 +89,49 @@ public class Bags {
 
     /**
      * Load task when chatbot is started store in reading file and parsed into
-     * Task objects using parseTask helper
-     * *
+     * Task objects using parseTask helper *
      */
-    private static void loadTasks() {
+    private static void loadTasks() throws BagsException {
 
         List<String> savedTasks = FileReading.readFileContents();
 
+        store.clear();
         readingFile.clear();
-        readingFile.addAll(savedTasks);
 
-        for (String taskString : readingFile) {
+        for (String taskString : savedTasks) {
 
             Task task = parseTask(taskString);
 
             if (task != null) {
                 store.add(task);
+                readingFile.add(task.parseEvent());
             }
         }
 
     }
 
+    /*private static String parseTimeHelper(String dateAndTime) throws BagsException {
+
+        try {
+
+            DateTimeFormatter inputFormatter
+                    = DateTimeFormatter.ofPattern("dd/MM/yyyy h:mma");
+            LocalDateTime temp = LocalDateTime.parse(dateAndTime, inputFormatter);
+
+            DateTimeFormatter outputFormatter
+                    = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+            return temp.format(outputFormatter);
+
+        } catch (DateTimeParseException e) {
+            throw new BagsException("Wrong date/time format! Please use yyyy-MM-dd HH:mm "
+                    + "(e.g. 2026-08-25 14:30)."
+            );
+        }
+    }*/
+
     //Convert String from File into Task objects
-    private static Task parseTask(String taskString) {
+    private static Task parseTask(String taskString) throws BagsException {
 
         String[] parts = taskString.split("\\|");
 
@@ -138,6 +162,8 @@ public class Bags {
             String description = parts[2].trim();
             String deadline = parts[3].trim();
 
+            //String formattedDeadline = parseTimeHelper(deadline);
+
             task = new Deadlines(description, deadline);
 
         } else if (type.equals("E")) {
@@ -150,13 +176,16 @@ public class Bags {
             String from = parts[3].trim();
             String to = parts[4].trim();
 
+            //String formattedFrom = parseTimeHelper(from);
+            //String formattedTo = parseTimeHelper(to);
+
             task = new Event(description, from, to);
         }
 
         /*Mark task as done  
         * since the task created is marked undone, need to manually mark it as done 
          */
-        if (task != null && !status.equals("[ ]")) {
+        if (task != null && status.equals("[X]")) {
             task.markDone();
         }
 
@@ -203,11 +232,14 @@ public class Bags {
         return null;
     }
 
-    private static void addTask(Scanner scanner) {
+    private static void addTask(Scanner scanner) throws BagsException{
 
         System.out.println(""" 
                            Enter your task. 
-                           Specify type of task in front, add /by for deadline task, add /from and /to for event task. 
+                           Format for each task type, follow the format closely: 
+                            1. todo <task name>
+                            2. deadline <name> /by <year-month-day> <hour:minutes>
+                            3. event <name> /from <year-month-day> <hour:minutes> <name> /to <year-month-day> <hour:minutes>
                            To exit enter exit.""");
 
         System.out.println(divider);
@@ -235,7 +267,8 @@ public class Bags {
                     throw new BagsException("Not a valid task type, only event, to do or deadline task.");
                 }
 
-                //After added task, save into the file 
+                // Keep the in-memory task list and its saved representation aligned.
+                readingFile.set(readingFile.size() - 1, task.parseEvent());
                 saveTasks();
 
                 System.out.println("Got it, I've added the following task to the list: ");
