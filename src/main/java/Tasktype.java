@@ -1,4 +1,6 @@
 //Used AI to generate enum class
+//Task types 
+
 public enum Tasktype {
     TODO,
     DEADLINE,

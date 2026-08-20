@@ -1,3 +1,4 @@
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -6,13 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+//File reading class 
 public class FileReading {
 
     private static final String FILE_PATH = "./data/Bags.txt";
 
-    /**
-     * Stores the strings from readingFile into Bags.txt.
-     */
+    //Stores the strings from readingFile into Bags.txt.
     public static void storeTaskContents(List<String> readingFile) {
 
         File file = new File(FILE_PATH);
@@ -35,8 +35,8 @@ public class FileReading {
     }
 
     /**
-     * Reads all contents from Bags.txt.
-     * Returns an empty list if there is no save file.
+     * Reads all contents from Bags.txt. Returns an empty list if there is no
+     * save file.
      */
     public static List<String> readFileContents() {
 

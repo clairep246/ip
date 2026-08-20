@@ -1,4 +1,7 @@
+//Event task 
+
 public class Event extends Task {
+
     private String from;
     private String to;
 
@@ -23,7 +26,7 @@ public class Event extends Task {
     }
 
     @Override
-     public String parseEvent() {
-        return "E | " + "[" + getStatusIcon() + "] | " + description + " | " + from + " | " + to; 
+    public String parseEvent() {
+        return "E | " + "[" + getStatusIcon() + "] | " + description + " | " + from + " | " + to;
     }
 }
