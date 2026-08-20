@@ -56,7 +56,7 @@ public class Ui {
         showDivider();
     }
 
-    /** Displays a visual separator between chatbot responses. */
+    /** Displays a divider between chatbot responses*/
     public void showDivider() {
         System.out.println(DIVIDER);
     }

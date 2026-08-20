@@ -13,6 +13,7 @@ public class Bags {
     public static ArrayList<Task> store = new ArrayList<>();
 
     private static final Storage storage = new Storage("./data/Bags.txt");
+    private static final Parser parser = new Parser();
 
     // Stores the formatted strings that will be written to Bags.txt
     public static ArrayList<String> readingFile = new ArrayList<>();
@@ -32,30 +33,30 @@ public class Bags {
         String output = ui.readCommand();
         ui.showDivider();
 
-        while (!output.startsWith("bye")) {
+        Parser.Command command = parser.parseCommand(output);
+        while (command != Parser.Command.BYE) {
 
             try {
-
-                if (output.trim().isEmpty()) {
+                if (command == Parser.Command.EMPTY) {
                     throw new BagsException("No command was entered. Please enter a command.");
                 }
 
-                if (output.startsWith("add task")) {
+                if (command == Parser.Command.ADD_TASK) {
                     addTask(ui);
 
-                } else if (output.startsWith("list")) {
+                } else if (command == Parser.Command.LIST) {
                     listItems();
 
-                } else if (output.startsWith("mark")) {
+                } else if (command == Parser.Command.MARK) {
                     markDone(output);
 
-                } else if (output.startsWith("unmark")) {
+                } else if (command == Parser.Command.UNMARK) {
                     unMarkDone(output);
 
-                } else if (output.equals("echo")) {
+                } else if (command == Parser.Command.ECHO) {
                     echoWords(ui);
 
-                } else if (output.startsWith("delete")) {
+                } else if (command == Parser.Command.DELETE) {
                     deleteTask(output);
 
                 } else {
@@ -69,6 +70,7 @@ public class Bags {
             ui.showPrompt();
 
             output = ui.readCommand();
+            command = parser.parseCommand(output);
         }
 
         saveTasks();
@@ -91,7 +93,7 @@ public class Bags {
 
         for (String taskString : savedTasks) {
 
-            Task task = parseTask(taskString);
+            Task task = parser.parseTask(taskString);
 
             if (task != null) {
                 store.add(task);
@@ -101,84 +103,8 @@ public class Bags {
 
     }
 
-    //Convert String from File into Task objects
-    private static Task parseTask(String taskString) throws BagsException {
-
-        String[] parts = taskString.split("\\|");
-
-        if (parts.length < 3) {
-            return null;
-        }
-
-        String type = parts[0].trim();
-        String status = parts[1].trim();
-
-        Task task = null;
-
-        if (type.equals("T")) {
-
-            if (parts.length < 3) {
-                return null;
-            }
-
-            String description = parts[2].trim();
-            task = new ToDo(description);
-
-        } else if (type.equals("D")) {
-
-            if (parts.length < 4) {
-                return null;
-            }
-
-            String description = parts[2].trim();
-            String deadline = parts[3].trim();
-
-            task = new Deadlines(description, deadline);
-
-        } else if (type.equals("E")) {
-
-            if (parts.length < 5) {
-                return null;
-            }
-
-            String description = parts[2].trim();
-            String from = parts[3].trim();
-            String to = parts[4].trim();
-
-            task = new Event(description, from, to);
-        }
-
-        /*Mark task as done  
-        * since the task created is marked undone, need to manually mark it as done 
-         */
-        if (task != null && status.equals("[X]")) {
-            task.markDone();
-        }
-
-        return task;
-    }
-
     private static void saveTasks() {
         storage.save(readingFile);
-    }
-
-    //Match task type according to user input 
-    private static Tasktype matchTaskType(String input) {
-
-        if (input.startsWith("todo")) {
-
-            return Tasktype.TODO;
-
-        } else if (input.startsWith("deadline")) {
-
-            return Tasktype.DEADLINE;
-
-        } else if (input.startsWith("event")) {
-
-            return Tasktype.EVENT;
-        }
-
-        return null;
     }
 
     private static void addTask(Ui ui) throws BagsException{
@@ -197,7 +123,7 @@ public class Bags {
 
         while (!output.equals("exit")) {
             try {
-                Tasktype type = matchTaskType(output);
+                Tasktype type = parser.parseTaskType(output);
                 Task task = null;
 
                 if (type == Tasktype.TODO) {

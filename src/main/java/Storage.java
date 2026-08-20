@@ -39,7 +39,7 @@ public class Storage {
         return saveFile;
     }
 
-    /** Saves every supplied task record, replacing the previous file contents. */
+    /** Saves every supplied task record, overwriting the previous content */
     public void save(List<String> taskRecords) {
         File file = getSaveFile();
         File parentDir = file.getParentFile();
@@ -58,9 +58,27 @@ public class Storage {
     }
 
     /**
-     * Loads all saved task records, or returns an empty list when no save file exists.
+     * Loads and recreates all tasks saved in the file.
+     *
+     * @param parser converts each saved record into a task
+     * @return the tasks stored in the save file
+     * @throws BagsException if a saved task cannot be parsed
      */
-    public List<String> load() {
+    public List<Task> loadTasks(Parser parser) throws BagsException {
+        List<Task> tasks = new ArrayList<>();
+
+        for (String record : loadTaskRecords()) {
+            Task task = parser.parseTask(record);
+            if (task != null) {
+                tasks.add(task);
+            }
+        }
+
+        return tasks;
+    }
+
+    /** Reads the raw lines from the save file. */
+    private List<String> loadTaskRecords() {
         List<String> taskRecords = new ArrayList<>();
 
         try (Scanner scanner = new Scanner(getSaveFile())) {
