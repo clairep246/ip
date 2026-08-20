@@ -1,7 +1,6 @@
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 //Main chatbot class 
 
 public class Bags {
@@ -18,7 +17,6 @@ public class Bags {
 
     public static void main(String[] args) {
 
-        Scanner scanner = new Scanner(System.in);
         Ui ui = new Ui();
 
         try {
@@ -29,7 +27,7 @@ public class Bags {
 
         ui.showWelcome();
 
-        String output = scanner.nextLine();
+        String output = ui.readCommand();
         ui.showDivider();
 
         while (!output.startsWith("bye")) {
@@ -41,7 +39,7 @@ public class Bags {
                 }
 
                 if (output.startsWith("add task")) {
-                    addTask(scanner);
+                    addTask(ui);
 
                 } else if (output.startsWith("list")) {
                     listItems();
@@ -53,7 +51,7 @@ public class Bags {
                     unMarkDone(output);
 
                 } else if (output.equals("echo")) {
-                    echoWords(scanner);
+                    echoWords(ui);
 
                 } else if (output.startsWith("delete")) {
                     deleteTask(output);
@@ -68,14 +66,14 @@ public class Bags {
 
             ui.showPrompt();
 
-            output = scanner.nextLine();
+            output = ui.readCommand();
         }
 
         saveTasks();
 
         ui.showGoodbye();
 
-        scanner.close();
+        ui.close();
     }
 
     /**
@@ -186,7 +184,7 @@ public class Bags {
         return null;
     }
 
-    private static void addTask(Scanner scanner) throws BagsException{
+    private static void addTask(Ui ui) throws BagsException{
 
         System.out.println(""" 
                            Enter your task. 
@@ -198,7 +196,7 @@ public class Bags {
 
         System.out.println(divider);
 
-        String output = scanner.nextLine();
+        String output = ui.readCommand();
 
         while (!output.equals("exit")) {
             try {
@@ -235,7 +233,7 @@ public class Bags {
 
             System.out.println(divider);
 
-            output = scanner.nextLine();
+            output = ui.readCommand();
         }
         System.out.println("Exited editing mode");
     }
@@ -510,14 +508,14 @@ public class Bags {
     }
 
     //Echo the users inputs 
-    private static void echoWords(Scanner scanner)
+    private static void echoWords(Ui ui)
             throws BagsException {
 
         System.out.println("From now on I will echo your input. To exit enter exit.");
 
         System.out.println(divider);
 
-        String echo = scanner.nextLine();
+        String echo = ui.readCommand();
 
         while (!echo.equals("exit")) {
 
@@ -528,7 +526,7 @@ public class Bags {
             System.out.println(echo);
             System.out.println(divider);
 
-            echo = scanner.nextLine();
+            echo = ui.readCommand();
         }
 
         System.out.println("Exited echo mode.");

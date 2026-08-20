@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 /**
  * Handles the chatbot's general messages and prompts shown to the user.
  */
@@ -13,6 +15,23 @@ public class Ui {
             + "| |_) | (_| | (_| \\__ \\\n"
             + "|____/ \\__,_|\\__, |___/\n"
             + "               |___/";
+
+    private final Scanner scanner;
+
+    /** Creates a user interface that reads commands from standard input. */
+    public Ui() {
+        scanner = new Scanner(System.in);
+    }
+
+    /** Reads one complete command entered by the user. */
+    public String readCommand() {
+        return scanner.nextLine();
+    }
+
+    /** Closes the input reader when the chatbot exits. */
+    public void close() {
+        scanner.close();
+    }
 
     /** Displays the chatbot greeting and its first command prompt. */
     public void showWelcome() {
