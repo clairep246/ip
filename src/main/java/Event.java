@@ -1,4 +1,7 @@
+//Event task 
+
 public class Event extends Task {
+
     private String from;
     private String to;
 
@@ -20,5 +23,10 @@ public class Event extends Task {
     public String toString() {
         return "[E][" + getStatusIcon() + "] " + description
                 + " (from: " + from + " to: " + to + ")";
+    }
+
+    @Override
+    public String parseEvent() {
+        return "E | " + "[" + getStatusIcon() + "] | " + description + " | " + from + " | " + to;
     }
 }

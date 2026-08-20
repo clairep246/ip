@@ -1,3 +1,5 @@
+//Todo task type 
+
 public class ToDo extends Task {
 
     public ToDo(String description) {
@@ -8,4 +10,10 @@ public class ToDo extends Task {
     public String toString() {
         return "[T][" + super.getStatusIcon() + "] " + super.getDescription();
     }
+
+    @Override
+    public String parseEvent() {
+        return "T | " + "[" + getStatusIcon() + "] | " + description;
+    }
+
 }

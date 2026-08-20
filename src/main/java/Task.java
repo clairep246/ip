@@ -1,4 +1,7 @@
+//Task class that is used a template to be overriden for other task types
+
 public abstract class Task {
+
     protected String description;
     protected boolean isDone;
     protected Tasktype type;
@@ -37,4 +40,10 @@ public abstract class Task {
     public String toString() {
         return "[" + getStatusIcon() + "] " + description;
     }
+
+    //Parse task to format it before appending to task file 
+    public String parseEvent() {
+        return "";
+    }
+
 }
