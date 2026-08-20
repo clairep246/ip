@@ -1,6 +1,9 @@
 //Event task 
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 public class Event extends Task {
 
     private LocalDateTime from;
@@ -8,18 +11,22 @@ public class Event extends Task {
     private LocalDateTime to;
     private String formatted_to;
 
-
-    public Event(String description, String from, String to) {
+    public Event(String description, String from, String to) throws BagsException {
         super(description, Tasktype.EVENT);
+        
+        try {
+            DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            this.from = LocalDateTime.parse(from, inputFormatter);
+            this.to = LocalDateTime.parse(to, inputFormatter);
 
-         DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        this.from = LocalDateTime.parse(from, inputFormatter);
-        this.to = LocalDateTime.parse(to, inputFormatter);
-     
-        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy h:mma");
-        this.formatted_from = this.from.format(outputFormatter);
-        this.formatted_to = this.to.format(outputFormatter);
+            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy h:mma");
+            this.formatted_from = this.from.format(outputFormatter);
+            this.formatted_to = this.to.format(outputFormatter);
 
+        } catch (DateTimeParseException e) {
+            throw new BagsException("Please key in date in correct format: year-month-date hh:mm in 24h");
+
+        }
     }
 
     public LocalDateTime getFrom() {
@@ -38,7 +45,7 @@ public class Event extends Task {
 
     @Override
     public String parseEvent() {
-        return "E | " + "[" + getStatusIcon() + "] | " + description + " | " 
-        + formatted_from + " | " + formatted_to;
+        return "E | " + "[" + getStatusIcon() + "] | " + description + " | "
+                + formatted_from + " | " + formatted_to;
     }
 }

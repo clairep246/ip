@@ -1,11 +1,12 @@
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
 //Main chatbot class 
+
 public class Bags {
 
     private static final String divider
@@ -30,7 +31,11 @@ public class Bags {
 
         Scanner scanner = new Scanner(System.in);
 
-        loadTasks();
+        try {
+            loadTasks();
+        } catch (BagsException e) {
+            System.out.println("Error!! " + e.getMessage());
+        }
 
         printWelcome();
 
@@ -87,10 +92,9 @@ public class Bags {
 
     /**
      * Load task when chatbot is started store in reading file and parsed into
-     * Task objects using parseTask helper
-     * *
+     * Task objects using parseTask helper *
      */
-    private static void loadTasks() {
+    private static void loadTasks() throws BagsException {
 
         List<String> savedTasks = FileReading.readFileContents();
 
@@ -108,16 +112,28 @@ public class Bags {
 
     }
 
-    //Convert time back to original format 
-    private static String parseTimeHelper(String dateAndTime) {
-        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy h:mma");
-        LocalDateTime temp = LocalDateTime.parse(dateAndTime, inputFormatter);
-     
-        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        return temp.format(outputFormatter);
+    private static String parseTimeHelper(String dateAndTime) throws BagsException {
+
+        try {
+
+            DateTimeFormatter inputFormatter
+                    = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            LocalDateTime temp = LocalDateTime.parse(dateAndTime, inputFormatter);
+
+            DateTimeFormatter outputFormatter
+                    = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+            return temp.format(outputFormatter);
+
+        } catch (DateTimeParseException e) {
+            throw new BagsException("Wrong date/time format! Please use yyyy-MM-dd HH:mm "
+                    + "(e.g. 2026-08-25 14:30)."
+            );
+        }
     }
+
     //Convert String from File into Task objects
-    private static Task parseTask(String taskString) {
+    private static Task parseTask(String taskString) throws BagsException {
 
         String[] parts = taskString.split("\\|");
 
@@ -218,7 +234,7 @@ public class Bags {
         return null;
     }
 
-    private static void addTask(Scanner scanner) {
+    private static void addTask(Scanner scanner) throws BagsException{
 
         System.out.println(""" 
                            Enter your task. 
