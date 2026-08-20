@@ -1,4 +1,6 @@
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -106,6 +108,14 @@ public class Bags {
 
     }
 
+    //Convert time back to original format 
+    private static String parseTimeHelper(String dateAndTime) {
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy h:mma");
+        LocalDateTime temp = LocalDateTime.parse(dateAndTime, inputFormatter);
+     
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        return temp.format(outputFormatter);
+    }
     //Convert String from File into Task objects
     private static Task parseTask(String taskString) {
 
@@ -138,7 +148,9 @@ public class Bags {
             String description = parts[2].trim();
             String deadline = parts[3].trim();
 
-            task = new Deadlines(description, deadline);
+            String formattedDeadline = parseTimeHelper(deadline);
+
+            task = new Deadlines(description, formattedDeadline);
 
         } else if (type.equals("E")) {
 
@@ -150,7 +162,10 @@ public class Bags {
             String from = parts[3].trim();
             String to = parts[4].trim();
 
-            task = new Event(description, from, to);
+            String formattedFrom = parseTimeHelper(from);
+            String formattedTo = parseTimeHelper(to);
+
+            task = new Event(description, formattedFrom, formattedTo);
         }
 
         /*Mark task as done  
@@ -207,7 +222,10 @@ public class Bags {
 
         System.out.println(""" 
                            Enter your task. 
-                           Specify type of task in front, add /by for deadline task, add /from and /to for event task. 
+                           Format for each task type, follow the format closely: 
+                            1. todo <task name>
+                            2. deadline <name> /by <year-month-day> <hour:minutes>
+                            3. event <name> /from <year-month-day> <hour:minutes> <name> /to <year-month-day> <hour:minutes>
                            To exit enter exit.""");
 
         System.out.println(divider);
