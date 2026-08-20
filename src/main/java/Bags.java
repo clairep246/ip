@@ -1,11 +1,11 @@
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 //Main chatbot class 
 
 public class Bags {
 
+    // Used by command-specific interactions that will move to Ui next.
     private static final String divider
             = "____________________________________________________________";
 
@@ -15,18 +15,9 @@ public class Bags {
     // Stores the formatted strings that will be written to Bags.txt
     public static ArrayList<String> readingFile = new ArrayList<>();
 
-    // Used ChatGPT to generate banner 
-    private static final String banner
-            = " ____                  \n"
-            + "| __ )  __ _  __ _ ___ \n"
-            + "|  _ \\ / _` |/ _` / __|\n"
-            + "| |_) | (_| | (_| \\__ \\\n"
-            + "|____/ \\__,_|\\__, |___/\n"
-            + "               |___/";
-
     public static void main(String[] args) {
 
-        Scanner scanner = new Scanner(System.in);
+        Ui ui = new Ui();
 
         try {
             loadTasks();
@@ -34,10 +25,10 @@ public class Bags {
             System.out.println("Error!! " + e.getMessage());
         }
 
-        printWelcome();
+        ui.showWelcome();
 
-        String output = scanner.nextLine();
-        System.out.println(divider);
+        String output = ui.readCommand();
+        ui.showDivider();
 
         while (!output.startsWith("bye")) {
 
@@ -48,7 +39,7 @@ public class Bags {
                 }
 
                 if (output.startsWith("add task")) {
-                    addTask(scanner);
+                    addTask(ui);
 
                 } else if (output.startsWith("list")) {
                     listItems();
@@ -60,7 +51,7 @@ public class Bags {
                     unMarkDone(output);
 
                 } else if (output.equals("echo")) {
-                    echoWords(scanner);
+                    echoWords(ui);
 
                 } else if (output.startsWith("delete")) {
                     deleteTask(output);
@@ -73,18 +64,16 @@ public class Bags {
                 System.out.println("Error!! " + e.getMessage());
             }
 
-            System.out.println(divider);
-            System.out.println("What can I do for you?");
-            System.out.println(divider);
+            ui.showPrompt();
 
-            output = scanner.nextLine();
+            output = ui.readCommand();
         }
 
         saveTasks();
 
-        printGoodbye();
+        ui.showGoodbye();
 
-        scanner.close();
+        ui.close();
     }
 
     /**
@@ -109,26 +98,6 @@ public class Bags {
         }
 
     }
-
-    /*private static String parseTimeHelper(String dateAndTime) throws BagsException {
-
-        try {
-
-            DateTimeFormatter inputFormatter
-                    = DateTimeFormatter.ofPattern("dd/MM/yyyy h:mma");
-            LocalDateTime temp = LocalDateTime.parse(dateAndTime, inputFormatter);
-
-            DateTimeFormatter outputFormatter
-                    = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
-            return temp.format(outputFormatter);
-
-        } catch (DateTimeParseException e) {
-            throw new BagsException("Wrong date/time format! Please use yyyy-MM-dd HH:mm "
-                    + "(e.g. 2026-08-25 14:30)."
-            );
-        }
-    }*/
 
     //Convert String from File into Task objects
     private static Task parseTask(String taskString) throws BagsException {
@@ -196,23 +165,6 @@ public class Bags {
         FileReading.storeTaskContents(readingFile);
     }
 
-    private static void printWelcome() {
-
-        System.out.println(divider);
-        System.out.println(banner);
-        System.out.println(divider);
-        System.out.println("Hello! I'm Bags. Nice to meet you!");
-        System.out.println(divider);
-        System.out.println("What can I do for you?");
-        System.out.println(divider);
-    }
-
-    private static void printGoodbye() {
-
-        System.out.println("Bye. Hope to see you again soon!");
-        System.out.println(divider);
-    }
-
     //Match task type according to user input 
     private static Tasktype matchTaskType(String input) {
 
@@ -232,7 +184,7 @@ public class Bags {
         return null;
     }
 
-    private static void addTask(Scanner scanner) throws BagsException{
+    private static void addTask(Ui ui) throws BagsException{
 
         System.out.println(""" 
                            Enter your task. 
@@ -244,7 +196,7 @@ public class Bags {
 
         System.out.println(divider);
 
-        String output = scanner.nextLine();
+        String output = ui.readCommand();
 
         while (!output.equals("exit")) {
             try {
@@ -281,7 +233,7 @@ public class Bags {
 
             System.out.println(divider);
 
-            output = scanner.nextLine();
+            output = ui.readCommand();
         }
         System.out.println("Exited editing mode");
     }
@@ -556,14 +508,14 @@ public class Bags {
     }
 
     //Echo the users inputs 
-    private static void echoWords(Scanner scanner)
+    private static void echoWords(Ui ui)
             throws BagsException {
 
         System.out.println("From now on I will echo your input. To exit enter exit.");
 
         System.out.println(divider);
 
-        String echo = scanner.nextLine();
+        String echo = ui.readCommand();
 
         while (!echo.equals("exit")) {
 
@@ -574,7 +526,7 @@ public class Bags {
             System.out.println(echo);
             System.out.println(divider);
 
-            echo = scanner.nextLine();
+            echo = ui.readCommand();
         }
 
         System.out.println("Exited echo mode.");
