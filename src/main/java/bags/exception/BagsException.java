@@ -1,3 +1,5 @@
+package bags.exception;
+
 //Exception class for Bags Exception
 
 public class BagsException extends Exception {

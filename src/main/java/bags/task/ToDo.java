@@ -1,3 +1,7 @@
+package bags.task;
+
+import bags.exception.BagsException;
+
 //Todo task type 
 
 public class ToDo extends Task {

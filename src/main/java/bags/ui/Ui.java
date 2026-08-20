@@ -1,3 +1,5 @@
+package bags.ui;
+
 import java.util.Scanner;
 
 /**

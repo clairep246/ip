@@ -1,3 +1,5 @@
+package bags.task;
+
 //Task class that is used a template to be overriden for other task types
 public abstract class Task {
 

@@ -1,3 +1,7 @@
+package bags.task;
+
+import bags.exception.BagsException;
+
 //Event task 
 
 import java.time.LocalDateTime;

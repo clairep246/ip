@@ -1,3 +1,15 @@
+package bags;
+
+import bags.exception.BagsException;
+import bags.parser.Parser;
+import bags.storage.Storage;
+import bags.task.Deadlines;
+import bags.task.Event;
+import bags.task.Task;
+import bags.task.TaskList;
+import bags.task.Tasktype;
+import bags.task.ToDo;
+import bags.ui.Ui;
 
 //Main chatbot class 
 

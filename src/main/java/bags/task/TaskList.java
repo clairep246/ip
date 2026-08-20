@@ -1,5 +1,8 @@
+package bags.task;
+
 import java.util.ArrayList;
 import java.util.List;
+import bags.exception.BagsException;
 
 /** Stores tasks and provides operations that change the task collection. */
 //Use AI to add tasklist related methods from Bags.java
