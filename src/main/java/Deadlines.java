@@ -1,4 +1,6 @@
+
 public class Deadlines extends Task {
+
     private String deadline;
 
     public Deadlines(String description, String deadline) {
@@ -14,5 +16,10 @@ public class Deadlines extends Task {
     public String toString() {
         return "[D][" + super.getStatusIcon() + "] " + super.getDescription()
                 + " (by: " + this.deadline + ")";
+    }
+
+    @Override
+    public String parseEvent() {
+        return "D | " + "[" + getStatusIcon() + "] | " + description + " | " + deadline;
     }
 }

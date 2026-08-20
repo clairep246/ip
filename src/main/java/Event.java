@@ -21,4 +21,9 @@ public class Event extends Task {
         return "[E][" + getStatusIcon() + "] " + description
                 + " (from: " + from + " to: " + to + ")";
     }
+
+    @Override
+     public String parseEvent() {
+        return "E | " + "[" + getStatusIcon() + "] | " + description + " | " + from + " | " + to; 
+    }
 }
