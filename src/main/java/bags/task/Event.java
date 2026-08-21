@@ -1,21 +1,30 @@
 package bags.task;
 
-import bags.exception.BagsException;
-
-//Event task 
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
+import bags.exception.BagsException;
+
+/**
+ * Represents a task that spans a time range.
+ */
 public class Event extends Task {
 
     private static final DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     private LocalDateTime from;
-    private String formatted_from;
+    private String formattedFrom;
     private LocalDateTime to;
-    private String formatted_to;
+    private String formattedTo;
 
+    /**
+     * Creates an event task.
+     *
+     * @param description text describing the task
+     * @param from start date-time string in {@code yyyy-MM-dd HH:mm} format
+     * @param to end date-time string in {@code yyyy-MM-dd HH:mm} format
+     * @throws BagsException if either date-time format is invalid
+     */
     public Event(String description, String from, String to) throws BagsException {
         super(description, Tasktype.EVENT);
 
@@ -24,19 +33,21 @@ public class Event extends Task {
             this.to = LocalDateTime.parse(to, inputFormatter);
 
             DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy h:mma");
-            this.formatted_from = this.from.format(outputFormatter);
-            this.formatted_to = this.to.format(outputFormatter);
+            this.formattedFrom = this.from.format(outputFormatter);
+            this.formattedTo = this.to.format(outputFormatter);
 
         } catch (DateTimeParseException e) {
             throw new BagsException("Please key in date in correct format: year-month-date hh:mm in 24h");
-
         }
     }
 
     /**
-     * Creates an event task from add task command.
+     * Creates an event task from an add-task command string.
+     *
+     * @param output user input after {@code event}
+     * @return the created event task
+     * @throws BagsException if the description or time range is missing, or the format is invalid
      */
-    //Use AI to reconfigure method into each task type class
     public static Event fromCommand(String output) throws BagsException {
         String[] temp = output.split(" ");
         if (temp.length < 2) {
@@ -85,10 +96,20 @@ public class Event extends Task {
         return new Event(description, fromStr, toStr);
     }
 
+    /**
+     * Returns the start date-time of the event.
+     *
+     * @return the start date-time
+     */
     public LocalDateTime getFrom() {
         return this.from;
     }
 
+    /**
+     * Returns the end date-time of the event.
+     *
+     * @return the end date-time
+     */
     public LocalDateTime getTo() {
         return this.to;
     }
@@ -96,7 +117,7 @@ public class Event extends Task {
     @Override
     public String toString() {
         return "[E][" + getStatusIcon() + "] " + description
-                + " (from: " + formatted_from + " to: " + formatted_to + ")";
+                + " (from: " + formattedFrom + " to: " + formattedTo + ")";
     }
 
     @Override

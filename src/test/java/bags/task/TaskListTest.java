@@ -21,8 +21,7 @@ class TaskListTest {
         return taskList;
     }
 
-
-   //Add method
+    // Add method
     @Test
     void addMethod_emptyList_successfullyAddTask() throws BagsException {
         TaskList taskList = new TaskList();
@@ -32,14 +31,14 @@ class TaskListTest {
         taskList.add(todo);
 
         List<Task> tasks = taskList.getTasks();
-        List<String> readingFile = taskList.getReadingFile();
+        List<String> readingFileRecords = taskList.getReadingFileRecords();
 
         assertEquals(1, taskList.size());
         assertEquals(todo, tasks.get(0));
-        assertEquals(todo.parseEvent(), readingFile.get(0));
+        assertEquals(todo.parseEvent(), readingFileRecords.get(0));
     }
 
-    //Mark done method
+    // Mark done method
     @Test
     void markDone_existingTask_markCorrectTaskAsDone() throws BagsException {
         TaskList taskList = createTaskList();
@@ -88,7 +87,7 @@ class TaskListTest {
 
 
     @Test
-    void markDone_nonNumbericInput_rejectInput() throws BagsException {
+    void markDone_nonNumericInput_rejectInput() throws BagsException {
         TaskList taskList = createTaskList();
 
         BagsException exception = assertThrows(
@@ -99,7 +98,7 @@ class TaskListTest {
         assertTrue(exception.getMessage().contains("Invalid task number"));
     }
 
-    //Mark undone
+    // Mark undone
     @Test
     void markUndone_addedTask_markCorrectTaskUndone() throws BagsException {
         TaskList taskList = createTaskList();
@@ -107,10 +106,10 @@ class TaskListTest {
         taskList.markDone("done 1");
 
         Task task = taskList.markUndone("undone 1");
-        List<String> readingFile = taskList.getReadingFile();
+        List<String> readingFileRecords = taskList.getReadingFileRecords();
 
         assertFalse(task.isDone());
-        assertEquals(task.parseEvent(), readingFile.get(0));
+        assertEquals(task.parseEvent(), readingFileRecords.get(0));
 
     }
 
@@ -165,7 +164,7 @@ class TaskListTest {
         assertTrue(exception.getMessage().contains("Invalid task number"));
     }
 
-    //Delete task 
+    // Delete task
     @Test
     void deleteMethod_deleteOne_removeCorrectTask() throws BagsException {
         TaskList taskList = createTaskList();
@@ -219,7 +218,7 @@ class TaskListTest {
 
 
     @Test
-    void deleteSMethod_nonNumericTaskInput_rejectInput() throws BagsException {
+    void deleteMethod_nonNumericTaskInput_rejectInput() throws BagsException {
         TaskList taskList = createTaskList();
 
         BagsException exception = assertThrows(

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
 import bags.exception.BagsException;
 import bags.parser.Parser;
 import bags.task.Task;
@@ -14,11 +15,8 @@ import bags.task.Task;
 /**
  * Loads task records from, and saves task records to, the application's save file.
  */
-
-//Use AI to generate storage class and move storage methods from Bags
 public class Storage {
 
-    private static final String LEGACY_FILE_PATH = "./src/main/java/data/Bags.txt";
     private final File saveFile;
 
     /**
@@ -31,20 +29,10 @@ public class Storage {
     }
 
     /**
-     * Uses the configured save file, or an existing save from the previous
-     * source-folder working-directory setup.
+     * Saves every supplied task record, overwriting the previous content.
+     *
+     * @param taskRecords records to write to the save file
      */
-    private File getSaveFile() {
-        File legacyFile = new File(LEGACY_FILE_PATH);
-
-        if (!saveFile.exists() && legacyFile.exists()) {
-            return legacyFile;
-        }
-
-        return saveFile;
-    }
-
-    /** Saves every supplied task record, overwriting the previous content */
     public void save(List<String> taskRecords) {
         File file = getSaveFile();
         File parentDir = file.getParentFile();
@@ -80,6 +68,15 @@ public class Storage {
         }
 
         return tasks;
+    }
+
+    /**
+     * Returns the configured save file.
+     *
+     * @return the file to use for persistence
+     */
+    private File getSaveFile() {
+        return saveFile;
     }
 
     /** Reads the raw lines from the save file. */

@@ -16,12 +16,10 @@ import bags.exception.BagsException;
 import bags.parser.Parser;
 import bags.task.Task;
 
-//Use AI to generate test
 class StorageTest {
 
     @TempDir
     Path tempDir;
-
 
     // ============================================================
     // save()
@@ -47,38 +45,38 @@ class StorageTest {
     }
 
     @Test
-void save_directoryAsFile_handlesIOException() throws Exception {
+    void save_directoryAsFile_handlesIOException() throws Exception {
 
-    Path directory = tempDir.resolve("Bags");
+        Path directory = tempDir.resolve("Bags");
 
-    Files.createDirectory(directory);
+        Files.createDirectory(directory);
 
-    Storage storage = new Storage(directory.toString());
+        Storage storage = new Storage(directory.toString());
 
-    ByteArrayOutputStream output =
-            new ByteArrayOutputStream();
+        ByteArrayOutputStream output =
+                new ByteArrayOutputStream();
 
-    PrintStream originalOut = System.out;
+        PrintStream originalOut = System.out;
 
-    try {
-        System.setOut(new PrintStream(output));
+        try {
+            System.setOut(new PrintStream(output));
 
-        storage.save(List.of(
-                "T | [ ] | Read book"
-        ));
+            storage.save(List.of(
+                    "T | [ ] | Read book"
+            ));
 
-        assertTrue(
-                output.toString().contains(
-                        "Something went wrong while saving:"
-                )
-        );
+            assertTrue(
+                    output.toString().contains(
+                            "Something went wrong while saving:"
+                    )
+            );
 
-    } finally {
-        System.setOut(originalOut);
+        } finally {
+            System.setOut(originalOut);
+        }
     }
-}
 
-    //load task
+    // load task
     @Test
     void loadTasks_validRecords_returnsCorrectTasks()
             throws Exception {
@@ -159,7 +157,7 @@ void save_directoryAsFile_handlesIOException() throws Exception {
     }
 
 
-    //Save and load task
+    // Save and load task
 
     @Test
     void saveThenLoad_validRecords_returnsSameTasks()

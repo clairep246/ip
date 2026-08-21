@@ -11,11 +11,11 @@ import bags.task.Tasktype;
 import bags.task.ToDo;
 import bags.ui.Ui;
 
-//Main chatbot class 
-
+/**
+ * Main entry point for the Bags chatbot application.
+ */
 public class Bags {
 
-    // Used by command-specific interactions that will move to Ui next.
     private static final String divider
             = "____________________________________________________________";
 
@@ -23,8 +23,12 @@ public class Bags {
     private static final Parser parser = new Parser();
     private static TaskList tasks;
 
+    /**
+     * Starts the chatbot loop.
+     *
+     * @param args command-line arguments (unused)
+     */
     public static void main(String[] args) {
-
         Ui ui = new Ui();
 
         try {
@@ -86,14 +90,20 @@ public class Bags {
         ui.close();
     }
 
+    /** Persists the current task list to the save file. */
     private static void saveTasks() {
         storage.save(tasks.toSaveRecords());
     }
 
+    /**
+     * Prompts the user to enter new tasks.
+     *
+     * @param ui user interface for reading commands
+     */
     private static void addTask(Ui ui) {
         System.out.println("""
-                           Enter your task. 
-                           Format for each task type, follow the format closely: 
+                           Enter your task.
+                           Format for each task type, follow the format closely:
                             1. todo <task name>
                             2. deadline <name> /by <year-month-day> <hour:minutes>
                             3. event <name> /from <year-month-day> <hour:minutes> <name> /to <year-month-day> <hour:minutes>
@@ -128,7 +138,11 @@ public class Bags {
         System.out.println("Exited editing mode");
     }
 
-    //Displays all tasks currently stored in the task list
+    /**
+     * Displays all tasks currently stored in the task list.
+     *
+     * @throws BagsException if the task list is empty
+     */
     private static void listItems() throws BagsException {
 
         if (tasks.isEmpty()) {
@@ -139,7 +153,12 @@ public class Bags {
         }
     }
 
-    //Marks the selected task as completed. 
+    /**
+     * Marks the selected task as completed.
+     *
+     * @param output command string containing the task number
+     * @throws BagsException if the task number is missing or invalid
+     */
     private static void markDone(String output) throws BagsException {
         Task task = tasks.markDone(output);
         saveTasks();
@@ -147,7 +166,12 @@ public class Bags {
         System.out.println(task.toString());
     }
 
-    //Marks the selected task as undone. 
+    /**
+     * Marks the selected task as undone.
+     *
+     * @param output command string containing the task number
+     * @throws BagsException if the task number is missing or invalid
+     */
     private static void unMarkDone(String output)
             throws BagsException {
 
@@ -158,9 +182,11 @@ public class Bags {
     }
 
     /**
-     * Deletes the selected task. Since both store and readingFile indexes the
-     * task at the same index, removing both will remove the same task
+     * Deletes the selected task. Since both store and readingFileRecords indexes the
+     * task at the same index, removing both will remove the same task.
      *
+     * @param output command string containing the task number
+     * @throws BagsException if the task number is missing or invalid
      */
     private static void deleteTask(String output) throws BagsException {
         Task task = tasks.delete(output);
@@ -170,7 +196,12 @@ public class Bags {
         System.out.println("You now have " + tasks.size() + " in your task list.");
     }
 
-    //Echo the users inputs 
+    /**
+     * Echoes the user's inputs until the user types {@code exit}.
+     *
+     * @param ui user interface for reading commands
+     * @throws BagsException if the user enters an empty line
+     */
     private static void echoWords(Ui ui)
             throws BagsException {
 

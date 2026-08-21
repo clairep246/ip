@@ -1,8 +1,8 @@
 package bags.task;
 
-//Used AI to generate enum class
-//Task types 
-
+/**
+ * Represents the type of a task.
+ */
 public enum Tasktype {
     TODO,
     DEADLINE,

@@ -5,49 +5,87 @@ import java.util.List;
 
 import bags.exception.BagsException;
 
-/** Stores tasks and provides operations that change the task collection. */
-//Use AI to add tasklist related methods from Bags.java
+/**
+ * Stores tasks and provides operations that change the task collection.
+ */
 public class TaskList {
     private final ArrayList<Task> tasks;
-    private final ArrayList<String> readingFile;
+    private final ArrayList<String> readingFileRecords;
 
-    /** Creates an empty task list. */
+    /**
+     * Creates an empty task list.
+     */
     public TaskList() {
         tasks = new ArrayList<>();
-        readingFile = new ArrayList<>();
+        readingFileRecords = new ArrayList<>();
     }
 
-    /** Creates a task list containing the supplied loaded tasks. */
+    /**
+     * Creates a task list containing the supplied loaded tasks.
+     *
+     * @param tasks tasks loaded from storage
+     */
     public TaskList(List<Task> tasks) {
         this.tasks = new ArrayList<>(tasks);
-        readingFile = new ArrayList<>();
+        readingFileRecords = new ArrayList<>();
         for (Task task : tasks) {
-            readingFile.add(task.parseEvent());
+            readingFileRecords.add(task.parseEvent());
         }
     }
 
+    /**
+     * Adds a task to the list.
+     *
+     * @param task task to add
+     */
     public void add(Task task) {
         tasks.add(task);
-        readingFile.add(task.parseEvent());
+        readingFileRecords.add(task.parseEvent());
     }
 
+    /**
+     * Returns the number of tasks in the list.
+     *
+     * @return task count
+     */
     public int size() {
         return tasks.size();
     }
 
+    /**
+     * Returns whether the task list is empty.
+     *
+     * @return {@code true} if no tasks are stored
+     */
     public boolean isEmpty() {
         return tasks.isEmpty();
     }
 
+    /**
+     * Returns an unmodifiable view of the stored tasks.
+     *
+     * @return the tasks
+     */
     public List<Task> getTasks() {
         return List.copyOf(tasks);
     }
 
-    public List<String> getReadingFile() {
-        return readingFile;
+    /**
+     * Returns the current file records for all tasks.
+     *
+     * @return the save-file records
+     */
+    public List<String> getReadingFileRecords() {
+        return readingFileRecords;
     }
 
-    /** Marks the task selected done*/
+    /**
+     * Marks the task selected done.
+     *
+     * @param output command string containing the task number
+     * @return the marked task
+     * @throws BagsException if the task number is missing or invalid
+     */
     public Task markDone(String output) throws BagsException {
         String[] temp = output.split(" ");
 
@@ -62,14 +100,20 @@ public class TaskList {
             }
             Task task = tasks.get(taskNumber - 1);
             task.markDone();
-            readingFile.set(taskNumber - 1, task.parseEvent());
+            readingFileRecords.set(taskNumber - 1, task.parseEvent());
             return task;
         } catch (NumberFormatException e) {
             throw new BagsException("Invalid task number! Please enter a valid number from 1 to " + tasks.size());
         }
     }
 
-    /** Marks the task selected undone */
+    /**
+     * Marks the task selected undone.
+     *
+     * @param output command string containing the task number
+     * @return the unmarked task
+     * @throws BagsException if the task number is missing or invalid
+     */
     public Task markUndone(String output) throws BagsException {
         String[] temp = output.split(" ");
 
@@ -84,14 +128,20 @@ public class TaskList {
             }
             Task task = tasks.get(taskNumber - 1);
             task.markUndone();
-            readingFile.set(taskNumber - 1, task.parseEvent());
+            readingFileRecords.set(taskNumber - 1, task.parseEvent());
             return task;
         } catch (NumberFormatException e) {
             throw new BagsException("Invalid task number. Please enter a valid number from 1 to " + tasks.size());
         }
     }
 
-    /** Deletes the task selected  */
+    /**
+     * Deletes the task selected.
+     *
+     * @param output command string containing the task number
+     * @return the deleted task
+     * @throws BagsException if the task number is missing or invalid
+     */
     public Task delete(String output) throws BagsException {
         String[] temp = output.split(" ");
         if (temp.length < 2) {
@@ -104,19 +154,27 @@ public class TaskList {
                 throw new BagsException("Task does not exist. Enter value from 1 to " + tasks.size());
             }
             Task task = tasks.remove(taskNumber - 1);
-            readingFile.remove(taskNumber - 1);
+            readingFileRecords.remove(taskNumber - 1);
             return task;
         } catch (NumberFormatException e) {
             throw new BagsException("Invalid task number. Please enter a valid number from 1 to " + tasks.size());
         }
     }
 
-    /** Converts all tasks into records suitable for Storage. */
+    /**
+     * Converts all tasks into records suitable for Storage.
+     *
+     * @return a copy of the save-file records
+     */
     public List<String> toSaveRecords() {
-        return new ArrayList<>(readingFile);
+        return new ArrayList<>(readingFileRecords);
     }
 
-    /** Returns the task list in the numbered format */
+    /**
+     * Returns the task list in a numbered format.
+     *
+     * @return formatted task list string
+     */
     @Override
     public String toString() {
         StringBuilder output = new StringBuilder("Here are the tasks in your list:");
@@ -128,5 +186,4 @@ public class TaskList {
         }
         return output.toString();
     }
-
 }

@@ -12,12 +12,18 @@ import bags.task.ToDo;
  */
 public class Parser {
 
+    /**
+     * Commands recognized from user input.
+     */
     public enum Command {
         ADD_TASK, LIST, MARK, UNMARK, ECHO, DELETE, BYE, EMPTY, UNKNOWN
     }
 
     /**
      * Determines the type of command represented by the user's input.
+     *
+     * @param input raw user input
+     * @return the parsed command
      */
     public Command parseCommand(String input) {
         if (input.trim().isEmpty()) {
@@ -43,6 +49,9 @@ public class Parser {
 
     /**
      * Determines the task type specified at the beginning of a task command.
+     *
+     * @param input raw user input
+     * @return the parsed task type, or {@code null} if unrecognized
      */
     public Tasktype parseTaskType(String input) {
         if (input.startsWith("todo")) {
@@ -57,7 +66,11 @@ public class Parser {
     }
 
     /**
-     * Creates tasks objects from one record loaded from the save file.
+     * Creates task objects from one record loaded from the save file.
+     *
+     * @param taskString a pipe-separated task record
+     * @return the recreated task, or {@code null} if the record is malformed
+     * @throws BagsException if the saved task cannot be parsed
      */
     public Task parseTask(String taskString) throws BagsException {
         String[] parts = taskString.split("\\|");
@@ -83,7 +96,7 @@ public class Parser {
 
         if (task != null && status.equals("[X]")) {
             task.markDone();
-            
+
         }
 
         return task;
