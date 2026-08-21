@@ -13,7 +13,7 @@ import bags.task.ToDo;
 public class Parser {
 
     public enum Command {
-        ADD_TASK, LIST, MARK, UNMARK, ECHO, DELETE, BYE, EMPTY, UNKNOWN
+        ADD_TASK, LIST, MARK, UNMARK, ECHO, DELETE, SEARCH, BYE, EMPTY, UNKNOWN
     }
 
     /**
@@ -32,6 +32,8 @@ public class Parser {
             return Command.UNMARK;
         } else if (input.equals("echo")) {
             return Command.ECHO;
+        } else if(input.startsWith("search")) {
+            return Command.SEARCH;
         } else if (input.startsWith("delete")) {
             return Command.DELETE;
         } else if (input.startsWith("bye")) {

@@ -6,7 +6,7 @@ import java.util.List;
 import bags.exception.BagsException;
 
 /** Stores tasks and provides operations that change the task collection. */
-//Use AI to add tasklist related methods from Bags.java
+// Use AI to add tasklist related methods from Bags.java
 public class TaskList {
     private final ArrayList<Task> tasks;
     private final ArrayList<String> readingFile;
@@ -47,7 +47,7 @@ public class TaskList {
         return readingFile;
     }
 
-    /** Marks the task selected done*/
+    /** Marks the task selected done */
     public Task markDone(String output) throws BagsException {
         String[] temp = output.split(" ");
 
@@ -91,7 +91,7 @@ public class TaskList {
         }
     }
 
-    /** Deletes the task selected  */
+    /** Deletes the task selected */
     public Task delete(String output) throws BagsException {
         String[] temp = output.split(" ");
         if (temp.length < 2) {
@@ -129,4 +129,26 @@ public class TaskList {
         return output.toString();
     }
 
+    /**
+     * Searches for tasks containing the given keyword in their description.
+     *
+     * <p>
+     * The search is case-insensitive, so keywords match regardless of
+     * capitalisation.
+     * </p>
+     *
+     * @param keyword the keyword to search for
+     * @return a list of tasks whose descriptions contain the keyword
+     */
+    public List<Task> search(String keyword) {
+        List<Task> results = new ArrayList<>();
+
+        for (Task task : tasks) {
+            if (task.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
+                results.add(task);
+            }
+        }
+
+        return results;
+    }
 }

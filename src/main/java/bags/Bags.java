@@ -1,5 +1,7 @@
 package bags;
 
+import java.util.List;
+
 import bags.exception.BagsException;
 import bags.parser.Parser;
 import bags.storage.Storage;
@@ -65,8 +67,10 @@ public class Bags {
                 } else if (command == Parser.Command.DELETE) {
                     deleteTask(output);
 
-                } else {
-                    throw new BagsException("The command does not exist. Please try again :(");
+                } else if (command == Parser.Command.SEARCH) {
+                    searchTasks(output);                    
+                }else {
+                  throw new BagsException("The command does not exist. Please try again :(");
                 }
 
             } catch (BagsException e) {
@@ -194,4 +198,32 @@ public class Bags {
 
         System.out.println("Exited echo mode.");
     }
+
+    /**
+ * Searches the task list for tasks containing the specified keyword.
+ *
+ * @param output the user's search command
+ * @throws BagsException if no search keyword is provided
+ */
+private static void searchTasks(String output) throws BagsException {
+    String[] temp = output.split(" ", 2);
+
+    if (temp.length < 2 || temp[1].trim().isEmpty()) {
+        throw new BagsException("Please enter a keyword to search for.");
+    }
+
+    String keyword = temp[1].trim();
+    List<Task> results = tasks.search(keyword);
+
+    if (results.isEmpty()) {
+        System.out.println("No matching tasks found.");
+        return;
+    }
+
+    System.out.println("Here are the matching tasks:");
+    for (int i = 0; i < results.size(); i++) {
+        System.out.println((i + 1) + "." + results.get(i));
+    }
+}
+
 }
