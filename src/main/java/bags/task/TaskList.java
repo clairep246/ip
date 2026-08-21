@@ -2,6 +2,7 @@ package bags.task;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import bags.exception.BagsException;
 
 /** Stores tasks and provides operations that change the task collection. */
@@ -40,6 +41,10 @@ public class TaskList {
 
     public List<Task> getTasks() {
         return List.copyOf(tasks);
+    }
+
+    public List<String> getReadingFile() {
+        return readingFile;
     }
 
     /** Marks the task selected done*/
