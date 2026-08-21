@@ -1,1 +1,2 @@
 T | [ ] | Read book
+T | [X] | Do homework

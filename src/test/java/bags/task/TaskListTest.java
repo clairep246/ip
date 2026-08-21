@@ -52,11 +52,11 @@ class TaskListTest {
         taskList.add(todo);
 
         List<Task> tasks = taskList.getTasks();
-        List<String> readingFile = taskList.getReadingFile();
+        List<String> readingFileRecords = taskList.getReadingFile();
 
         assertEquals(1, taskList.size());
         assertEquals(todo, tasks.get(0));
-        assertEquals(todo.parseEvent(), readingFile.get(0));
+        assertEquals(todo.parseEvent(), readingFileRecords.get(0));
     }
     
     /**
@@ -163,10 +163,10 @@ class TaskListTest {
         taskList.markDone("done 1");
 
         Task task = taskList.markUndone("undone 1");
-        List<String> readingFile = taskList.getReadingFile();
+        List<String> readingFileRecords = taskList.getReadingFile();
 
         assertFalse(task.isDone());
-        assertEquals(task.parseEvent(), readingFile.get(0));
+        assertEquals(task.parseEvent(), readingFileRecords.get(0));
     }
 
     /**
@@ -339,4 +339,6 @@ class TaskListTest {
 
         assertTrue(exception.getMessage().contains("Invalid task number"));
     }
+
+
 }

@@ -14,10 +14,10 @@ public abstract class Task {
     protected Tasktype type;
 
     /**
-     * Creates a task with the given description and task type.
+     * Creates a task with the given description and type.
      *
-     * @param description the description of the task
-     * @param type the type of the task
+     * @param description text describing the task
+     * @param type category of the task
      */
     public Task(String description, Tasktype type) {
         this.description = description;
@@ -25,22 +25,43 @@ public abstract class Task {
         this.isDone = false;
     }
 
+    /**
+     * Marks the task as done.
+     */
     public void markDone() {
         this.isDone = true;
     }
 
+    /**
+     * Marks the task as not done.
+     */
     public void markUndone() {
         this.isDone = false;
     }
 
+    /**
+     * Returns the type of this task.
+     *
+     * @return the task type
+     */
     public Tasktype getType() {
         return this.type;
     }
 
+    /**
+     * Returns the description of this task.
+     *
+     * @return task description text
+     */
     public String getDescription() {
         return this.description;
     }
 
+    /**
+     * Returns whether the task is marked done.
+     *
+     * @return {@code true} if the task is done
+     */
     public boolean isDone() {
         return this.isDone;
     }
@@ -69,16 +90,11 @@ public abstract class Task {
     }
 
     /**
-     * Converts the task into the format used when saving it to the
-     * task storage file.
+     * Parses this task into its save-file record format.
      *
-     * <p>Subclasses override this method to provide the appropriate
-     * storage format for their specific task type.</p>
-     *
-     * @return the task formatted as a storage record
+     * @return the formatted task record
      */
     public String parseEvent() {
         return "";
     }
-
 }

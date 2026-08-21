@@ -17,7 +17,7 @@ import bags.task.ToDo;
 public class Parser {
 
     /**
-     * Represents the different commands that can be entered by the user.
+     * Commands recognized from user input.
      */
     public enum Command {
         ADD_TASK, LIST, MARK, UNMARK, ECHO, DELETE, BYE, EMPTY, UNKNOWN
@@ -54,8 +54,8 @@ public class Parser {
     /**
      * Determines the task type specified at the beginning of a task command.
      *
-     * @param input the task command entered by the user
-     * @return the corresponding task type, or null if the task type is invalid
+     * @param input user commmand
+     * @return the parsed task type, or {@code null} if unrecognized
      */
     public Tasktype parseTaskType(String input) {
         if (input.startsWith("todo")) {
@@ -105,7 +105,7 @@ public class Parser {
 
         if (task != null && status.equals("[X]")) {
             task.markDone();
-            
+
         }
 
         return task;

@@ -18,10 +18,8 @@ import bags.task.Task;
  * <p> AI was used to generate <code>Storage</code> class. The code was then reviewed and tweaked
  * to fit the application's standards.
  */
-
 public class Storage {
 
-    private static final String LEGACY_FILE_PATH = "./src/main/java/data/Bags.txt";
     private final File saveFile;
 
     /**
@@ -34,22 +32,10 @@ public class Storage {
     }
 
     /**
-     * Uses the configured save file, or an existing save from the previous
-     * source-folder working-directory setup.
-     * 
-     * @return the save file
+     * Saves every supplied task record, overwriting the previous content.
+     *
+     * @param taskRecords records to write to the save file
      */
-    private File getSaveFile() {
-        File legacyFile = new File(LEGACY_FILE_PATH);
-
-        if (!saveFile.exists() && legacyFile.exists()) {
-            return legacyFile;
-        }
-
-        return saveFile;
-    }
-
-    /** Saves every supplied task record, overwriting the previous content */
     public void save(List<String> taskRecords) {
         File file = getSaveFile();
         File parentDir = file.getParentFile();
@@ -87,10 +73,16 @@ public class Storage {
         return tasks;
     }
 
-    /** Reads the raw lines from the save file.
+    /**
+     * Returns the configured save file.
      *
-     * @return saved file content
+     * @return the file to use for persistence
      */
+    private File getSaveFile() {
+        return saveFile;
+    }
+
+    /** Reads the raw lines from the save file. */
     private List<String> loadTaskRecords() {
         List<String> taskRecords = new ArrayList<>();
 

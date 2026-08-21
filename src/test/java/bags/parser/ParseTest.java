@@ -23,72 +23,71 @@ import bags.task.ToDo;
  *
  * <p>These tests verify that ToDo, Deadline, and Event task records are
  * correctly parsed into the correct format.</p>
- *
  */
 public class ParseTest {
 
-        /**
-         * Tests that valid records from the task storage file are correctly
-         * parsed into the appropriate task types with the expected
-         * descriptions, completion status, and date-time formats.
-         *
-         * @throws BagsException if an error occurs while parsing a task record such as wrong time format.
-         */
-        @Test
-        void parseTask_validReadingFileRecords_createsCorrectTasks()
-                        throws BagsException {
+    /**
+     * Tests that valid records from the task storage file are correctly
+     * parsed into the appropriate task types with the expected
+     * descriptions, completion status, and date-time formats.
+     *
+     * @throws BagsException if an error occurs while parsing a task record.
+     */
+    @Test
+    void parseTask_validReadingFileRecords_createsCorrectTasks()
+            throws BagsException {
 
-                Parser parser = new Parser();
+        Parser parser = new Parser();
 
-                DateTimeFormatter inputFormatter =
-                                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        DateTimeFormatter inputFormatter =
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-                List<String> readingFile = List.of(
-                                "T | [ ] | Read book",
-                                "D | [ ] | Submit assignment | 2026-08-25 23:59",
-                                "E | [ ] | Project meeting | 2026-08-27 14:00 | 2026-08-27 16:00"
-                );
+        List<String> readingFileRecords = List.of(
+                "T | [ ] | Read book",
+                "D | [ ] | Submit assignment | 2026-08-25 23:59",
+                "E | [ ] | Project meeting | 2026-08-27 14:00 | 2026-08-27 16:00"
+        );
 
-                List<Task> tasks = new ArrayList<>();
+        List<Task> tasks = new ArrayList<>();
 
-                for (String record : readingFile) {
-                        Task task = parser.parseTask(record);
-                        tasks.add(task);
-                }
-
-                // ToDo task
-                assertInstanceOf(ToDo.class, tasks.get(0));
-                assertEquals("Read book", tasks.get(0).getDescription());
-                assertFalse(tasks.get(0).isDone());
-
-                // Deadline task
-                assertInstanceOf(Deadlines.class, tasks.get(1));
-                assertEquals("Submit assignment", tasks.get(1).getDescription());
-                assertFalse(tasks.get(1).isDone());
-
-                String[] deadlineParts = readingFile.get(1).split("\\|");
-                String deadline = deadlineParts[3].trim();
-
-                assertDoesNotThrow(
-                                () -> LocalDateTime.parse(deadline, inputFormatter)
-                );
-
-                // Event task
-                assertInstanceOf(Event.class, tasks.get(2));
-                assertEquals("Project meeting", tasks.get(2).getDescription());
-                assertFalse(tasks.get(2).isDone());
-
-                String[] eventParts = readingFile.get(2).split("\\|");
-
-                String from = eventParts[3].trim();
-                String to = eventParts[4].trim();
-
-                assertDoesNotThrow(
-                                () -> LocalDateTime.parse(from, inputFormatter)
-                );
-
-                assertDoesNotThrow(
-                                () -> LocalDateTime.parse(to, inputFormatter)
-                );
+        for (String record : readingFileRecords) {
+            Task task = parser.parseTask(record);
+            tasks.add(task);
         }
+
+        // ToDo task
+        assertInstanceOf(ToDo.class, tasks.get(0));
+        assertEquals("Read book", tasks.get(0).getDescription());
+        assertFalse(tasks.get(0).isDone());
+
+        // Deadline task
+        assertInstanceOf(Deadlines.class, tasks.get(1));
+        assertEquals("Submit assignment", tasks.get(1).getDescription());
+        assertFalse(tasks.get(1).isDone());
+
+        String[] deadlineParts = readingFileRecords.get(1).split("\\|");
+        String deadline = deadlineParts[3].trim();
+
+        assertDoesNotThrow(
+                () -> LocalDateTime.parse(deadline, inputFormatter)
+        );
+
+        // Event task
+        assertInstanceOf(Event.class, tasks.get(2));
+        assertEquals("Project meeting", tasks.get(2).getDescription());
+        assertFalse(tasks.get(2).isDone());
+
+        String[] eventParts = readingFileRecords.get(2).split("\\|");
+
+        String from = eventParts[3].trim();
+        String to = eventParts[4].trim();
+
+        assertDoesNotThrow(
+                () -> LocalDateTime.parse(from, inputFormatter)
+        );
+
+        assertDoesNotThrow(
+                () -> LocalDateTime.parse(to, inputFormatter)
+        );
+    }
 }

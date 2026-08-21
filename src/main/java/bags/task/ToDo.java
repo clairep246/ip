@@ -17,20 +17,20 @@ import bags.exception.BagsException;
 public class ToDo extends Task {
 
     /**
-     * Creates a ToDo task with the given description.
+     * Creates a to-do task.
      *
-     * @param description the description of the task
+     * @param description text describing the task
      */
     public ToDo(String description) {
         super(description, Tasktype.TODO);
     }
 
     /**
-     * Creates a ToDo task from an add task command.
+     * Creates a to-do task from an add-task command string.
      *
-     * @param output the user's add ToDo command
-     * @return a new ToDo task created from the command
-     * @throws BagsException if the task description is missing
+     * @param output user input after {@code todo}
+     * @return the created to-do task
+     * @throws BagsException if the description is missing
      */
     public static ToDo fromCommand(String output) throws BagsException {
         String[] temp = output.split(" ");
@@ -72,5 +72,4 @@ public class ToDo extends Task {
     public String parseEvent() {
         return "T | " + "[" + getStatusIcon() + "] | " + description;
     }
-
 }

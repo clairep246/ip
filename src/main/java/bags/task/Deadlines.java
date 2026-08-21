@@ -7,22 +7,20 @@ import java.time.format.DateTimeParseException;
 import bags.exception.BagsException;
 
 /**
- * Represents a deadline task with a specific date and time 
- * the task should be completed.
-
+ * Represents a task with a deadline.
  */
 public class Deadlines extends Task {
 
     private static final DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     private LocalDateTime deadline;
-    private String formatted_deadline;
+    private String formattedDeadline;
 
     /**
-     * Creates a deadline task with the given description and deadline.
+     * Creates a deadline task.
      *
-     * @param description the description of the task
-     * @param deadline the deadline in yyyy-MM-dd HH:mm format
-     * @throws BagsException if the deadline is in an invalid format
+     * @param description text describing the task
+     * @param deadline deadline string in {@code yyyy-MM-dd HH:mm} format
+     * @throws BagsException if the deadline format is invalid
      */
     public Deadlines(String description, String deadline) throws BagsException {
         super(description, Tasktype.DEADLINE);
@@ -31,7 +29,7 @@ public class Deadlines extends Task {
             this.deadline = LocalDateTime.parse(deadline, inputFormatter);
 
             DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy h:mma");
-            this.formatted_deadline = this.deadline.format(outputFormatter);
+            this.formattedDeadline = this.deadline.format(outputFormatter);
 
         } catch (DateTimeParseException e) {
             throw new BagsException("Please key in date in correct format: year-month-date hh:mm in 24h");
@@ -39,12 +37,11 @@ public class Deadlines extends Task {
     }
 
     /**
-     * Creates a deadline task from an add task command by splitting input and formatting each section.
+     * Creates a deadline task from an add-task command string.
      *
-     * @param output the user's add deadline command
-     * @return a new Deadlines task created from the command
-     * @throws BagsException if the command is missing the task description,
-     *                       /by keyword, or deadline
+     * @param output user input after {@code deadline}
+     * @return the created deadline task
+     * @throws BagsException if the description or deadline is missing, or the format is invalid
      */
     public static Deadlines fromCommand(String output) throws BagsException {
         String[] temp = output.split(" ");
@@ -85,6 +82,11 @@ public class Deadlines extends Task {
         return new Deadlines(description, deadlineInfo);
     }
 
+    /**
+     * Returns the deadline as a date-time object.
+     *
+     * @return the deadline
+     */
     public LocalDateTime getDeadline() {
         return this.deadline;
     }
@@ -97,7 +99,7 @@ public class Deadlines extends Task {
     @Override
     public String toString() {
         return "[D][" + super.getStatusIcon() + "] " + super.getDescription()
-                + " (by: " + formatted_deadline + ")";
+                + " (by: " + formattedDeadline + ")";
     }
 
     /**
