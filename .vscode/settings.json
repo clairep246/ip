@@ -1,5 +1,7 @@
 {
     "java.configuration.updateBuildConfiguration": "interactive",
     "mainClass": "bags.Bags",
-    "java.debug.settings.onBuildFailureProceed": true
+    "java.debug.settings.onBuildFailureProceed": true,
+    "editor.formatOnSave": false
+
 }

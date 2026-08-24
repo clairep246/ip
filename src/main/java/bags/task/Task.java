@@ -5,7 +5,6 @@ package bags.task;
  *
  * <p>This abstract class stores the common properties and behaviours
  * shared by different task types such as ToDo, Deadline, and Event.</p>
- 
  */
 public abstract class Task {
 
