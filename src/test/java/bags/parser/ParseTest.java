@@ -68,9 +68,7 @@ public class ParseTest {
         String[] deadlineParts = readingFileRecords.get(1).split("\\|");
         String deadline = deadlineParts[3].trim();
 
-        assertDoesNotThrow(
-                () -> LocalDateTime.parse(deadline, inputFormatter)
-        );
+        assertDoesNotThrow(() -> LocalDateTime.parse(deadline, inputFormatter));
 
         // Event task
         assertInstanceOf(Event.class, tasks.get(2));
@@ -82,12 +80,8 @@ public class ParseTest {
         String from = eventParts[3].trim();
         String to = eventParts[4].trim();
 
-        assertDoesNotThrow(
-                () -> LocalDateTime.parse(from, inputFormatter)
-        );
+        assertDoesNotThrow(() -> LocalDateTime.parse(from, inputFormatter));
 
-        assertDoesNotThrow(
-                () -> LocalDateTime.parse(to, inputFormatter)
-        );
+        assertDoesNotThrow(() -> LocalDateTime.parse(to, inputFormatter));
     }
 }

@@ -42,7 +42,7 @@ public class Parser {
             return Command.UNMARK;
         } else if (input.equals("echo")) {
             return Command.ECHO;
-        } else if(input.startsWith("search")) {
+        } else if (input.startsWith("search")) {
             return Command.SEARCH;
         } else if (input.startsWith("delete")) {
             return Command.DELETE;
