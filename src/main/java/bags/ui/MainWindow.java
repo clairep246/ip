@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 
 /**
@@ -27,15 +28,17 @@ public class MainWindow {
 
     private Bags bags;
 
+    private Image bagsImage;
+    private Image userImage;
+
     /**
      * Initialises the Bags application used by the JavaFX interface.
      */
     @FXML
     public void initialize() {
         bags = new Bags();
-
-        addMessage("Hello! I'm Bags. Nice to meet you!");
-        addMessage("What can I do for you?");
+        addBagsMessage("Hello! I'm Bags. Nice to meet you!");
+        addBagsMessage("What can I do for you?");
     }
 
     /**
@@ -46,15 +49,15 @@ public class MainWindow {
         String input = userInput.getText().trim();
 
         if (input.isEmpty()) {
-            addMessage("Please enter a command.");
+            addBagsMessage("Please enter a command.");
             return;
         }
 
-        addMessage("You: " + input);
+        addUserMessage(input);
 
         try {
             String response = bags.processCommand(input);
-            addMessage(response);
+            addBagsMessage(response);
 
             if (input.equals("bye")) {
                 sendButton.setDisable(true);
@@ -62,7 +65,7 @@ public class MainWindow {
             }
 
         } catch (BagsException e) {
-            addMessage("Error!! " + e.getMessage());
+            addBagsMessage("Error!! " + e.getMessage());
         }
 
         userInput.clear();
@@ -74,15 +77,22 @@ public class MainWindow {
      *
      * @param message the message to display
      */
-    private void addMessage(String message) {
-        javafx.scene.control.Label label =
-                new javafx.scene.control.Label(message);
+    private void addBagsMessage(String message) {
+        Image bagsImage = new Image(
+                MainWindow.class.getResourceAsStream("/images/Response.png"));
 
-        label.setWrapText(true);
-        label.setMaxWidth(360);
+        DialogBox dialogBox = DialogBox.getBagsDialog(message, bagsImage);
 
-        dialogContainer.getChildren().add(label);
+        dialogContainer.getChildren().add(dialogBox);
     }
+
+    private void addUserMessage(String message) {
+        Image userImage = new Image(MainWindow.class.getResourceAsStream("/images/User.png"));
+    DialogBox dialogBox =
+            DialogBox.getUserDialog(message, userImage);
+
+    dialogContainer.getChildren().add(dialogBox);
+}
 
     /**
      * Scrolls the conversation window to the latest message.
