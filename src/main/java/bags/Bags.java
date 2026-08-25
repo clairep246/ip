@@ -100,8 +100,7 @@ public class Bags {
                         "I can't echo silence. Did you miss a command?");
             }
 
-            return input
-                    + "\n____________________________________________________________";
+            return input;
         }
 
         Parser.Command command = parser.parseCommand(input);
@@ -117,7 +116,6 @@ public class Bags {
                      2. deadline <name> /by <year-month-day> <hour:minutes>
                      3. event <name> /from <year-month-day> <hour:minutes> <name> /to <year-month-day> <hour:minutes>
                     To exit enter exit.
-                    ____________________________________________________________
                     """;
 
         } else if (command == Parser.Command.LIST) {
@@ -136,8 +134,7 @@ public class Bags {
 
             isEchoMode = true;
 
-            return "From now on I will echo your input. To exit enter exit."
-                    + "\n____________________________________________________________";
+            return "From now on I will echo your input. To exit enter exit.";
 
         } else if (command == Parser.Command.DELETE) {
 
@@ -203,7 +200,6 @@ public class Bags {
                 + "\nNow you have "
                 + tasks.size()
                 + " tasks in your list.\n"
-                + "____________________________________________________________"
                 + "\nEnter another task or enter exit to leave editing mode.";
     }
 

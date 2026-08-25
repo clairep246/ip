@@ -4,23 +4,31 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.shape.Circle?>
 
 <fx:root alignment="TOP_RIGHT"
          type="javafx.scene.layout.HBox"
          xmlns="http://javafx.com/javafx/17"
-         xmlns:fx="http://javafx.com/fxml/1">
+         xmlns:fx="http://javafx.com/fxml/1"
+         stylesheets="@../css/dialog-box.css">
 
     <children>
 
         <Label fx:id="dialog"
                text="Label"
                wrapText="true"
-               maxWidth="300.0"/>
+               maxWidth="300.0"
+               minHeight="-Infinity"/>
 
-        <ImageView fx:id="displayPicture"
-                   fitHeight="80.0"
-                   fitWidth="80.0"
-                   preserveRatio="false"/>
+         <ImageView fx:id="displayPicture" 
+               fitHeight="41.0" 
+               fitWidth="41.0" 
+               pickOnBounds="true" 
+               preserveRatio="false">
+            <clip>
+                <Circle centerX="20.5" centerY="20.5" radius="20.5" />
+            </clip>
+        </ImageView>
 
     </children>
 
