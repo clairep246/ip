@@ -11,14 +11,13 @@ import bags.task.Task;
 import bags.task.TaskList;
 import bags.task.Tasktype;
 import bags.task.ToDo;
-import bags.ui.Ui;
 
 /**
  * Main chatbot class for the Bags task management application.
  *
  * <p>
- * The {@code Bags} class coordinates the user interface, command parsing,
- * task management, and storage components of the application.
+ * The {@code Bags} class coordinates command parsing, task management,
+ * and storage components of the application.
  * </p>
  *
  * <p>
@@ -28,307 +27,249 @@ import bags.ui.Ui;
  */
 public class Bags {
 
-    /**
-     * Divider used to separate sections of the chatbot output.
-     */
-    private static final String divider =
-            "____________________________________________________________";
+    private final Storage storage;
+    private final Parser parser;
+    private TaskList tasks;
+
+    private boolean isAddingTask;
+    private boolean isEchoMode;
 
     /**
-     * Storage object responsible for saving and loading task records.
-     */
-    private static final Storage storage =
-            new Storage("./data/Bags.txt");
-
-    /**
-     * Parser used to interpret user commands and stored task records.
-     */
-    private static final Parser parser = new Parser();
-
-    /**
-     * Task list containing all tasks currently managed by the application.
-     */
-    private static TaskList tasks;
-
-    /**
-     * Starts the Bags chatbot application.
+     * Creates a Bags application and loads existing tasks from storage.
      *
      * <p>
-     * This method initialises the user interface and loads existing tasks
-     * from storage. It then continuously reads and processes user commands
-     * until the user enters the {@code bye} command.
+     * If the existing storage file cannot be loaded, an empty task list
+     * is created instead.
      * </p>
-     *
-     * <p>
-     * Any {@link BagsException} encountered while processing a command is
-     * displayed to the user without terminating the application.
-     * </p>
-     *
-     * @param args command-line arguments passed to the application
      */
-    public static void main(String[] args) {
-
-        Ui ui = new Ui();
+    public Bags() {
+        storage = new Storage("./data/Bags.txt");
+        parser = new Parser();
+        isAddingTask = false;
+        isEchoMode = false;
 
         try {
             tasks = new TaskList(storage.loadTasks(parser));
         } catch (BagsException e) {
-            System.out.println("Error!! " + e.getMessage());
             tasks = new TaskList();
         }
+    }
 
-        ui.showWelcome();
+    /**
+     * Processes a command entered by the user.
+     *
+     * @param input the command entered by the user
+     * @return the response that should be displayed to the user
+     */
+    public String processCommand(String input) throws BagsException {
 
-        String output = ui.readCommand();
-        ui.showDivider();
-
-        Parser.Command command = parser.parseCommand(output);
-
-        while (command != Parser.Command.BYE) {
-
-            try {
-                if (command == Parser.Command.EMPTY) {
-                    throw new BagsException(
-                            "No command was entered. Please enter a command.");
-                }
-
-                if (command == Parser.Command.ADD_TASK) {
-                    addTask(ui);
-
-                } else if (command == Parser.Command.LIST) {
-                    listItems();
-
-                } else if (command == Parser.Command.MARK) {
-                    markDone(output);
-
-                } else if (command == Parser.Command.UNMARK) {
-                    unMarkDone(output);
-
-                } else if (command == Parser.Command.ECHO) {
-                    echoWords(ui);
-
-                } else if (command == Parser.Command.DELETE) {
-                    deleteTask(output);
-
-                } else if (command == Parser.Command.SEARCH) {
-                    searchTasks(output);
-
-                } else {
-                    throw new BagsException(
-                            "The command does not exist. Please try again :(");
-                }
-
-            } catch (BagsException e) {
-                System.out.println("Error!! " + e.getMessage());
-            }
-
-            ui.showPrompt();
-
-            output = ui.readCommand();
-            command = parser.parseCommand(output);
+        if (input == null || input.trim().isEmpty()) {
+            throw new BagsException(
+                    "No command was entered. Please enter a command.");
         }
 
+        input = input.trim();
+
+        /*
+         * If Bags is currently adding tasks, every input is treated
+         * as a task command until the user enters exit.
+         */
+        if (isAddingTask) {
+
+            if (input.equals("exit")) {
+                isAddingTask = false;
+                return "Exited editing mode.";
+            }
+
+            return addTask(input);
+        }
+
+        /*
+         * If Bags is currently in echo mode, every input is echoed
+         * until the user enters exit.
+         */
+        if (isEchoMode) {
+
+            if (input.equals("exit")) {
+                isEchoMode = false;
+                return "Exited echo mode.";
+            }
+
+            if (input.isEmpty()) {
+                throw new BagsException(
+                        "I can't echo silence. Did you miss a command?");
+            }
+
+            return input
+                    + "\n____________________________________________________________";
+        }
+
+        Parser.Command command = parser.parseCommand(input);
+
+        if (command == Parser.Command.ADD_TASK) {
+
+            isAddingTask = true;
+
+            return """
+                    Enter your task.
+                    Format for each task type, follow the format closely:
+                     1. todo <task name>
+                     2. deadline <name> /by <year-month-day> <hour:minutes>
+                     3. event <name> /from <year-month-day> <hour:minutes> <name> /to <year-month-day> <hour:minutes>
+                    To exit enter exit.
+                    ____________________________________________________________
+                    """;
+
+        } else if (command == Parser.Command.LIST) {
+
+            return listItems();
+
+        } else if (command == Parser.Command.MARK) {
+
+            return markDone(input);
+
+        } else if (command == Parser.Command.UNMARK) {
+
+            return unMarkDone(input);
+
+        } else if (command == Parser.Command.ECHO) {
+
+            isEchoMode = true;
+
+            return "From now on I will echo your input. To exit enter exit."
+                    + "\n____________________________________________________________";
+
+        } else if (command == Parser.Command.DELETE) {
+
+            return deleteTask(input);
+
+        } else if (command == Parser.Command.SEARCH) {
+
+            return searchTasks(input);
+
+        } else if (command == Parser.Command.BYE) {
+
+            saveTasks();
+
+            return "Bye. Hope to see you again soon!";
+
+        } else {
+
+            throw new BagsException(
+                    "The command does not exist. Please try again :(");
+        }
+    }
+
+    /**
+     * Adds a task to the task list.
+     *
+     * <p>
+     * This method replaces one iteration of the original
+     * {@code while (!output.equals("exit"))} loop.
+     * </p>
+     *
+     * @param input the task command entered by the user
+     * @return a message describing the added task
+     * @throws BagsException if the task type or task format is invalid
+     */
+    private String addTask(String input) throws BagsException {
+
+        Tasktype type = parser.parseTaskType(input);
+        Task task;
+
+        if (type == Tasktype.TODO) {
+
+            task = ToDo.fromCommand(input);
+
+        } else if (type == Tasktype.DEADLINE) {
+
+            task = Deadlines.fromCommand(input);
+
+        } else if (type == Tasktype.EVENT) {
+
+            task = Event.fromCommand(input);
+
+        } else {
+
+            throw new BagsException(
+                    "Not a valid task type, only event, to do or deadline task.");
+        }
+
+        tasks.add(task);
         saveTasks();
 
-        ui.showGoodbye();
-
-        ui.close();
-    }
-
-    /**
-     * Saves all current tasks to the storage file.
-     *
-     * <p>
-     * The tasks are converted into their storage record format before
-     * being passed to the {@link Storage} object.
-     * </p>
-     */
-    private static void saveTasks() {
-        storage.save(tasks.toSaveRecords());
-    }
-
-    /**
-     * Enters task creation mode and allows the user to add tasks.
-     *
-     * <p>
-     * The user can create ToDo, Deadline, or Event tasks using the
-     * specified command formats. The user can enter {@code exit} to
-     * leave task creation mode.
-     * </p>
-     *
-     * @param ui the user interface used to receive commands from the user
-     */
-    private static void addTask(Ui ui) {
-
-        System.out.println("""
-                Enter your task.
-                Format for each task type, follow the format closely:
-                 1. todo <task name>
-                 2. deadline <name> /by <year-month-day> <hour:minutes>
-                 3. event <name> /from <year-month-day> <hour:minutes> <name> /to <year-month-day> <hour:minutes>
-                To exit enter exit.""");
-
-        System.out.println(divider);
-
-        String output = ui.readCommand();
-
-        while (!output.equals("exit")) {
-
-            try {
-                Tasktype type = parser.parseTaskType(output);
-                Task task;
-
-                if (type == Tasktype.TODO) {
-                    task = ToDo.fromCommand(output);
-
-                } else if (type == Tasktype.DEADLINE) {
-                    task = Deadlines.fromCommand(output);
-
-                } else if (type == Tasktype.EVENT) {
-                    task = Event.fromCommand(output);
-
-                } else {
-                    throw new BagsException(
-                            "Not a valid task type, only event, to do or deadline task.");
-                }
-
-                tasks.add(task);
-                saveTasks();
-
-                System.out.println(
-                        "Got it, I've added the following task to the list: ");
-                System.out.println(task);
-
-                System.out.println(
-                        "Now you have " + tasks.size() + " tasks in your list");
-
-            } catch (BagsException e) {
-                System.out.println(e.getMessage());
-            }
-
-            System.out.println(divider);
-            output = ui.readCommand();
-        }
-
-        System.out.println("Exited editing mode");
+        return "Got it, I've added the following task to the list:\n"
+                + task
+                + "\nNow you have "
+                + tasks.size()
+                + " tasks in your list.\n"
+                + "____________________________________________________________"
+                + "\nEnter another task or enter exit to leave editing mode.";
     }
 
     /**
      * Displays all tasks currently stored in the task list.
      *
+     * @return the current tasks
      * @throws BagsException if the task list is empty
      */
-    private static void listItems() throws BagsException {
+    private String listItems() throws BagsException {
 
         if (tasks.isEmpty()) {
             throw new BagsException(
                     "Your list empty. Please add some tasks!");
-
-        } else {
-            System.out.println(tasks);
         }
+
+        return tasks.toString();
     }
 
     /**
      * Marks the specified task as completed.
      *
-     * <p>
-     * The updated task list is saved to storage after the task is marked
-     * as completed.
-     * </p>
-     *
-     * @param output the user's mark command containing the task number
+     * @param input the user's mark command containing the task number
+     * @return a message describing the updated task
      * @throws BagsException if the task number is invalid
      */
-    private static void markDone(String output) throws BagsException {
+    private String markDone(String input) throws BagsException {
 
-        Task task = tasks.markDone(output);
+        Task task = tasks.markDone(input);
         saveTasks();
 
-        System.out.println("Ok! I've marked this task as done: ");
-        System.out.println(task);
+        return "Ok! I've marked this task as done:\n" + task;
     }
 
     /**
      * Marks the specified task as incomplete.
      *
-     * <p>
-     * The updated task list is saved to storage after the task is marked
-     * as incomplete.
-     * </p>
-     *
-     * @param output the user's unmark command containing the task number
+     * @param input the user's unmark command containing the task number
+     * @return a message describing the updated task
      * @throws BagsException if the task number is invalid
      */
-    private static void unMarkDone(String output)
-            throws BagsException {
+    private String unMarkDone(String input) throws BagsException {
 
-        Task task = tasks.markUndone(output);
+        Task task = tasks.markUndone(input);
         saveTasks();
 
-        System.out.println(
-                "Alright! I've marked this task as undone: ");
-        System.out.println(task);
+        return "Alright! I've marked this task as undone:\n" + task;
     }
 
     /**
      * Deletes the specified task from the task list.
      *
-     * <p>
-     * The updated task list is saved to storage after the task is deleted.
-     * </p>
-     *
-     * @param output the user's delete command containing the task number
+     * @param input the user's delete command containing the task number
+     * @return a message describing the deleted task
      * @throws BagsException if the task number is invalid
      */
-    private static void deleteTask(String output) throws BagsException {
+    private String deleteTask(String input) throws BagsException {
 
-        Task task = tasks.delete(output);
+        Task task = tasks.delete(input);
         saveTasks();
 
-        System.out.println(
-                "Got it! I've deleted the following task: ");
-        System.out.println(task);
-
-        System.out.println(
-                "You now have " + tasks.size() + " in your task list.");
-    }
-
-    /**
-     * Enters echo mode and repeatedly prints the user's input.
-     *
-     * <p>
-     * Echo mode continues until the user enters {@code exit}.
-     * Empty input is rejected because there is nothing to echo.
-     * </p>
-     *
-     * @param ui the user interface used to receive commands from the user
-     * @throws BagsException if the user enters an empty input
-     */
-    private static void echoWords(Ui ui)
-            throws BagsException {
-
-        System.out.println(
-                "From now on I will echo your input. To exit enter exit.");
-
-        System.out.println(divider);
-
-        String echo = ui.readCommand();
-
-        while (!echo.equals("exit")) {
-
-            if (echo.isEmpty()) {
-                throw new BagsException(
-                        "I can't echo silence. Did you miss a command?");
-            }
-
-            System.out.println(echo);
-            System.out.println(divider);
-
-            echo = ui.readCommand();
-        }
-
-        System.out.println("Exited echo mode.");
+        return "Got it! I've deleted the following task:\n"
+                + task
+                + "\nYou now have "
+                + tasks.size()
+                + " tasks in your task list.";
     }
 
     /**
@@ -336,35 +277,45 @@ public class Bags {
      *
      * <p>
      * The keyword is extracted from the user's search command and passed
-     * to the {@link TaskList} search method. Matching tasks are then
-     * displayed to the user.
-     * </p>
+     * to the {@link TaskList} search method.
      *
-     * @param output the user's search command containing the keyword
+     * @param input the user's search command containing the keyword
+     * @return the matching tasks
      * @throws BagsException if no search keyword is provided
      */
-    private static void searchTasks(String output)
-            throws BagsException {
+    private String searchTasks(String input) throws BagsException {
 
-        String[] temp = output.split(" ", 2);
+        String[] parts = input.split(" ", 2);
 
-        if (temp.length < 2 || temp[1].trim().isEmpty()) {
+        if (parts.length < 2 || parts[1].trim().isEmpty()) {
             throw new BagsException(
                     "Please enter a keyword to search for.");
         }
 
-        String keyword = temp[1].trim();
+        String keyword = parts[1].trim();
         List<Task> results = tasks.search(keyword);
 
         if (results.isEmpty()) {
-            System.out.println("No matching tasks found.");
-            return;
+            return "No matching tasks found.";
         }
 
-        System.out.println("Here are the matching tasks:");
+        StringBuilder output = new StringBuilder();
+        output.append("Here are the matching tasks:");
 
         for (int i = 0; i < results.size(); i++) {
-            System.out.println((i + 1) + "." + results.get(i));
+            output.append(System.lineSeparator())
+                    .append(i + 1)
+                    .append(".")
+                    .append(results.get(i));
         }
+
+        return output.toString();
+    }
+
+    /**
+     * Saves all current tasks to the storage file.
+     */
+    private void saveTasks() {
+        storage.save(tasks.toSaveRecords());
     }
 }
