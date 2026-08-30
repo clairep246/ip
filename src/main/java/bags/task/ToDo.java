@@ -32,7 +32,7 @@ public class ToDo extends Task {
      * @return the created to-do task
      * @throws BagsException if the description is missing
      */
-    public static ToDo fromCommand(String output) throws BagsException {
+    public static ToDo createTask(String output) throws BagsException {
         String[] temp = output.split(" ");
 
         if (temp.length < 2) {

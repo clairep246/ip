@@ -47,7 +47,7 @@ class TaskListTest {
     void addMethod_emptyList_successfullyAddTask() throws BagsException {
         TaskList taskList = new TaskList();
 
-        assertEquals(0, taskList.size());
+        assertEquals(0, taskList.getSize());
 
         ToDo todo = new ToDo("Read book");
         taskList.add(todo);
@@ -55,7 +55,7 @@ class TaskListTest {
         List<Task> tasks = taskList.getTasks();
         List<String> readingFileRecords = taskList.getReadingFile();
 
-        assertEquals(1, taskList.size());
+        assertEquals(1, taskList.getSize());
         assertEquals(todo, tasks.get(0));
         assertEquals(todo.parseEvent(), readingFileRecords.get(0));
     }
@@ -259,7 +259,7 @@ class TaskListTest {
         Task deleted = taskList.delete("delete 1");
 
         assertEquals("Read book", deleted.getDescription());
-        assertEquals(1, taskList.size());
+        assertEquals(1, taskList.getSize());
         assertEquals(
                 "Do homework",
                 taskList.getTasks().get(0).getDescription()

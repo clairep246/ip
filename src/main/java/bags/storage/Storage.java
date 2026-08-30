@@ -35,7 +35,7 @@ public class Storage {
      *
      * @param taskRecords records to write to the save file
      */
-    public void save(List<String> taskRecords) {
+    public void saveRecords(List<String> taskRecords) {
         File file = getSaveFile();
         File parentDir = file.getParentFile();
 

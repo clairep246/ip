@@ -43,7 +43,7 @@ public class Deadlines extends Task {
      * @return the created deadline task
      * @throws BagsException if the description or deadline is missing, or the format is invalid
      */
-    public static Deadlines fromCommand(String output) throws BagsException {
+    public static Deadlines createTask(String output) throws BagsException {
         String[] temp = output.split(" ");
 
         if (temp.length < 2) {

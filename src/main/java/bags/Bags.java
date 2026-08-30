@@ -176,15 +176,15 @@ public class Bags {
 
         if (type == Tasktype.TODO) {
 
-            task = ToDo.fromCommand(input);
+            task = ToDo.createTask(input);
 
         } else if (type == Tasktype.DEADLINE) {
 
-            task = Deadlines.fromCommand(input);
+            task = Deadlines.createTask(input);
 
         } else if (type == Tasktype.EVENT) {
 
-            task = Event.fromCommand(input);
+            task = Event.createTask(input);
 
         } else {
 
@@ -198,7 +198,7 @@ public class Bags {
         return "Got it, I've added the following task to the list:\n"
                 + task
                 + "\nNow you have "
-                + tasks.size()
+                + tasks.getSize()
                 + " tasks in your list.\n"
                 + "\nEnter another task or enter exit to leave editing mode.";
     }
@@ -264,7 +264,7 @@ public class Bags {
         return "Got it! I've deleted the following task:\n"
                 + task
                 + "\nYou now have "
-                + tasks.size()
+                + tasks.getSize()
                 + " tasks in your task list.";
     }
 
@@ -312,6 +312,6 @@ public class Bags {
      * Saves all current tasks to the storage file.
      */
     private void saveTasks() {
-        storage.save(tasks.toSaveRecords());
+        storage.saveRecords(tasks.toSaveRecords());
     }
 }

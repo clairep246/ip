@@ -6,15 +6,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import bags.parser.Parser;
 import bags.task.Task;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests the {@link Storage} class for saving and loading task records.
@@ -53,7 +52,7 @@ class StorageTest {
                 "T | [X] | Do homework"
         );
 
-        storage.save(records);
+        storage.saveRecords(records);
 
         List<String> savedRecords = Files.readAllLines(file);
 
@@ -81,7 +80,7 @@ class StorageTest {
         try {
             System.setOut(new PrintStream(output));
 
-            storage.save(List.of("T | [ ] | Read book"));
+            storage.saveRecords(List.of("T | [ ] | Read book"));
 
             assertTrue(
                     output.toString().contains(
@@ -210,7 +209,7 @@ class StorageTest {
                 "T | [X] | Do homework"
         );
 
-        storage.save(records);
+        storage.saveRecords(records);
 
         Parser parser = new Parser();
 

@@ -88,10 +88,9 @@ public class MainWindow {
 
     private void addUserMessage(String message) {
         Image userImage = new Image(MainWindow.class.getResourceAsStream("/images/User.png"));
-    DialogBox dialogBox =
-            DialogBox.getUserDialog(message, userImage);
+        DialogBox dialogBox =DialogBox.getUserDialog(message, userImage);
 
-    dialogContainer.getChildren().add(dialogBox);
+        dialogContainer.getChildren().add(dialogBox);
 }
 
     /**

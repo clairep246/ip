@@ -47,7 +47,7 @@ public class Event extends Task {
      * @return the created event task
      * @throws BagsException if the description or time range is missing, or the format is invalid
      */
-    public static Event fromCommand(String output) throws BagsException {
+    public static Event createTask(String output) throws BagsException {
         String[] temp = output.split(" ");
         if (temp.length < 2) {
             throw new BagsException("Missing task description! Add task info after task type");
