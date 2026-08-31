@@ -13,9 +13,9 @@ import bags.parser.Parser;
 import bags.task.Task;
 
 /**
- * Loads task records from, and saves task records to, the application's save file.
- * <p> AI was used to generate <code>Storage</code> class. The code was then reviewed and tweaked
- * to fit the application's standards.
+ * Loads task records from, and saves task records to, the application's safe file.
+ * <p> AI was used to generate <code>Storage</code> class.
+ * The code was then reviewed and tweaked to fit the application's standards.
  */
 public class Storage {
 

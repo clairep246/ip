@@ -36,7 +36,8 @@ public class ToDo extends Task {
         String[] temp = output.split(" ");
 
         if (temp.length < 2) {
-            throw new BagsException("Missing task description! Add info after the type of task");
+            throw new BagsException(
+                    "Missing task description! Add info after the type of task");
         }
 
         StringBuilder name = new StringBuilder();
@@ -46,7 +47,8 @@ public class ToDo extends Task {
 
         String description = name.toString().trim();
         if (description.isEmpty()) {
-            throw new BagsException("Missing task description! Add info after the type of task");
+            throw new BagsException(
+                    "Missing task description! Add info after the type of task");
         }
 
         return new ToDo(description);

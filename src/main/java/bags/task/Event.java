@@ -26,7 +26,8 @@ public class Event extends Task {
      * @param to end date-time string in {@code yyyy-MM-dd HH:mm} format
      * @throws BagsException if either date-time format is invalid
      */
-    public Event(String description, String from, String to) throws BagsException {
+    public Event(String description, String from, String to)
+            throws BagsException {
         super(description, Tasktype.EVENT);
 
         try {
@@ -49,13 +50,15 @@ public class Event extends Task {
      *
      * @param output user input after {@code event}
      * @return the created event task
-     * @throws BagsException if the description or time range is missing, or the format is invalid
+     * @throws BagsException if the description or time range is missing,
+     * or the format is invalid
      */
     public static Event createTask(String output) throws BagsException {
         String[] words = output.split(" ");
 
         if (words.length < 2) {
-            throw new BagsException("Missing task description! Add task info after task type");
+            throw new BagsException(
+                    "Missing task description! Add task info after task type");
         }
 
         int fromIndex = findIndex(words, "/from");
@@ -68,7 +71,8 @@ public class Event extends Task {
 
         String description = buildText(words, 1, fromIndex);
         if (description.isEmpty()) {
-            throw new BagsException("Missing task description! Add task info after task type");
+            throw new BagsException(
+                    "Missing task description! Add task info after task type");
         }
 
         String fromString = buildText(words, fromIndex + 1, toIndex);
@@ -107,7 +111,8 @@ public class Event extends Task {
      * @param endIndex the exclusive ending index
      * @return the combined text
      */
-    private static String buildText(String[] words, int startIndex, int endIndex) {
+    private static String buildText(
+            String[] words, int startIndex, int endIndex) {
         StringBuilder text = new StringBuilder();
 
         for (int i = startIndex; i < endIndex; i++) {

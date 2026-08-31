@@ -94,7 +94,8 @@ public class Deadlines extends Task {
      * @param endIndex the exclusive ending index
      * @return the combined text
      */
-    private static String buildText(String[] words, int startIndex, int endIndex) {
+    private static String buildText(
+            String[] words, int startIndex, int endIndex) {
         StringBuilder text = new StringBuilder();
 
         for (int i = startIndex; i < endIndex; i++) {
