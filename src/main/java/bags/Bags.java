@@ -3,6 +3,7 @@ package bags;
 import java.util.List;
 
 import bags.exception.BagsException;
+import bags.parser.Command;
 import bags.parser.Parser;
 import bags.storage.Storage;
 import bags.task.Deadlines;
@@ -103,9 +104,9 @@ public class Bags {
             return input;
         }
 
-        Parser.Command command = parser.parseCommand(input);
+        Command command = parser.parseCommand(input);
 
-        if (command == Parser.Command.ADD_TASK) {
+        if (command == Command.ADD_TASK) {
 
             isAddingTask = true;
 
@@ -118,33 +119,33 @@ public class Bags {
                     To exit enter exit.
                     """;
 
-        } else if (command == Parser.Command.LIST) {
+        } else if (command == Command.LIST) {
 
             return listItems();
 
-        } else if (command == Parser.Command.MARK) {
+        } else if (command == Command.MARK) {
 
             return markDone(input);
 
-        } else if (command == Parser.Command.UNMARK) {
+        } else if (command == Command.UNMARK) {
 
             return unMarkDone(input);
 
-        } else if (command == Parser.Command.ECHO) {
+        } else if (command == Command.ECHO) {
 
             isEchoMode = true;
 
             return "From now on I will echo your input. To exit enter exit.";
 
-        } else if (command == Parser.Command.DELETE) {
+        } else if (command == Command.DELETE) {
 
             return deleteTask(input);
 
-        } else if (command == Parser.Command.SEARCH) {
+        } else if (command == Command.SEARCH) {
 
             return searchTasks(input);
 
-        } else if (command == Parser.Command.BYE) {
+        } else if (command == Command.BYE) {
 
             saveTasks();
 
