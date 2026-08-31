@@ -2,6 +2,7 @@ package bags.ui;
 
 import bags.Bags;
 import bags.exception.BagsException;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -28,11 +29,8 @@ public class MainWindow {
 
     private Bags bags;
 
-    private Image bagsImage;
-    private Image userImage;
-
     /**
-     * Initialises the Bags application used by the JavaFX interface.
+     * Initializes the Bags application used by the JavaFX interface.
      */
     @FXML
     public void initialize() {
@@ -86,12 +84,19 @@ public class MainWindow {
         dialogContainer.getChildren().add(dialogBox);
     }
 
+    /**
+     * Adds a user message to the conversation window.
+     *
+     * @param message the message to display
+     */
     private void addUserMessage(String message) {
-        Image userImage = new Image(MainWindow.class.getResourceAsStream("/images/User.png"));
-        DialogBox dialogBox =DialogBox.getUserDialog(message, userImage);
+        Image userImage = new Image(
+                MainWindow.class.getResourceAsStream("/images/User.png"));
+
+        DialogBox dialogBox = DialogBox.getUserDialog(message, userImage);
 
         dialogContainer.getChildren().add(dialogBox);
-}
+    }
 
     /**
      * Scrolls the conversation window to the latest message.
