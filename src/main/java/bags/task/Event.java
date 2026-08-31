@@ -51,7 +51,7 @@ public class Event extends Task {
      * @param output user input after {@code event}
      * @return the created event task
      * @throws BagsException if the description or time range is missing,
-     * or the format is invalid
+     *     or the format is invalid
      */
     public static Event createTask(String output) throws BagsException {
         String[] words = output.split(" ");

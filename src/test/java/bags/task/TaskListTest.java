@@ -89,8 +89,7 @@ class TaskListTest {
         TaskList taskList = createTaskList();
 
         BagsException exception = assertThrows(
-                BagsException.class,
-                () -> taskList.markDone("done")
+                BagsException.class, () -> taskList.markDone("done")
         );
 
         assertTrue(exception.getMessage().contains("Missing task number"));
@@ -106,8 +105,7 @@ class TaskListTest {
         TaskList taskList = createTaskList();
 
         BagsException exception = assertThrows(
-                BagsException.class,
-                () -> taskList.markDone("done 0")
+                BagsException.class, () -> taskList.markDone("done 0")
         );
 
         assertTrue(exception.getMessage().contains("Task does not exist"));
@@ -125,8 +123,7 @@ class TaskListTest {
         TaskList taskList = createTaskList();
 
         BagsException exception = assertThrows(
-                BagsException.class,
-                () -> taskList.markDone("done 3")
+                BagsException.class, () -> taskList.markDone("done 3")
         );
 
         assertTrue(exception.getMessage().contains("Task does not exist"));
@@ -144,8 +141,7 @@ class TaskListTest {
         TaskList taskList = createTaskList();
 
         BagsException exception = assertThrows(
-                BagsException.class,
-                () -> taskList.markDone("done abc")
+                BagsException.class, () -> taskList.markDone("done abc")
         );
 
         assertTrue(exception.getMessage().contains("Invalid task number"));
@@ -183,8 +179,7 @@ class TaskListTest {
         TaskList taskList = createTaskList();
 
         BagsException exception = assertThrows(
-                BagsException.class,
-                () -> taskList.markUndone("undone")
+                BagsException.class, () -> taskList.markUndone("undone")
         );
 
         assertTrue(exception.getMessage().contains("Missing task number"));
@@ -200,8 +195,7 @@ class TaskListTest {
         TaskList taskList = createTaskList();
 
         BagsException exception = assertThrows(
-                BagsException.class,
-                () -> taskList.markUndone("undone 0")
+                BagsException.class, () -> taskList.markUndone("undone 0")
         );
 
         assertTrue(exception.getMessage().contains("Task does not exist"));
@@ -219,8 +213,7 @@ class TaskListTest {
         TaskList taskList = createTaskList();
 
         BagsException exception = assertThrows(
-                BagsException.class,
-                () -> taskList.markUndone("undone 3")
+                BagsException.class, () -> taskList.markUndone("undone 3")
         );
 
         assertTrue(exception.getMessage().contains("Task does not exist"));
@@ -238,8 +231,7 @@ class TaskListTest {
         TaskList taskList = createTaskList();
 
         BagsException exception = assertThrows(
-                BagsException.class,
-                () -> taskList.markUndone("undone abc")
+                BagsException.class, () -> taskList.markUndone("undone abc")
         );
 
         assertTrue(exception.getMessage().contains("Invalid task number"));
@@ -278,8 +270,7 @@ class TaskListTest {
         TaskList taskList = createTaskList();
 
         BagsException exception = assertThrows(
-                BagsException.class,
-                () -> taskList.delete("delete")
+                BagsException.class, () -> taskList.delete("delete")
         );
 
         assertTrue(exception.getMessage().contains("Missing task number"));
@@ -296,8 +287,7 @@ class TaskListTest {
         TaskList taskList = createTaskList();
 
         BagsException exception = assertThrows(
-                BagsException.class,
-                () -> taskList.delete("delete 0")
+                BagsException.class, () -> taskList.delete("delete 0")
         );
 
         assertTrue(exception.getMessage().contains("Task does not exist"));
@@ -315,8 +305,7 @@ class TaskListTest {
         TaskList taskList = createTaskList();
 
         BagsException exception = assertThrows(
-                BagsException.class,
-                () -> taskList.delete("delete 3")
+                BagsException.class, () -> taskList.delete("delete 3")
         );
 
         assertTrue(exception.getMessage().contains("Task does not exist"));
@@ -334,8 +323,7 @@ class TaskListTest {
         TaskList taskList = createTaskList();
 
         BagsException exception = assertThrows(
-                BagsException.class,
-                () -> taskList.delete("delete abc")
+                BagsException.class, () -> taskList.delete("delete abc")
         );
 
         assertTrue(exception.getMessage().contains("Invalid task number"));

@@ -65,7 +65,7 @@ class StorageTest {
      * @throws Exception if an unexpected file operation error occurs
      */
     @Test
-    void save_directoryAsFile_handlesIOException() throws Exception {
+    void save_directoryAsFile_handlesIoException() throws Exception {
         Path directory = tempDir.resolve("Bags");
         Files.createDirectory(directory);
 

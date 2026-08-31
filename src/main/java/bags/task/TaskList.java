@@ -142,8 +142,8 @@ public class TaskList {
 
         if (temp.length < 2) {
             throw new BagsException(
-                    "Missing task number. Enter value from 1 to " +
-                            tasks.size());
+                    "Missing task number. Enter value from 1 to "
+                            + tasks.size());
         }
 
         try {
@@ -159,8 +159,8 @@ public class TaskList {
             return task;
         } catch (NumberFormatException e) {
             throw new BagsException(
-                    "Invalid task number. Please enter a valid number from 1 to " +
-                            tasks.size());
+                    "Invalid task number. Please enter a valid number from 1 to "
+                            + tasks.size());
         }
     }
 
@@ -175,24 +175,24 @@ public class TaskList {
         String[] temp = output.split(" ");
         if (temp.length < 2) {
             throw new BagsException(
-                    "Missing task number. Enter value from 1 to " +
-                            tasks.size());
+                    "Missing task number. Enter value from 1 to "
+                            + tasks.size());
         }
 
         try {
             int taskNumber = Integer.parseInt(temp[1]);
             if (taskNumber <= 0 || taskNumber > tasks.size()) {
                 throw new BagsException(
-                        "Task does not exist. Enter value from 1 to " +
-                                tasks.size());
+                        "Task does not exist. Enter value from 1 to "
+                                + tasks.size());
             }
             Task task = tasks.remove(taskNumber - 1);
             readingFileRecords.remove(taskNumber - 1);
             return task;
         } catch (NumberFormatException e) {
             throw new BagsException(
-                    "Invalid task number. Please enter a valid number from 1 to " +
-                            tasks.size());
+                    "Invalid task number. Please enter a valid number from 1 to "
+                            + tasks.size());
         }
     }
 

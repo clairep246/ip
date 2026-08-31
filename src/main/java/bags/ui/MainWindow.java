@@ -2,7 +2,6 @@ package bags.ui;
 
 import bags.Bags;
 import bags.exception.BagsException;
-
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
