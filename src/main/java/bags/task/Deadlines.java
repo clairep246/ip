@@ -11,7 +11,8 @@ import bags.exception.BagsException;
  */
 public class Deadlines extends Task {
 
-    private static final DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final DateTimeFormatter inputFormatter =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     private LocalDateTime deadline;
     private String formattedDeadline;
 
@@ -30,17 +31,18 @@ public class Deadlines extends Task {
         try {
             this.deadline = LocalDateTime.parse(deadline, inputFormatter);
 
-            DateTimeFormatter outputFormatter = 
+            DateTimeFormatter outputFormatter =
                     DateTimeFormatter.ofPattern("dd/MM/yyyy h:mma");
             this.formattedDeadline = this.deadline.format(outputFormatter);
-            
+
             assert this.deadline != null : "Deadline must be parsed successfully";
             assert this.formattedDeadline != null
                 : "Formatted deadline must be created";
 
 
         } catch (DateTimeParseException e) {
-            throw new BagsException("Please key in date in correct format: year-month-date hh:mm in 24h");
+            throw new BagsException(
+                    "Please key in date in correct format: year-month-date hh:mm in 24h");
         }
     }
 
@@ -59,38 +61,57 @@ public class Deadlines extends Task {
             throw new BagsException("Missing task description! Add some info after task type");
         }
 
-        int byIndex = -1;
-        for (int i = 0; i < temp.length; i++) {
-            if (temp[i].equals("/by")) {
-                byIndex = i;
-                break;
-            }
-        }
-
+        int byIndex = findByIndex(temp);
         if (byIndex == -1) {
             throw new BagsException("Missing /by. Please add in /by <end date>");
         }
 
-        assert byIndex >= 0 : "A deadline command must contain /by";
-
-        StringBuilder name = new StringBuilder();
-        for (int i = 1; i < byIndex; i++) {
-            name.append(temp[i]).append(" ");
-        }
-        String description = name.toString().trim();
+        String description = buildText(temp, 1, byIndex);
         if (description.isEmpty()) {
             throw new BagsException("Missing task description! Add some info after task type");
         }
 
-        StringBuilder deadline = new StringBuilder();
-        for (int i = byIndex + 1; i < temp.length; i++) {
-            deadline.append(temp[i]).append(" ");
-        }
-        String deadlineInfo = deadline.toString().trim();
+        String deadlineInfo = buildText(temp, byIndex + 1, temp.length);
         if (deadlineInfo.isEmpty()) {
             throw new BagsException("Missing deadline after /by! Add /by <deadline> after task name");
         }
+
         return new Deadlines(description, deadlineInfo);
+    }
+
+    /**
+     * Finds the position of the {@code /by} keyword.
+     *
+     * @param words the command words
+     * @return the index of {@code /by}, or {@code -1} if it is absent
+     */
+    private static int findByIndex(String[] words) {
+        for (int i = 0; i < words.length; i++) {
+            if (words[i].equals("/by")) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    /**
+     * Builds a trimmed string from a range of command words.
+     *
+     * @param words the command words
+     * @param startIndex the inclusive starting index
+     * @param endIndex the exclusive ending index
+     * @return the combined text
+     */
+    private static String buildText(
+            String[] words, int startIndex, int endIndex) {
+        StringBuilder text = new StringBuilder();
+
+        for (int i = startIndex; i < endIndex; i++) {
+            text.append(words[i]).append(" ");
+        }
+
+        return text.toString().trim();
     }
 
     /**

@@ -13,6 +13,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
+
 /**
  * Represents a dialog box containing a message and a profile picture.
  */
@@ -35,7 +36,7 @@ public class DialogBox extends HBox {
             fxmlLoader.setRoot(this);
             fxmlLoader.load();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Unable to load the dialog box layout.", e);
         }
 
         assert dialog != null : "Dialog label must be loaded from FXML";
@@ -47,8 +48,8 @@ public class DialogBox extends HBox {
     }
 
     /**
-     * Flips the dialog box such that the ImageView is on the left
-     * and text is on the right.
+     * Flips the dialog box such that the ImageView is on the left and text
+     * is on the right.
      */
     private void flip() {
         assert dialog != null : "Dialog label must be initialized";
@@ -56,14 +57,13 @@ public class DialogBox extends HBox {
                 : "Dialog box must contain text and image nodes";
 
         this.setAlignment(Pos.TOP_LEFT);
-
         ObservableList<Node> tmp =
                 FXCollections.observableArrayList(this.getChildren());
-
         FXCollections.reverse(tmp);
         this.getChildren().setAll(tmp);
         dialog.getStyleClass().add("reply-label");
     }
+
 
     /**
      * Creates a dialog box for Bags.

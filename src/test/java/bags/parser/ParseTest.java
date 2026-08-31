@@ -1,14 +1,15 @@
 package bags.parser;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import org.junit.jupiter.api.Test;
 
 import bags.exception.BagsException;
@@ -21,8 +22,10 @@ import bags.task.ToDo;
  * Tests the {@link Parser} class for converting stored task records
  * into their equivalent {@link Task} objects.
  *
- * <p>These tests verify that ToDo, Deadline, and Event task records are
- * correctly parsed into the correct format.</p>
+ * <p>
+ * These tests verify that ToDo, Deadline, and Event task records are
+ * correctly parsed into the correct format.
+ * </p>
  */
 public class ParseTest {
 
@@ -36,7 +39,6 @@ public class ParseTest {
     @Test
     void parseTask_validReadingFileRecords_createsCorrectTasks()
             throws BagsException {
-
         Parser parser = new Parser();
 
         DateTimeFormatter inputFormatter =
@@ -76,12 +78,10 @@ public class ParseTest {
         assertFalse(tasks.get(2).isDone());
 
         String[] eventParts = readingFileRecords.get(2).split("\\|");
-
         String from = eventParts[3].trim();
         String to = eventParts[4].trim();
 
         assertDoesNotThrow(() -> LocalDateTime.parse(from, inputFormatter));
-
         assertDoesNotThrow(() -> LocalDateTime.parse(to, inputFormatter));
     }
 }

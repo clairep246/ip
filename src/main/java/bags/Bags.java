@@ -3,6 +3,7 @@ package bags;
 import java.util.List;
 
 import bags.exception.BagsException;
+import bags.parser.Command;
 import bags.parser.Parser;
 import bags.storage.Storage;
 import bags.task.Deadlines;
@@ -14,6 +15,16 @@ import bags.task.ToDo;
 
 /**
  * Main chatbot class for the Bags task management application.
+ *
+ * <p>
+ * The {@code Bags} class coordinates command parsing, task management,
+ * and storage components of the application.
+ * </p>
+ *
+ * <p>
+ * It supports creating, listing, completing, uncompleting, deleting,
+ * searching, and saving tasks.
+ * </p>
  */
 public class Bags {
 
@@ -21,8 +32,8 @@ public class Bags {
     private final Parser parser;
     private TaskList tasks;
 
-    private boolean isAddingTask;
-    private boolean isEchoMode;
+    private boolean isAddingTask = false;
+    private boolean isEchoMode = false;
 
     /**
      * Creates a Bags application and loads existing tasks from storage.
@@ -30,8 +41,6 @@ public class Bags {
     public Bags() {
         storage = new Storage("./data/Bags.txt");
         parser = new Parser();
-        isAddingTask = false;
-        isEchoMode = false;
 
         assert storage != null : "Storage must be initialized";
         assert parser != null : "Parser must be initialized";
@@ -66,7 +75,12 @@ public class Bags {
 
         input = input.trim();
 
+        /*
+         * If Bags is currently adding tasks, every input is treated
+         * as a task command until the user enters exit.
+         */
         if (isAddingTask) {
+
             if (input.equals("exit")) {
                 isAddingTask = false;
                 return "Exited editing mode.";
@@ -89,11 +103,11 @@ public class Bags {
             return input;
         }
 
-        Parser.Command command = parser.parseCommand(input);
+        Command command = parser.parseCommand(input);
 
         assert command != null : "Parser must return a command";
 
-        if (command == Parser.Command.ADD_TASK) {
+        if (command == Command.ADD_TASK) {
             isAddingTask = true;
 
             assert isAddingTask : "Adding-task mode must be enabled";
@@ -106,33 +120,26 @@ public class Bags {
                      3. event <name> /from <year-month-day> <hour:minutes> <name> /to <year-month-day> <hour:minutes>
                     To exit enter exit.
                     """;
-
-        } else if (command == Parser.Command.LIST) {
+        } else if (command == Command.LIST) {
             return listItems();
-
-        } else if (command == Parser.Command.MARK) {
+        } else if (command == Command.MARK) {
             return markDone(input);
-
-        } else if (command == Parser.Command.UNMARK) {
-            return unMarkDone(input);
-
-        } else if (command == Parser.Command.ECHO) {
+        } else if (command == Command.UNMARK) {
+            return unmarkDone(input);
+        } else if (command == Command.ECHO) {
             isEchoMode = true;
 
             assert isEchoMode : "Echo mode must be enabled";
 
             return "From now on I will echo your input. To exit enter exit.";
-
-        } else if (command == Parser.Command.DELETE) {
+        } else if (command == Command.DELETE) {
             return deleteTask(input);
-
-        } else if (command == Parser.Command.SEARCH) {
+        } else if (command == Command.SEARCH) {
             return searchTasks(input);
-
-        } else if (command == Parser.Command.BYE) {
+        } else if (command == Command.BYE) {
             saveTasks();
-            return "Bye. Hope to see you again soon!";
 
+            return "Bye. Hope to see you again soon!";
         } else {
             throw new BagsException(
                     "The command does not exist. Please try again :(");
@@ -141,6 +148,11 @@ public class Bags {
 
     /**
      * Adds a task to the task list.
+     *
+     * <p>
+     * This method replaces one iteration of the original
+     * {@code while (!output.equals("exit"))} loop.
+     * </p>
      *
      * @param input the task command entered by the user
      * @return a message describing the added task
@@ -230,10 +242,9 @@ public class Bags {
      * @return a message describing the updated task
      * @throws BagsException if the task number is invalid
      */
-    private String unMarkDone(String input) throws BagsException {
+    private String unmarkDone(String input) throws BagsException {
         assert input != null : "Unmark command must not be null";
         assert tasks != null : "Task list must be initialized";
-
         Task task = tasks.markUndone(input);
 
         assert task != null : "Unmarked task must be returned";
@@ -271,7 +282,12 @@ public class Bags {
     /**
      * Searches the task list for tasks containing the specified keyword.
      *
-     * @param input the user's search command
+     * <p>
+     * The keyword is extracted from the user's search command and passed
+     * to the {@link TaskList} search method.
+     * </p>
+     *
+     * @param input the user's search command containing the keyword
      * @return the matching tasks
      * @throws BagsException if no search keyword is provided
      */
@@ -324,3 +340,4 @@ public class Bags {
         storage.saveRecords(tasks.toSaveRecords());
     }
 }
+

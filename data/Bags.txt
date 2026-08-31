@@ -1,3 +1,2 @@
 T | [ ] | read
-D | [ ] | reading | 2026-01-01 12:00
-T | [ ] | reading
+D | [X] | reading | 2026-01-01 12:00

@@ -17,13 +17,6 @@ import bags.task.ToDo;
 public class Parser {
 
     /**
-     * Commands recognized from user input.
-     */
-    public enum Command {
-        ADD_TASK, LIST, MARK, UNMARK, ECHO, DELETE, SEARCH, BYE, EMPTY, UNKNOWN
-    }
-
-    /**
      * Determines the type of command represented by the user's input.
      *
      * @param input the command entered by the user

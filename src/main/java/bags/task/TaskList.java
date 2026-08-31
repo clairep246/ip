@@ -118,20 +118,26 @@ public class TaskList {
         String[] temp = output.split(" ");
 
         if (temp.length < 2) {
-            throw new BagsException("Missing task number. Add a number from 1 to " + tasks.size());
+            throw new BagsException(
+                    "Missing task number. Add a number from 1 to "
+                            + tasks.size());
         }
 
         try {
             int taskNumber = Integer.parseInt(temp[1]);
             if (taskNumber <= 0 || taskNumber > tasks.size()) {
-                throw new BagsException("Task does not exist. Please only input number 1 to " + tasks.size());
+                throw new BagsException(
+                        "Task does not exist. Please only input number 1 to "
+                                + tasks.size());
             }
             Task task = tasks.get(taskNumber - 1);
             task.markDone();
             readingFileRecords.set(taskNumber - 1, task.parseEvent());
             return task;
         } catch (NumberFormatException e) {
-            throw new BagsException("Invalid task number! Please enter a valid number from 1 to " + tasks.size());
+            throw new BagsException(
+                    "Invalid task number! Please enter a valid number from 1 to "
+                            + tasks.size());
         }
     }
 
@@ -149,20 +155,26 @@ public class TaskList {
         String[] temp = output.split(" ");
 
         if (temp.length < 2) {
-            throw new BagsException("Missing task number. Enter value from 1 to " + tasks.size());
+            throw new BagsException(
+                    "Missing task number. Enter value from 1 to "
+                            + tasks.size());
         }
 
         try {
             int taskNumber = Integer.parseInt(temp[1]);
             if (taskNumber <= 0 || taskNumber > tasks.size()) {
-                throw new BagsException("Task does not exist. Enter value from 1 to " + tasks.size());
+                throw new BagsException(
+                        "Task does not exist. Enter value from 1 to "
+                                + tasks.size());
             }
             Task task = tasks.get(taskNumber - 1);
             task.markUndone();
             readingFileRecords.set(taskNumber - 1, task.parseEvent());
             return task;
         } catch (NumberFormatException e) {
-            throw new BagsException("Invalid task number. Please enter a valid number from 1 to " + tasks.size());
+            throw new BagsException(
+                    "Invalid task number. Please enter a valid number from 1 to "
+                            + tasks.size());
         }
     }
 
@@ -177,19 +189,25 @@ public class TaskList {
         assert output != null : "Command output must not be null";
         String[] temp = output.split(" ");
         if (temp.length < 2) {
-            throw new BagsException("Missing task number. Enter value from 1 to " + tasks.size());
+            throw new BagsException(
+                    "Missing task number. Enter value from 1 to "
+                            + tasks.size());
         }
 
         try {
             int taskNumber = Integer.parseInt(temp[1]);
             if (taskNumber <= 0 || taskNumber > tasks.size()) {
-                throw new BagsException("Task does not exist. Enter value from 1 to " + tasks.size());
+                throw new BagsException(
+                        "Task does not exist. Enter value from 1 to "
+                                + tasks.size());
             }
             Task task = tasks.remove(taskNumber - 1);
             readingFileRecords.remove(taskNumber - 1);
             return task;
         } catch (NumberFormatException e) {
-            throw new BagsException("Invalid task number. Please enter a valid number from 1 to " + tasks.size());
+            throw new BagsException(
+                    "Invalid task number. Please enter a valid number from 1 to "
+                            + tasks.size());
         }
     }
 

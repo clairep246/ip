@@ -32,7 +32,7 @@ public class MainWindow {
     private Image userImage;
 
     /**
-     * Initialises the Bags application used by the JavaFX interface.
+     * Initializes the Bags application used by the JavaFX interface.
      */
     @FXML
     public void initialize() {
@@ -115,11 +115,6 @@ public class MainWindow {
         dialogContainer.getChildren().add(dialogBox);
     }
 
-    /**
-     * Adds a user message to the conversation window.
-     *
-     * @param message the message to display
-     */
     private void addUserMessage(String message) {
         assert message != null : "User message must not be null";
         assert dialogContainer != null
