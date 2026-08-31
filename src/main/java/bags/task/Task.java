@@ -19,6 +19,9 @@ public abstract class Task {
      * @param type category of the task
      */
     public Task(String description, Tasktype type) {
+        assert description != null : "Task description must not be null";
+        assert type != null : "Task type must not be null";
+
         this.description = description;
         this.type = type;
         this.isDone = false;
@@ -29,6 +32,8 @@ public abstract class Task {
      */
     public void markDone() {
         this.isDone = true;
+
+        assert this.isDone: "Task should be marked as done";
     }
 
     /**
@@ -36,7 +41,9 @@ public abstract class Task {
      */
     public void markUndone() {
         this.isDone = false;
+        assert !this.isDone: "Task should be marked as undone";
     }
+    
 
     /**
      * Returns the type of this task.
