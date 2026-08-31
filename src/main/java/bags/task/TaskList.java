@@ -249,15 +249,14 @@ public class TaskList {
      * @return a list of tasks whose descriptions contain the keyword
      */
     public List<Task> search(String keyword) {
+        String searchKeyword = keyword.toLowerCase();
         assert keyword != null : "Search keyword must not be null";
         List<Task> results = new ArrayList<>();
 
-        for (Task task : tasks) {
-            if (task.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
-                results.add(task);
-            }
-        }
-
-        return results;
+        return tasks.stream()
+                .filter(task -> task.getDescription()
+                        .toLowerCase()
+                        .contains(searchKeyword))
+                .toList();
     }
 }
