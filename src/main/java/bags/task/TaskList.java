@@ -216,14 +216,12 @@ public class TaskList {
      * @return a list of tasks whose descriptions contain the keyword
      */
     public List<Task> search(String keyword) {
-        List<Task> results = new ArrayList<>();
+        String searchKeyword = keyword.toLowerCase();
 
-        for (Task task : tasks) {
-            if (task.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
-                results.add(task);
-            }
-        }
-
-        return results;
+        return tasks.stream()
+                .filter(task -> task.getDescription()
+                        .toLowerCase()
+                        .contains(searchKeyword))
+                .toList();
     }
 }
