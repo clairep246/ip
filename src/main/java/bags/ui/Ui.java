@@ -17,14 +17,17 @@ public class Ui {
 
     private static final String BANNER =
             " ____                  \n"
-            + "| __ )  __ _  __ _ ___ \n"
-            + "|  _ \\ / _` |/ _` / __|\n"
-            + "| |_) | (_| | (_| \\__ \\\n"
-            + "|____/ \\__,_|\\__, |___/\n"
-            + "               |___/";
+                    + "| __ )  __ _  __ _ ___ \n"
+                    + "|  _ \\ / _` |/ _` / __|\n"
+                    + "| |_) | (_| | (_| \\__ \\\n"
+                    + "|____/ \\__,_|\\__, |___/\n"
+                    + "               |___/";
 
     private final Scanner scanner;
 
+    /**
+     * Creates a user interface with a scanner for reading user input.
+     */
     public Ui() {
         scanner = new Scanner(System.in);
     }
@@ -73,6 +76,9 @@ public class Ui {
         showDivider();
     }
 
+    /**
+     * Shows a divider line.
+     */
     public void showDivider() {
         System.out.println(DIVIDER);
     }
