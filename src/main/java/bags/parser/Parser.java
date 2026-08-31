@@ -56,7 +56,7 @@ public class Parser {
     /**
      * Determines the task type specified at the beginning of a task command.
      *
-     * @param input user commmand
+     * @param input user command
      * @return the parsed task type, or {@code null} if unrecognized
      */
     public Tasktype parseTaskType(String input) {
