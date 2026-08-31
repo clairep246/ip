@@ -32,8 +32,8 @@ public class Bags {
     private final Parser parser;
     private TaskList tasks;
 
-    private boolean isAddingTask;
-    private boolean isEchoMode;
+    private boolean isAddingTask = false;
+    private boolean isEchoMode = false;
 
     /**
      * Creates a Bags application and loads existing tasks from storage.
@@ -46,8 +46,6 @@ public class Bags {
     public Bags() {
         storage = new Storage("./data/Bags.txt");
         parser = new Parser();
-        isAddingTask = false;
-        isEchoMode = false;
 
         try {
             tasks = new TaskList(storage.loadTasks(parser));
@@ -61,9 +59,9 @@ public class Bags {
      *
      * @param input the command entered by the user
      * @return the response that should be displayed to the user
+     * @throws BagsException if the command is invalid
      */
     public String processCommand(String input) throws BagsException {
-
         if (input == null || input.trim().isEmpty()) {
             throw new BagsException(
                     "No command was entered. Please enter a command.");
@@ -76,7 +74,6 @@ public class Bags {
          * as a task command until the user enters exit.
          */
         if (isAddingTask) {
-
             if (input.equals("exit")) {
                 isAddingTask = false;
                 return "Exited editing mode.";
@@ -90,7 +87,6 @@ public class Bags {
          * until the user enters exit.
          */
         if (isEchoMode) {
-
             if (input.equals("exit")) {
                 isEchoMode = false;
                 return "Exited echo mode.";
@@ -107,7 +103,6 @@ public class Bags {
         Command command = parser.parseCommand(input);
 
         if (command == Command.ADD_TASK) {
-
             isAddingTask = true;
 
             return """
@@ -118,41 +113,25 @@ public class Bags {
                      3. event <name> /from <year-month-day> <hour:minutes> <name> /to <year-month-day> <hour:minutes>
                     To exit enter exit.
                     """;
-
         } else if (command == Command.LIST) {
-
             return listItems();
-
         } else if (command == Command.MARK) {
-
             return markDone(input);
-
         } else if (command == Command.UNMARK) {
-
-            return unMarkDone(input);
-
+            return unmarkDone(input);
         } else if (command == Command.ECHO) {
-
             isEchoMode = true;
 
             return "From now on I will echo your input. To exit enter exit.";
-
         } else if (command == Command.DELETE) {
-
             return deleteTask(input);
-
         } else if (command == Command.SEARCH) {
-
             return searchTasks(input);
-
         } else if (command == Command.BYE) {
-
             saveTasks();
 
             return "Bye. Hope to see you again soon!";
-
         } else {
-
             throw new BagsException(
                     "The command does not exist. Please try again :(");
         }
@@ -171,24 +150,16 @@ public class Bags {
      * @throws BagsException if the task type or task format is invalid
      */
     private String addTask(String input) throws BagsException {
-
         Tasktype type = parser.parseTaskType(input);
         Task task;
 
         if (type == Tasktype.TODO) {
-
             task = ToDo.createTask(input);
-
         } else if (type == Tasktype.DEADLINE) {
-
             task = Deadlines.createTask(input);
-
         } else if (type == Tasktype.EVENT) {
-
             task = Event.createTask(input);
-
         } else {
-
             throw new BagsException(
                     "Not a valid task type, only event, to do or deadline task.");
         }
@@ -211,7 +182,6 @@ public class Bags {
      * @throws BagsException if the task list is empty
      */
     private String listItems() throws BagsException {
-
         if (tasks.isEmpty()) {
             throw new BagsException(
                     "Your list empty. Please add some tasks!");
@@ -228,7 +198,6 @@ public class Bags {
      * @throws BagsException if the task number is invalid
      */
     private String markDone(String input) throws BagsException {
-
         Task task = tasks.markDone(input);
         saveTasks();
 
@@ -242,8 +211,7 @@ public class Bags {
      * @return a message describing the updated task
      * @throws BagsException if the task number is invalid
      */
-    private String unMarkDone(String input) throws BagsException {
-
+    private String unmarkDone(String input) throws BagsException {
         Task task = tasks.markUndone(input);
         saveTasks();
 
@@ -258,7 +226,6 @@ public class Bags {
      * @throws BagsException if the task number is invalid
      */
     private String deleteTask(String input) throws BagsException {
-
         Task task = tasks.delete(input);
         saveTasks();
 
@@ -275,13 +242,13 @@ public class Bags {
      * <p>
      * The keyword is extracted from the user's search command and passed
      * to the {@link TaskList} search method.
+     * </p>
      *
      * @param input the user's search command containing the keyword
      * @return the matching tasks
      * @throws BagsException if no search keyword is provided
      */
     private String searchTasks(String input) throws BagsException {
-
         String[] parts = input.split(" ", 2);
 
         if (parts.length < 2 || parts[1].trim().isEmpty()) {
