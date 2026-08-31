@@ -32,11 +32,20 @@ public class MainWindow {
     private Image userImage;
 
     /**
-     * Initialises the Bags application used by the JavaFX interface.
+     * Initializes the Bags application used by the JavaFX interface.
      */
     @FXML
     public void initialize() {
+        assert userInput != null : "User input field must be initialized";
+        assert sendButton != null : "Send button must be initialized";
+        assert scrollPane != null : "Scroll pane must be initialized";
+        assert dialogContainer != null
+                : "Dialog container must be initialized";
+
         bags = new Bags();
+
+        assert bags != null : "Bags application must be created";
+
         addBagsMessage("Hello! I'm Bags. Nice to meet you!");
         addBagsMessage("What can I do for you?");
     }
@@ -46,6 +55,9 @@ public class MainWindow {
      */
     @FXML
     private void handleUserInput() {
+        assert userInput != null : "User input field must be initialized";
+        assert bags != null : "Bags application must be initialized";
+
         String input = userInput.getText().trim();
 
         if (input.isEmpty()) {
@@ -57,14 +69,20 @@ public class MainWindow {
 
         try {
             String response = bags.processCommand(input);
+
+            assert response != null : "Bags must return a response";
+
             addBagsMessage(response);
 
             if (input.equals("bye")) {
+                assert sendButton != null
+                        : "Send button must be initialized";
                 sendButton.setDisable(true);
                 userInput.setDisable(true);
             }
 
         } catch (BagsException e) {
+            assert e != null : "Caught exception must not be null";
             addBagsMessage("Error!! " + e.getMessage());
         }
 
@@ -78,26 +96,55 @@ public class MainWindow {
      * @param message the message to display
      */
     private void addBagsMessage(String message) {
-        Image bagsImage = new Image(
-                MainWindow.class.getResourceAsStream("/images/Response.png"));
+        assert message != null : "Bags message must not be null";
+        assert dialogContainer != null
+                : "Dialog container must be initialized";
 
-        DialogBox dialogBox = DialogBox.getBagsDialog(message, bagsImage);
+        bagsImage = new Image(
+                MainWindow.class.getResourceAsStream(
+                        "/images/Response.png"));
+
+        assert bagsImage != null : "Bags image must be loaded";
+        assert !bagsImage.isError() : "Bags image must load without errors";
+
+        DialogBox dialogBox =
+                DialogBox.getBagsDialog(message, bagsImage);
+
+        assert dialogBox != null : "Bags dialog box must be created";
 
         dialogContainer.getChildren().add(dialogBox);
     }
 
     private void addUserMessage(String message) {
-        Image userImage = new Image(MainWindow.class.getResourceAsStream("/images/User.png"));
-        DialogBox dialogBox =DialogBox.getUserDialog(message, userImage);
+        assert message != null : "User message must not be null";
+        assert dialogContainer != null
+                : "Dialog container must be initialized";
+
+        userImage = new Image(
+                MainWindow.class.getResourceAsStream(
+                        "/images/User.png"));
+
+        assert userImage != null : "User image must be loaded";
+        assert !userImage.isError() : "User image must load without errors";
+
+        DialogBox dialogBox =
+                DialogBox.getUserDialog(message, userImage);
+
+        assert dialogBox != null : "User dialog box must be created";
 
         dialogContainer.getChildren().add(dialogBox);
-}
+    }
 
     /**
      * Scrolls the conversation window to the latest message.
      */
     private void scrollToBottom() {
+        assert scrollPane != null : "Scroll pane must be initialized";
+
         scrollPane.layout();
         scrollPane.setVvalue(1.0);
+
+        assert scrollPane.getVvalue() == 1.0
+                : "Scroll pane should be positioned at the bottom";
     }
 }

@@ -1,14 +1,15 @@
 package bags.storage;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -20,8 +21,8 @@ import bags.task.Task;
  *
  * <p>
  * These tests verify that task records are correctly written to files,
- * loaded from files, and handled when invalid records or
- * file-related errors are encountered.
+ * loaded from files, and handled when invalid records or file-related
+ * errors are encountered.
  * </p>
  *
  * <p>
@@ -42,9 +43,7 @@ class StorageTest {
      */
     @Test
     void save_validRecords_writesRecordsToFile() throws Exception {
-
         Path file = tempDir.resolve("Bags.txt");
-
         Storage storage = new Storage(file.toString());
 
         List<String> records = List.of(
@@ -66,10 +65,8 @@ class StorageTest {
      * @throws Exception if an unexpected file operation error occurs
      */
     @Test
-    void save_directoryAsFile_handlesIOException() throws Exception {
-
+    void save_directoryAsFile_handlesIoException() throws Exception {
         Path directory = tempDir.resolve("Bags");
-
         Files.createDirectory(directory);
 
         Storage storage = new Storage(directory.toString());
@@ -82,11 +79,8 @@ class StorageTest {
 
             storage.saveRecords(List.of("T | [ ] | Read book"));
 
-            assertTrue(
-                    output.toString().contains(
-                            "Something went wrong while saving:")
-            );
-
+            assertTrue(output.toString().contains(
+                    "Something went wrong while saving:"));
         } finally {
             System.setOut(originalOut);
         }
@@ -100,7 +94,6 @@ class StorageTest {
      */
     @Test
     void loadTasks_validRecords_returnsCorrectTasks() throws Exception {
-
         Path file = tempDir.resolve("Bags.txt");
 
         Files.write(
@@ -118,18 +111,10 @@ class StorageTest {
 
         assertEquals(2, tasks.size());
 
-        assertEquals(
-                "Read book",
-                tasks.get(0).getDescription()
-        );
-
+        assertEquals("Read book", tasks.get(0).getDescription());
         assertFalse(tasks.get(0).isDone());
 
-        assertEquals(
-                "Do homework",
-                tasks.get(1).getDescription()
-        );
-
+        assertEquals("Do homework", tasks.get(1).getDescription());
         assertTrue(tasks.get(1).isDone());
     }
 
@@ -141,7 +126,6 @@ class StorageTest {
      */
     @Test
     void loadTasks_invalidRecord_ignoresInvalidTask() throws Exception {
-
         Path file = tempDir.resolve("Bags.txt");
 
         Files.write(
@@ -159,16 +143,8 @@ class StorageTest {
         List<Task> tasks = storage.loadTasks(parser);
 
         assertEquals(2, tasks.size());
-
-        assertEquals(
-                "Read book",
-                tasks.get(0).getDescription()
-        );
-
-        assertEquals(
-                "Do homework",
-                tasks.get(1).getDescription()
-        );
+        assertEquals("Read book", tasks.get(0).getDescription());
+        assertEquals("Do homework", tasks.get(1).getDescription());
     }
 
     /**
@@ -179,10 +155,8 @@ class StorageTest {
      */
     @Test
     void loadTasks_missingFile_returnsEmptyList() throws Exception {
-
         Path file = tempDir.resolve("DoesNotExist.txt");
 
-        // Deliberately do not create the file.
         Storage storage = new Storage(file.toString());
         Parser parser = new Parser();
 
@@ -199,9 +173,7 @@ class StorageTest {
      */
     @Test
     void saveThenLoad_validRecords_returnsSameTasks() throws Exception {
-
         Path file = tempDir.resolve("Bags.txt");
-
         Storage storage = new Storage(file.toString());
 
         List<String> records = List.of(
@@ -212,23 +184,14 @@ class StorageTest {
         storage.saveRecords(records);
 
         Parser parser = new Parser();
-
         List<Task> tasks = storage.loadTasks(parser);
 
         assertEquals(2, tasks.size());
 
-        assertEquals(
-                "Read book",
-                tasks.get(0).getDescription()
-        );
-
+        assertEquals("Read book", tasks.get(0).getDescription());
         assertFalse(tasks.get(0).isDone());
 
-        assertEquals(
-                "Do homework",
-                tasks.get(1).getDescription()
-        );
-
+        assertEquals("Do homework", tasks.get(1).getDescription());
         assertTrue(tasks.get(1).isDone());
     }
 }
