@@ -26,8 +26,11 @@ public class Event extends Task {
      * @param to end date-time string in {@code yyyy-MM-dd HH:mm} format
      * @throws BagsException if either date-time format is invalid
      */
-    public Event(String description, String from, String to)
-            throws BagsException {
+    public Event(String description, String from, String to) throws BagsException {
+        assert description != null : "Task description must not be null";
+        assert from != null : "Event start time must not be null";
+        assert to != null : "Event end time must not be null";
+
         super(description, Tasktype.EVENT);
 
         try {
@@ -38,6 +41,11 @@ public class Event extends Task {
                     DateTimeFormatter.ofPattern("dd/MM/yyyy h:mma");
             this.formattedFrom = this.from.format(outputFormatter);
             this.formattedTo = this.to.format(outputFormatter);
+
+            assert this.from != null : "Event start time must be parsed";
+            assert this.to != null : "Event end time must be parsed";
+            assert !this.to.isBefore(this.from)
+                    : "Event end time must not be before start time";
 
         } catch (DateTimeParseException e) {
             throw new BagsException(
@@ -140,12 +148,23 @@ public class Event extends Task {
         return this.to;
     }
 
+     /**
+     * Returns the event task in a user-readable format.
+     *
+     * @return the formatted event task
+     */
+
     @Override
     public String toString() {
         return "[E][" + getStatusIcon() + "] " + description
                 + " (from: " + formattedFrom + " to: " + formattedTo + ")";
     }
 
+    /**
+     * Converts the event task into the format used for saving to storage.
+     *
+     * @return the event task as a storage record
+     */
     @Override
     public String parseEvent() {
         return "E | " + "[" + getStatusIcon() + "] | " + description + " | "

@@ -13,6 +13,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
+
 /**
  * Represents a dialog box containing a message and a profile picture.
  */
@@ -25,6 +26,9 @@ public class DialogBox extends HBox {
     private ImageView displayPicture;
 
     private DialogBox(String text, Image img) {
+        assert text != null : "Dialog text must not be null";
+        assert img != null : "Dialog image must not be null";
+
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(
                     DialogBox.class.getResource("/view/DialogBox.fxml"));
@@ -35,6 +39,10 @@ public class DialogBox extends HBox {
             throw new RuntimeException("Unable to load the dialog box layout.", e);
         }
 
+        assert dialog != null : "Dialog label must be loaded from FXML";
+        assert displayPicture != null
+                : "Display picture must be loaded from FXML";
+
         dialog.setText(text);
         displayPicture.setImage(img);
     }
@@ -44,6 +52,10 @@ public class DialogBox extends HBox {
      * is on the right.
      */
     private void flip() {
+        assert dialog != null : "Dialog label must be initialized";
+        assert getChildren().size() >= 2
+                : "Dialog box must contain text and image nodes";
+
         this.setAlignment(Pos.TOP_LEFT);
         ObservableList<Node> tmp =
                 FXCollections.observableArrayList(this.getChildren());
@@ -51,6 +63,7 @@ public class DialogBox extends HBox {
         this.getChildren().setAll(tmp);
         dialog.getStyleClass().add("reply-label");
     }
+
 
     /**
      * Creates a dialog box for Bags.
@@ -60,8 +73,13 @@ public class DialogBox extends HBox {
      * @return a dialog box for Bags
      */
     public static DialogBox getBagsDialog(String text, Image img) {
+        assert text != null : "Bags dialog text must not be null";
+        assert img != null : "Bags profile picture must not be null";
+
         DialogBox db = new DialogBox(text, img);
         db.flip();
+
+        assert db != null : "Bags dialog box must be created";
         return db;
     }
 
@@ -73,6 +91,12 @@ public class DialogBox extends HBox {
      * @return a dialog box for the user
      */
     public static DialogBox getUserDialog(String text, Image img) {
-        return new DialogBox(text, img);
+        assert text != null : "User dialog text must not be null";
+        assert img != null : "User profile picture must not be null";
+
+        DialogBox db = new DialogBox(text, img);
+
+        assert db != null : "User dialog box must be created";
+        return db;
     }
 }

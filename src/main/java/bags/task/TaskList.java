@@ -38,11 +38,18 @@ public class TaskList {
      * @param tasks the list of tasks to initialise the task list with
      */
     public TaskList(List<Task> tasks) {
+        assert tasks != null : "Task list must not be null";
+
         this.tasks = new ArrayList<>(tasks);
         readingFileRecords = new ArrayList<>();
+
         for (Task task : tasks) {
+            assert task != null : "Task list must not contain null tasks";
             readingFileRecords.add(task.parseEvent());
         }
+
+        assert this.tasks.size() == readingFileRecords.size()
+                : "Each task must have a corresponding storage record";
     }
 
     /**
@@ -52,8 +59,13 @@ public class TaskList {
      * @param task the task to add
      */
     public void add(Task task) {
+        assert task != null : "Cannot add a null task";
+
         tasks.add(task);
         readingFileRecords.add(task.parseEvent());
+
+        assert tasks.size() == readingFileRecords.size()
+                : "Task and storage-record lists must remain synchronized";
     }
 
     /**
@@ -102,6 +114,7 @@ public class TaskList {
      *                       or does not correspond to an existing task
      */
     public Task markDone(String output) throws BagsException {
+        assert output != null : "Command output must not be null";
         String[] temp = output.split(" ");
 
         if (temp.length < 2) {
@@ -138,6 +151,7 @@ public class TaskList {
      *                       or does not correspond to an existing task
      */
     public Task markUndone(String output) throws BagsException {
+        assert output != null : "Command output must not be null";
         String[] temp = output.split(" ");
 
         if (temp.length < 2) {
@@ -172,6 +186,7 @@ public class TaskList {
      * @throws BagsException if the task number is missing or invalid
      */
     public Task delete(String output) throws BagsException {
+        assert output != null : "Command output must not be null";
         String[] temp = output.split(" ");
         if (temp.length < 2) {
             throw new BagsException(
@@ -234,6 +249,7 @@ public class TaskList {
      * @return a list of tasks whose descriptions contain the keyword
      */
     public List<Task> search(String keyword) {
+        assert keyword != null : "Search keyword must not be null";
         List<Task> results = new ArrayList<>();
 
         for (Task task : tasks) {

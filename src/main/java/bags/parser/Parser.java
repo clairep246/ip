@@ -23,6 +23,8 @@ public class Parser {
      * @return the corresponding command type
      */
     public Command parseCommand(String input) {
+        assert input != null : "Command input must not be null";
+
         if (input.trim().isEmpty()) {
             return Command.EMPTY;
         } else if (input.startsWith("add task")) {
@@ -33,7 +35,7 @@ public class Parser {
             return Command.MARK;
         } else if (input.startsWith("unmark")) {
             return Command.UNMARK;
-        } else if (input.equals("echo")) {
+        } else if (input.startsWith("echo")) {
             return Command.ECHO;
         } else if (input.startsWith("search")) {
             return Command.SEARCH;
@@ -53,6 +55,8 @@ public class Parser {
      * @return the parsed task type, or {@code null} if unrecognized
      */
     public Tasktype parseTaskType(String input) {
+        assert input != null : "Task type input must not be null";
+
         if (input.startsWith("todo")) {
             return Tasktype.TODO;
         } else if (input.startsWith("deadline")) {
@@ -67,16 +71,13 @@ public class Parser {
     /**
      * Creates a task object from one record loaded from the save file.
      *
-     * <p>The method determines the task type from the record and creates
-     * the corresponding {@link ToDo}, {@link Deadlines}, or {@link Event}
-     * object. If the record indicates that the task is completed, the
-     * task is also marked as done because a new {@link Task} object is marked as undone.</p>
-     *
      * @param taskString the saved task record to parse
      * @return the corresponding task object, or null if the record is invalid
      * @throws BagsException if the task contains invalid information
      */
     public Task parseTask(String taskString) throws BagsException {
+        assert taskString != null : "Saved task record must not be null";
+
         String[] parts = taskString.split("\\|");
 
         if (parts.length < 3) {
@@ -95,12 +96,11 @@ public class Parser {
 
         } else if (type.equals("E") && parts.length >= 5) {
             task = new Event(parts[2].trim(), parts[3].trim(), parts[4].trim());
-
         }
 
         if (task != null && status.equals("[X]")) {
             task.markDone();
-
+            assert task.isDone() : "Task should be marked as done";
         }
 
         return task;

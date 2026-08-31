@@ -37,21 +37,23 @@ public class Bags {
 
     /**
      * Creates a Bags application and loads existing tasks from storage.
-     *
-     * <p>
-     * If the existing storage file cannot be loaded, an empty task list
-     * is created instead.
-     * </p>
      */
     public Bags() {
         storage = new Storage("./data/Bags.txt");
         parser = new Parser();
+
+        assert storage != null : "Storage must be initialized";
+        assert parser != null : "Parser must be initialized";
 
         try {
             tasks = new TaskList(storage.loadTasks(parser));
         } catch (BagsException e) {
             tasks = new TaskList();
         }
+
+        assert tasks != null : "Task list must be initialized";
+        assert !isAddingTask : "Adding-task mode should initially be disabled";
+        assert !isEchoMode : "Echo mode should initially be disabled";
     }
 
     /**
@@ -62,6 +64,10 @@ public class Bags {
      * @throws BagsException if the command is invalid
      */
     public String processCommand(String input) throws BagsException {
+        assert parser != null : "Parser must be initialized";
+        assert tasks != null : "Task list must be initialized";
+        assert storage != null : "Storage must be initialized";
+
         if (input == null || input.trim().isEmpty()) {
             throw new BagsException(
                     "No command was entered. Please enter a command.");
@@ -74,6 +80,7 @@ public class Bags {
          * as a task command until the user enters exit.
          */
         if (isAddingTask) {
+
             if (input.equals("exit")) {
                 isAddingTask = false;
                 return "Exited editing mode.";
@@ -82,10 +89,6 @@ public class Bags {
             return addTask(input);
         }
 
-        /*
-         * If Bags is currently in echo mode, every input is echoed
-         * until the user enters exit.
-         */
         if (isEchoMode) {
             if (input.equals("exit")) {
                 isEchoMode = false;
@@ -102,8 +105,12 @@ public class Bags {
 
         Command command = parser.parseCommand(input);
 
+        assert command != null : "Parser must return a command";
+
         if (command == Command.ADD_TASK) {
             isAddingTask = true;
+
+            assert isAddingTask : "Adding-task mode must be enabled";
 
             return """
                     Enter your task.
@@ -121,6 +128,8 @@ public class Bags {
             return unmarkDone(input);
         } else if (command == Command.ECHO) {
             isEchoMode = true;
+
+            assert isEchoMode : "Echo mode must be enabled";
 
             return "From now on I will echo your input. To exit enter exit.";
         } else if (command == Command.DELETE) {
@@ -150,6 +159,10 @@ public class Bags {
      * @throws BagsException if the task type or task format is invalid
      */
     private String addTask(String input) throws BagsException {
+        assert input != null : "Task input must not be null";
+        assert parser != null : "Parser must be initialized";
+        assert tasks != null : "Task list must be initialized";
+
         Tasktype type = parser.parseTaskType(input);
         Task task;
 
@@ -164,8 +177,13 @@ public class Bags {
                     "Not a valid task type, only event, to do or deadline task.");
         }
 
+        assert task != null : "A valid task must be created";
+
         tasks.add(task);
         saveTasks();
+
+        assert tasks.getSize() > 0
+                : "Task list must contain the new task";
 
         return "Got it, I've added the following task to the list:\n"
                 + task
@@ -182,23 +200,36 @@ public class Bags {
      * @throws BagsException if the task list is empty
      */
     private String listItems() throws BagsException {
+        assert tasks != null : "Task list must be initialized";
+
         if (tasks.isEmpty()) {
             throw new BagsException(
                     "Your list empty. Please add some tasks!");
         }
 
-        return tasks.toString();
+        String result = tasks.toString();
+
+        assert result != null : "Task list output must not be null";
+
+        return result;
     }
 
     /**
      * Marks the specified task as completed.
      *
-     * @param input the user's mark command containing the task number
+     * @param input the user's mark command
      * @return a message describing the updated task
      * @throws BagsException if the task number is invalid
      */
     private String markDone(String input) throws BagsException {
+        assert input != null : "Mark command must not be null";
+        assert tasks != null : "Task list must be initialized";
+
         Task task = tasks.markDone(input);
+
+        assert task != null : "Marked task must be returned";
+        assert task.isDone() : "Marked task must be completed";
+
         saveTasks();
 
         return "Ok! I've marked this task as done:\n" + task;
@@ -207,12 +238,18 @@ public class Bags {
     /**
      * Marks the specified task as incomplete.
      *
-     * @param input the user's unmark command containing the task number
+     * @param input the user's unmark command
      * @return a message describing the updated task
      * @throws BagsException if the task number is invalid
      */
     private String unmarkDone(String input) throws BagsException {
+        assert input != null : "Unmark command must not be null";
+        assert tasks != null : "Task list must be initialized";
         Task task = tasks.markUndone(input);
+
+        assert task != null : "Unmarked task must be returned";
+        assert !task.isDone() : "Unmarked task must be incomplete";
+
         saveTasks();
 
         return "Alright! I've marked this task as undone:\n" + task;
@@ -221,12 +258,18 @@ public class Bags {
     /**
      * Deletes the specified task from the task list.
      *
-     * @param input the user's delete command containing the task number
+     * @param input the user's delete command
      * @return a message describing the deleted task
      * @throws BagsException if the task number is invalid
      */
     private String deleteTask(String input) throws BagsException {
+        assert input != null : "Delete command must not be null";
+        assert tasks != null : "Task list must be initialized";
+
         Task task = tasks.delete(input);
+
+        assert task != null : "Deleted task must be returned";
+
         saveTasks();
 
         return "Got it! I've deleted the following task:\n"
@@ -249,6 +292,9 @@ public class Bags {
      * @throws BagsException if no search keyword is provided
      */
     private String searchTasks(String input) throws BagsException {
+        assert input != null : "Search command must not be null";
+        assert tasks != null : "Task list must be initialized";
+
         String[] parts = input.split(" ", 2);
 
         if (parts.length < 2 || parts[1].trim().isEmpty()) {
@@ -257,7 +303,12 @@ public class Bags {
         }
 
         String keyword = parts[1].trim();
+
+        assert !keyword.isEmpty() : "Search keyword must not be empty";
+
         List<Task> results = tasks.search(keyword);
+
+        assert results != null : "Search results must not be null";
 
         if (results.isEmpty()) {
             return "No matching tasks found.";
@@ -267,6 +318,9 @@ public class Bags {
         output.append("Here are the matching tasks:");
 
         for (int i = 0; i < results.size(); i++) {
+            assert results.get(i) != null
+                    : "Search results must not contain null tasks";
+
             output.append(System.lineSeparator())
                     .append(i + 1)
                     .append(".")
@@ -280,6 +334,10 @@ public class Bags {
      * Saves all current tasks to the storage file.
      */
     private void saveTasks() {
+        assert storage != null : "Storage must be initialized";
+        assert tasks != null : "Task list must be initialized";
+
         storage.saveRecords(tasks.toSaveRecords());
     }
 }
+

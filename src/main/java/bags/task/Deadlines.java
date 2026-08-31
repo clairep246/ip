@@ -24,13 +24,21 @@ public class Deadlines extends Task {
      * @throws BagsException if the deadline format is invalid
      */
     public Deadlines(String description, String deadline) throws BagsException {
+        assert description != null : "Task description must not be null";
+        assert deadline != null : "Deadline must not be null";
         super(description, Tasktype.DEADLINE);
 
         try {
             this.deadline = LocalDateTime.parse(deadline, inputFormatter);
 
-            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy h:mma");
+            DateTimeFormatter outputFormatter =
+                    DateTimeFormatter.ofPattern("dd/MM/yyyy h:mma");
             this.formattedDeadline = this.deadline.format(outputFormatter);
+
+            assert this.deadline != null : "Deadline must be parsed successfully";
+            assert this.formattedDeadline != null
+                : "Formatted deadline must be created";
+
 
         } catch (DateTimeParseException e) {
             throw new BagsException(
@@ -46,6 +54,7 @@ public class Deadlines extends Task {
      * @throws BagsException if the description or deadline is missing, or the format is invalid
      */
     public static Deadlines createTask(String output) throws BagsException {
+        assert output != null : "Creating of deadline task command must not be null";
         String[] temp = output.split(" ");
 
         if (temp.length < 2) {
