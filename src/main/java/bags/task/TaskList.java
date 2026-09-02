@@ -7,62 +7,40 @@ import bags.exception.BagsException;
 
 /**
  * Stores tasks and provides operations that change the task collection.
- *
- * <p>The task list maintains both the {@code tasks} list containing the
- * task objects and the {@code readingFileRecords} list containing their
- * corresponding storage records. Both lists are kept synchronised so
- * that changes to a task are reflected in its stored record.</p>
  */
 public class TaskList {
 
     private final List<Task> tasks;
-    private final List<String> readingFileRecords;
 
     /**
      * Creates an empty task list.
      */
     public TaskList() {
-        tasks = new ArrayList<>();
-        readingFileRecords = new ArrayList<>();
+        this.tasks = new ArrayList<>();
     }
 
     /**
      * Creates a task list containing the supplied loaded tasks.
      *
-     * <p>The corresponding storage record for each task is also generated
-     * and stored in {@code readingFileRecords}.</p>
-     *
      * @param tasks the list of tasks to initialise the task list with
      */
     public TaskList(List<Task> tasks) {
-        assert tasks != null : "Task list must not be null";
-
-        this.tasks = new ArrayList<>(tasks);
-        this.readingFileRecords = new ArrayList<>();
-
-        for (Task task : tasks) {
-            assert task != null : "Task list must not contain null tasks";
-            readingFileRecords.add(task.parseEvent());
+        if (tasks == null) {
+            this.tasks = new ArrayList<>();
+        } else {
+            this.tasks = new ArrayList<>(tasks);
         }
-
-        assert this.tasks.size() == readingFileRecords.size()
-                : "Each task must have a corresponding storage record";
     }
 
     /**
-     * Adds a task to the task list and creates its corresponding
-     * storage record.
+     * Adds a task to the task list.
      *
      * @param task the task to add
      */
     public void add(Task task) {
-        assert task != null : "Cannot add a null task";
-
-        tasks.add(task);
-        readingFileRecords.add(task.parseEvent());
-
-        assert tasks.size() == readingFileRecords.size()
-                : "Task and storage-record lists must remain synchronized";
+        if (task != null) {
+            tasks.add(task);
+        }
     }
 
     public int getSize() {
@@ -78,17 +56,7 @@ public class TaskList {
     }
 
     /**
-     * Returns the storage records corresponding to the tasks.
-     *
-     * @return a list of storage records
-     */
-    public List<String> getReadingFile() {
-        return this.readingFileRecords;
-    }
-
-    /**
-     * Marks the selected task as done and updates its corresponding
-     * storage record.
+     * Marks the selected task as done.
      *
      * @param command the user's mark command containing the task number
      * @return the task that was marked as done
@@ -96,18 +64,14 @@ public class TaskList {
      *                       or does not correspond to an existing task
      */
     public Task markDone(String command) throws BagsException {
-        assert command != null : "Command output must not be null";
         int index = parseTaskIndex(command);
-
         Task task = tasks.get(index);
         task.markDone();
-        readingFileRecords.set(index, task.parseEvent());
         return task;
     }
 
     /**
-     * Marks the selected task as undone and updates its corresponding
-     * storage record.
+     * Marks the selected task as undone.
      *
      * @param command the user's unmark command containing the task number
      * @return the task that was marked as undone
@@ -115,12 +79,9 @@ public class TaskList {
      *                       or does not correspond to an existing task
      */
     public Task markUndone(String command) throws BagsException {
-        assert command != null : "Command output must not be null";
         int index = parseTaskIndex(command);
-
         Task task = tasks.get(index);
         task.markUndone();
-        readingFileRecords.set(index, task.parseEvent());
         return task;
     }
 
@@ -132,12 +93,8 @@ public class TaskList {
      * @throws BagsException if the task number is missing or invalid
      */
     public Task delete(String command) throws BagsException {
-        assert command != null : "Command output must not be null";
         int index = parseTaskIndex(command);
-
-        Task task = tasks.remove(index);
-        readingFileRecords.remove(index);
-        return task;
+        return tasks.remove(index);
     }
 
     /**
@@ -168,12 +125,54 @@ public class TaskList {
     }
 
     /**
-     * Converts all tasks into records suitable for Storage.
+     * Converts all tasks into formatted records suitable for Storage.
      *
-     * @return a copy of the save-file records
+     * @return list of storage-formatted task strings
      */
-    public List<String> toSaveRecords() {
-        return new ArrayList<>(readingFileRecords);
+    public List<String> saveRecords() {
+        List<String> records = new ArrayList<>();
+        for (Task task : tasks) {
+            records.add(task.parseEvent());
+        }
+        return records;
+    }
+
+    /**
+     * Searches for tasks containing the keyword specified in the command string.
+     *
+     * @param command the user's search command containing the search keyword
+     * @return formatted string of matching tasks
+     * @throws BagsException if the keyword is missing or blank
+     */
+    public String search(String command) throws BagsException {
+        if (command == null) {
+            throw new BagsException("Search command cannot be null.");
+        }
+
+        String[] parts = command.split(" ", 2);
+        if (parts.length < 2 || parts[1].trim().isEmpty()) {
+            throw new BagsException("Please enter a keyword to search for.");
+        }
+
+        String searchKeyword = parts[1].trim().toLowerCase();
+
+        List<Task> matchingTasks = tasks.stream()
+                .filter(task -> task.getDescription().toLowerCase().contains(searchKeyword))
+                .toList();
+
+        if (matchingTasks.isEmpty()) {
+            return "No matching tasks found.";
+        }
+
+        StringBuilder output = new StringBuilder("Here are the matching tasks:");
+        for (int i = 0; i < matchingTasks.size(); i++) {
+            output.append(System.lineSeparator())
+                    .append(i + 1)
+                    .append(".")
+                    .append(matchingTasks.get(i));
+        }
+
+        return output.toString();
     }
 
     /**
@@ -191,22 +190,5 @@ public class TaskList {
                     .append(tasks.get(i));
         }
         return output.toString();
-    }
-
-    /**
-     * Searches for tasks containing the given keyword in their description.
-     *
-     * @param keyword the keyword to search for
-     * @return a list of tasks whose descriptions contain the keyword
-     */
-    public List<Task> search(String keyword) {
-        assert keyword != null : "Search keyword must not be null";
-        String searchKeyword = keyword.toLowerCase();
-
-        return tasks.stream()
-                .filter(task -> task.getDescription()
-                        .toLowerCase()
-                        .contains(searchKeyword))
-                .toList();
     }
 }

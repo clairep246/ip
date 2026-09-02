@@ -65,6 +65,7 @@ public class Storage {
 
         List<Task> tasks = new ArrayList<>();
 
+        //loadTaskRecords is called to return the lines from save file
         for (String record : loadTaskRecords()) {
             assert record != null : "Loaded task record must not be null";
 
@@ -97,7 +98,7 @@ public class Storage {
         try (Scanner scanner = new Scanner(saveFile)) {
             while (scanner.hasNextLine()) {
                 String record = scanner.nextLine();
-                assert record != null : "task record must not be null";
+                assert record != null : "Task record must not be null";
                 taskRecords.add(record);
             }
         } catch (FileNotFoundException e) {

@@ -49,6 +49,10 @@ public class MainWindow {
     }
 
     private void loadImages() {
+        assert getClass().getResourceAsStream(BAGS_IMAGE_PATH) != null
+                : "Bags response image resource missing: " + BAGS_IMAGE_PATH;
+        assert getClass().getResourceAsStream(USER_IMAGE_PATH) != null
+                : "User image resource missing: " + USER_IMAGE_PATH;
         this.bagsImage = new Image(this.getClass().getResourceAsStream(BAGS_IMAGE_PATH));
         this.userImage = new Image(this.getClass().getResourceAsStream(USER_IMAGE_PATH));
     }

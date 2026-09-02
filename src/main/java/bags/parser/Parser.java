@@ -73,7 +73,7 @@ public class Parser {
      *
      * @param taskString the saved task record to parse
      * @return the corresponding task object, or null if the record is invalid
-     * @throws BagsException if the task contains invalid information
+     * @throws BagsException if the task input is invalid
      */
     public Task parseTask(String taskString) throws BagsException {
         assert taskString != null : "Saved task record must not be null";
