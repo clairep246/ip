@@ -39,6 +39,7 @@ public class Bags {
         } catch (BagsException e) {
             tasks = new TaskList();
         }
+
     }
 
     /**
@@ -57,7 +58,8 @@ public class Bags {
         String trimmedInput = input.trim();
 
         if (isEchoMode) {
-            return processEchoMode(trimmedInput);
+            String response = processEchoMode(trimmedInput);
+            return response;
         }
 
         if (trimmedInput.isEmpty()) {
@@ -66,14 +68,21 @@ public class Bags {
         }
 
         if (isAddingTask) {
-            return processAddingTaskMode(trimmedInput);
+            String response = processAddingTaskMode(trimmedInput);
+            return response;
         }
 
         Command command = parser.parseCommand(trimmedInput);
-        return executeCommand(command, trimmedInput);
+        assert command != null : "Parsed command must not be null";
+
+        String response = executeCommand(command, trimmedInput);
+        assert response != null : "Command execution response should not be null";
+
+        return response;
     }
 
     private String processAddingTaskMode(String input) throws BagsException {
+        assert isAddingTask : "Should only process adding task mode when flag is true";
         if (input.equals("exit")) {
             isAddingTask = false;
             return "Exited editing mode.";
@@ -82,6 +91,7 @@ public class Bags {
     }
 
     private String processEchoMode(String input) {
+        assert isEchoMode : "Should only process echo mode when flag is true";
         if (input.equals("exit")) {
             isEchoMode = false;
             return "Exited echo mode.";
@@ -93,6 +103,9 @@ public class Bags {
     }
 
     private String executeCommand(Command command, String input) throws BagsException {
+        assert command != null : "Command to execute cannot be null";
+        assert !input.isEmpty() : "Input string to executeCommand should not be empty";
+
         switch (command) {
             case ADD_TASK:
                 isAddingTask = true;
@@ -133,10 +146,17 @@ public class Bags {
      * @throws BagsException if the task type or task format is invalid
      */
     private String addTask(String input) throws BagsException {
+        assert input != null && !input.isEmpty() : "Task input to add must not be null or empty";
+
+        int initialSize = tasks.getSize();
         Tasktype type = parser.parseTaskType(input);
+        assert type != null : "Parsed Task type must not be null";
+
         Task task = createTask(type, input);
 
         tasks.add(task);
+        assert tasks.getSize() == initialSize + 1 : "TaskList size should increase by 1 after addition";
+
         saveTasks();
 
         return "Got it, I've added the following task to the list:\n"
@@ -148,6 +168,9 @@ public class Bags {
     }
 
     private Task createTask(Tasktype type, String input) throws BagsException {
+        assert type != null : "Task type cannot be null when creating task";
+        assert input != null && !input.isEmpty() : "Input string cannot be empty when creating task";
+
         switch (type) {
             case TODO:
                 return ToDo.createTask(input);
@@ -182,6 +205,7 @@ public class Bags {
      */
     private String markDone(String input) throws BagsException {
         Task task = tasks.markDone(input);
+        assert task != null : "Task returned after markDone should not be null";
         saveTasks();
         return "Ok! I've marked this task as done:\n" + task;
     }
@@ -195,6 +219,7 @@ public class Bags {
      */
     private String unmarkDone(String input) throws BagsException {
         Task task = tasks.markUndone(input);
+        assert task != null : "Task returned after markUndone should not be null";
         saveTasks();
         return "Alright! I've marked this task as undone:\n" + task;
     }
@@ -207,7 +232,12 @@ public class Bags {
      * @throws BagsException if the task number is invalid
      */
     private String deleteTask(String input) throws BagsException {
+        int initialSize = tasks.getSize();
         Task task = tasks.delete(input);
+
+        assert task != null : "Deleted task object should not be null";
+        assert tasks.getSize() == initialSize - 1 : "TaskList size should decrease by 1 after deletion";
+
         saveTasks();
         return "Got it! I've deleted the following task:\n"
                 + task
@@ -224,6 +254,7 @@ public class Bags {
      * @throws BagsException if no search keyword is provided
      */
     private String searchTasks(String input) throws BagsException {
+        assert input != null : "Search input should not be null";
         return tasks.search(input);
     }
 
@@ -231,6 +262,8 @@ public class Bags {
      * Saves all current tasks to the storage file.
      */
     private void saveTasks() {
+        assert storage != null : "Storage component must exist to save tasks";
+        assert tasks != null : "TaskList must exist to retrieve records for saving";
         storage.saveRecords(tasks.saveRecords());
     }
 }

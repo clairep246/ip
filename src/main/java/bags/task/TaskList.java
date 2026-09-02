@@ -38,9 +38,12 @@ public class TaskList {
      * @param task the task to add
      */
     public void add(Task task) {
-        if (task != null) {
-            tasks.add(task);
-        }
+        assert task != null : "Cannot add a null task to TaskList";
+        int previousSize = tasks.size();
+
+        tasks.add(task);
+
+        assert tasks.size() == previousSize + 1 : "Task list size should increase by 1 after addition";
     }
 
     public int getSize() {
@@ -65,8 +68,13 @@ public class TaskList {
      */
     public Task markDone(String command) throws BagsException {
         int index = parseTaskIndex(command);
+        assert index >= 0 && index < tasks.size() : "Parsed index must be within valid bounds";
+
         Task task = tasks.get(index);
+        assert task != null : "Task retrieved at valid index should not be null";
+
         task.markDone();
+        assert task.isDone() : "Task should be marked as done";
         return task;
     }
 
@@ -80,8 +88,13 @@ public class TaskList {
      */
     public Task markUndone(String command) throws BagsException {
         int index = parseTaskIndex(command);
+        assert index >= 0 && index < tasks.size() : "Parsed index must be within valid bounds";
+
         Task task = tasks.get(index);
+        assert task != null : "Task retrieved at valid index should not be null";
+
         task.markUndone();
+        assert !task.isDone() : "Task should be marked as undone";
         return task;
     }
 
@@ -94,7 +107,14 @@ public class TaskList {
      */
     public Task delete(String command) throws BagsException {
         int index = parseTaskIndex(command);
-        return tasks.remove(index);
+        assert index >= 0 && index < tasks.size() : "Parsed index must be within valid bounds";
+
+        int previousSize = tasks.size();
+        Task removedTask = tasks.remove(index);
+
+        assert removedTask != null : "Removed task should not be null";
+        assert tasks.size() == previousSize - 1 : "Task list size should decrease by 1 after deletion";
+        return removedTask;
     }
 
     /**
@@ -105,6 +125,8 @@ public class TaskList {
      * @throws BagsException if command format or task index is invalid
      */
     private int parseTaskIndex(String command) throws BagsException {
+        assert command != null : "Command string passed to parseTaskIndex should not be null";
+
         String[] words = command.split(" ");
         if (words.length < 2) {
             throw new BagsException(
@@ -117,7 +139,9 @@ public class TaskList {
                 throw new BagsException(
                         "Task does not exist. Please only input number 1 to " + tasks.size());
             }
-            return taskNumber - 1;
+
+            int index = taskNumber - 1;
+            return index;
         } catch (NumberFormatException e) {
             throw new BagsException(
                     "Invalid task number! Please enter a valid number from 1 to " + tasks.size());
@@ -132,8 +156,10 @@ public class TaskList {
     public List<String> saveRecords() {
         List<String> records = new ArrayList<>();
         for (Task task : tasks) {
+            assert task != null : "Task list should not contain null task elements";
             records.add(task.parseEvent());
         }
+        assert records.size() == tasks.size() : "Saved records count must match task list size";
         return records;
     }
 
@@ -155,6 +181,7 @@ public class TaskList {
         }
 
         String searchKeyword = parts[1].trim().toLowerCase();
+        assert !searchKeyword.isEmpty() : "Search keyword should not be empty after validation";
 
         List<Task> matchingTasks = tasks.stream()
                 .filter(task -> task.getDescription().toLowerCase().contains(searchKeyword))
@@ -166,10 +193,11 @@ public class TaskList {
 
         StringBuilder output = new StringBuilder("Here are the matching tasks:");
         for (int i = 0; i < matchingTasks.size(); i++) {
+            Task task = matchingTasks.get(i);
             output.append(System.lineSeparator())
                     .append(i + 1)
                     .append(".")
-                    .append(matchingTasks.get(i));
+                    .append(task);
         }
 
         return output.toString();
@@ -184,10 +212,11 @@ public class TaskList {
     public String toString() {
         StringBuilder output = new StringBuilder("Here are the tasks in your list:");
         for (int i = 0; i < tasks.size(); i++) {
+            Task task = tasks.get(i);
             output.append(System.lineSeparator())
                     .append(i + 1)
                     .append(".")
-                    .append(tasks.get(i));
+                    .append(task);
         }
         return output.toString();
     }
