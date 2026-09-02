@@ -11,12 +11,15 @@ import bags.exception.BagsException;
  */
 public class Event extends Task {
 
-    private static final DateTimeFormatter inputFormatter =
+    private static final DateTimeFormatter INPUT_FORMATTER =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-    private LocalDateTime from;
-    private String formattedFrom;
-    private LocalDateTime to;
-    private String formattedTo;
+    private static final DateTimeFormatter OUTPUT_FORMATTER =
+            DateTimeFormatter.ofPattern("dd/MM/yyyy h:mma");
+
+    private final LocalDateTime from;
+    private final String formattedFrom;
+    private final LocalDateTime to;
+    private final String formattedTo;
 
     /**
      * Creates an event task.
@@ -24,46 +27,38 @@ public class Event extends Task {
      * @param description text describing the task
      * @param from start date-time string in {@code yyyy-MM-dd HH:mm} format
      * @param to end date-time string in {@code yyyy-MM-dd HH:mm} format
-     * @throws BagsException if either date-time format is invalid
+     * @throws BagsException if either date-time format is invalid or end date is before start date
      */
     public Event(String description, String from, String to) throws BagsException {
+        super(description, Tasktype.EVENT);
         assert description != null : "Task description must not be null";
         assert from != null : "Event start time must not be null";
         assert to != null : "Event end time must not be null";
 
-        super(description, Tasktype.EVENT);
-
         try {
-            this.from = LocalDateTime.parse(from, inputFormatter);
-            this.to = LocalDateTime.parse(to, inputFormatter);
-
-            DateTimeFormatter outputFormatter =
-                    DateTimeFormatter.ofPattern("dd/MM/yyyy h:mma");
-            this.formattedFrom = this.from.format(outputFormatter);
-            this.formattedTo = this.to.format(outputFormatter);
-
-            assert this.from != null : "Event start time must be parsed";
-            assert this.to != null : "Event end time must be parsed";
-            assert !this.to.isBefore(this.from)
-                    : "Event end time must not be before start time";
-
+            this.from = LocalDateTime.parse(from, INPUT_FORMATTER);
+            this.to = LocalDateTime.parse(to, INPUT_FORMATTER);
         } catch (DateTimeParseException e) {
             throw new BagsException(
                     "Please key in date in correct format: year-month-date hh:mm in 24h");
         }
+
+        this.formattedFrom = this.from.format(OUTPUT_FORMATTER);
+        this.formattedTo = this.to.format(OUTPUT_FORMATTER);
     }
 
     /**
      * Creates an event task from an add-task command string.
      *
-     * @param output user input after {@code event}
+     * @param command user input after {@code event}
      * @return the created event task
      * @throws BagsException if the description or time range is missing,
      *     or the format is invalid
      */
-    public static Event createTask(String output) throws BagsException {
-        String[] words = output.split(" ");
+    public static Event createTask(String command) throws BagsException {
+        assert command != null : "Command string must not be null";
 
+        String[] words = command.split(" ");
         if (words.length < 2) {
             throw new BagsException(
                     "Missing task description! Add task info after task type");
@@ -95,9 +90,9 @@ public class Event extends Task {
     }
 
     /**
-     * Finds the position of a keyword in the command.
+     * Finds the position of {@code /from} and {@code /to}in the command.
      *
-     * @param words the command words
+     * @param words the referenced word list
      * @param keyword the keyword to find
      * @return the keyword index, or {@code -1} if it is absent
      */
@@ -107,53 +102,39 @@ public class Event extends Task {
                 return i;
             }
         }
-
         return -1;
     }
 
     /**
-     * Builds a trimmed string from a range of command words.
+     * Builds a string literal given a specific range from a referenced
+     * list of words.
      *
-     * @param words the command words
+     * @param words the referenced word list
      * @param startIndex the inclusive starting index
      * @param endIndex the exclusive ending index
      * @return the combined text
      */
-    private static String buildText(
-            String[] words, int startIndex, int endIndex) {
+    private static String buildText(String[] words, int startIndex, int endIndex) {
         StringBuilder text = new StringBuilder();
-
         for (int i = startIndex; i < endIndex; i++) {
             text.append(words[i]).append(" ");
         }
-
         return text.toString().trim();
     }
 
-    /**
-     * Returns the start date-time of the event.
-     *
-     * @return the start date-time
-     */
     public LocalDateTime getFrom() {
         return this.from;
     }
 
-    /**
-     * Returns the end date-time of the event.
-     *
-     * @return the end date-time
-     */
     public LocalDateTime getTo() {
         return this.to;
     }
 
-     /**
+    /**
      * Returns the event task in a user-readable format.
      *
      * @return the formatted event task
      */
-
     @Override
     public String toString() {
         return "[E][" + getStatusIcon() + "] " + description
@@ -163,11 +144,11 @@ public class Event extends Task {
     /**
      * Converts the event task into the format used for saving to storage.
      *
-     * @return the event task as a storage record
+     * @return the event task in its stored format.
      */
     @Override
     public String parseEvent() {
         return "E | " + "[" + getStatusIcon() + "] | " + description + " | "
-                + from.format(inputFormatter) + " | " + to.format(inputFormatter);
+                + from.format(INPUT_FORMATTER) + " | " + to.format(INPUT_FORMATTER);
     }
 }

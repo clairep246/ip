@@ -55,7 +55,7 @@ class TaskListTest {
         taskList.add(todo);
 
         List<Task> tasks = taskList.getTasks();
-        List<String> readingFileRecords = taskList.getReadingFile();
+        List<String> readingFileRecords = taskList.saveRecords();
 
         assertEquals(1, taskList.getSize());
         assertEquals(todo, tasks.get(0));
@@ -161,7 +161,7 @@ class TaskListTest {
         taskList.markDone("done 1");
 
         Task task = taskList.markUndone("undone 1");
-        List<String> readingFileRecords = taskList.getReadingFile();
+        List<String> readingFileRecords = taskList.saveRecords();
 
         assertFalse(task.isDone());
         assertEquals(task.parseEvent(), readingFileRecords.get(0));

@@ -27,21 +27,12 @@ public abstract class Task {
         this.isDone = false;
     }
 
-    /**
-     * Marks the task as done.
-     */
     public void markDone() {
         this.isDone = true;
-
-        assert this.isDone: "Task should be marked as done";
     }
 
-    /**
-     * Marks the task as not done.
-     */
     public void markUndone() {
         this.isDone = false;
-        assert !this.isDone: "Task should be marked as undone";
     }
     
 
@@ -54,20 +45,10 @@ public abstract class Task {
         return this.type;
     }
 
-    /**
-     * Returns the description of this task.
-     *
-     * @return task description text
-     */
     public String getDescription() {
         return this.description;
     }
 
-    /**
-     * Returns whether the task is marked done.
-     *
-     * @return {@code true} if the task is done
-     */
     public boolean isDone() {
         return this.isDone;
     }

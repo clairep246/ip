@@ -79,7 +79,6 @@ public class DialogBox extends HBox {
         DialogBox db = new DialogBox(text, img);
         db.flip();
 
-        assert db != null : "Bags dialog box must be created";
         return db;
     }
 
@@ -94,9 +93,6 @@ public class DialogBox extends HBox {
         assert text != null : "User dialog text must not be null";
         assert img != null : "User profile picture must not be null";
 
-        DialogBox db = new DialogBox(text, img);
-
-        assert db != null : "User dialog box must be created";
-        return db;
+        return new DialogBox(text, img);
     }
 }
