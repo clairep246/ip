@@ -86,19 +86,35 @@ public class Parser {
 
         String type = parts[0].trim();
         String status = parts[1].trim();
-        Task task = null;
 
         if (type.equals("T")) {
-            task = new ToDo(parts[2].trim());
-
-        } else if (type.equals("D") && parts.length >= 4) {
-            task = new Deadlines(parts[2].trim(), parts[3].trim());
-
-        } else if (type.equals("E") && parts.length >= 5) {
-            task = new Event(parts[2].trim(), parts[3].trim(), parts[4].trim());
+            return createTask(new ToDo(parts[2].trim()), status);
         }
 
-        if (task != null && status.equals("[X]")) {
+        if (type.equals("D") && parts.length >= 4) {
+            return createTask(
+                    new Deadlines(parts[2].trim(), parts[3].trim()),
+                    status);
+        }
+
+        if (type.equals("E") && parts.length >= 5) {
+            return createTask(
+                    new Event(parts[2].trim(), parts[3].trim(), parts[4].trim()),
+                    status);
+        }
+
+        return null;
+    }
+
+    /**
+     * Marks a task as done when its saved status indicates completion.
+     *
+     * @param task the task to update
+     * @param status the saved task status
+     * @return the updated task
+     */
+    private Task createTask(Task task, String status) {
+        if (status.equals("[X]")) {
             task.markDone();
             assert task.isDone() : "Task should be marked as done";
         }
