@@ -1,7 +1,5 @@
 package bags;
 
-import java.util.List;
-
 import bags.exception.BagsException;
 import bags.parser.Command;
 import bags.parser.Parser;
@@ -37,7 +35,6 @@ public class Bags {
         parser = new Parser();
 
         try {
-            //load save file and convert into tasks
             tasks = new TaskList(storage.loadTasks(parser));
         } catch (BagsException e) {
             tasks = new TaskList();
@@ -52,18 +49,24 @@ public class Bags {
      * @throws BagsException if the command is invalid
      */
     public String processCommand(String input) throws BagsException {
-        if (input == null || input.trim().isEmpty()) {
-            throw new BagsException("No command was entered. Please enter a command.");
+        if (input == null) {
+            throw new BagsException("No command entered. Were you missing a command?"
+                    + "Enter a command to get started!");
         }
 
         String trimmedInput = input.trim();
 
-        if (isAddingTask) {
-            return processAddingTaskMode(trimmedInput);
-        }
-
         if (isEchoMode) {
             return processEchoMode(trimmedInput);
+        }
+
+        if (trimmedInput.isEmpty()) {
+            throw new BagsException("No command entered. Were you missing a command? "
+                    + "Type a command to get started! ");
+        }
+
+        if (isAddingTask) {
+            return processAddingTaskMode(trimmedInput);
         }
 
         Command command = parser.parseCommand(trimmedInput);
@@ -78,10 +81,13 @@ public class Bags {
         return addTask(input);
     }
 
-    private String processEchoMode(String input) throws BagsException {
+    private String processEchoMode(String input) {
         if (input.equals("exit")) {
             isEchoMode = false;
             return "Exited echo mode.";
+        }
+        if (input.isEmpty()) {
+            return "Please enter a word, I can't echo silence :(";
         }
         return input;
     }
@@ -91,13 +97,13 @@ public class Bags {
             case ADD_TASK:
                 isAddingTask = true;
                 return """
-                    Enter your task.
-                    Format for each task type, follow the format closely:
-                     1. todo <task name>
-                     2. deadline <name> /by <year-month-day> <hour:minutes>
-                     3. event <name> /from <year-month-day> <hour:minutes> <name> /to <year-month-day> <hour:minutes>
-                    To exit enter exit.
-                    """;
+                Enter your task.
+                Format for each task type, follow the format closely:
+                 1. todo <task name>
+                 2. deadline <name> /by <year-month-day> <hour:minutes>
+                 3. event <name> /from <year-month-day> <hour:minutes> <name> /to <year-month-day> <hour:minutes>
+                To exit enter exit.
+                """;
             case LIST:
                 return listItems();
             case MARK:
@@ -225,8 +231,6 @@ public class Bags {
      * Saves all current tasks to the storage file.
      */
     private void saveTasks() {
-        //convert all tasks into save file format
-        // and store it in new file
         storage.saveRecords(tasks.saveRecords());
     }
 }

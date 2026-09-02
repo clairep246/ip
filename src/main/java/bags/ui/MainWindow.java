@@ -63,12 +63,6 @@ public class MainWindow {
     @FXML
     private void handleUserInput() {
         String input = userInput.getText().trim();
-
-        if (input.isEmpty()) {
-            addBagsMessage("Please enter a command.");
-            return;
-        }
-
         addUserMessage(input);
 
         try {
