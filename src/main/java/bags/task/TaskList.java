@@ -80,10 +80,10 @@ public class TaskList {
     /**
      * Returns the storage records corresponding to the tasks.
      *
-     * @return an unmodifiable list of storage records
+     * @return a list of storage records
      */
     public List<String> getReadingFile() {
-        return Collections.unmodifiableList(readingFileRecords);
+        return this.readingFileRecords;
     }
 
     /**
