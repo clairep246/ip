@@ -30,3 +30,4 @@ AI was used for the following purposes
 - Generate test case files for earlier stages.
 - Generate JavaDoc comments which were further improved. 
 - Create GUI and refactor classes to fit FXML files for GUI development. 
+- Add assertions and refactor classes to fit code quality. 
