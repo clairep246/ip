@@ -118,6 +118,23 @@ public class TaskList {
     }
 
     /**
+     * Returns the task selected by the task number.
+     *
+     * @param command command containing the task number
+     * @return the selected task
+     * @throws BagsException if the task number is missing, invalid,
+     *                       or does not correspond to an existing task
+     */
+    public Task getTask(String command) throws BagsException {
+        int index = parseTaskIndex(command);
+        assert index >= 0 && index < tasks.size() : "Parsed index must be within valid bounds";
+
+        Task task = tasks.get(index);
+        assert task != null : "Task retrieved at valid index should not be null";
+        return task;
+    }
+
+    /**
      * Parses the command string to extract and validate a 0-based task index.
      *
      * @param command raw command input containing the task number
@@ -201,6 +218,37 @@ public class TaskList {
         }
 
         return output.toString();
+    }
+
+    /**
+     * Replaces the selected task with a task of the same type.
+     *
+     * @param command the user's edit command containing the task number
+     * @param replacementTask the task that replaces the selected task
+     * @return the replacement task
+     * @throws BagsException if the task number is missing, invalid,
+     *                       does not correspond to an existing task, or the task types differ
+     */
+    public Task edit(String command, Task replacementTask) throws BagsException {
+        assert replacementTask != null : "Replacement task must not be null";
+
+        int index = parseTaskIndex(command);
+        assert index >= 0 && index < tasks.size() : "Parsed index must be within valid bounds";
+
+        Task originalTask = tasks.get(index);
+        assert originalTask != null : "Task retrieved at valid index should not be null";
+
+        if (originalTask.getType() != replacementTask.getType()) {
+            throw new BagsException("The replacement task must have the same type as the original task.");
+        }
+
+        if (originalTask.isDone()) {
+            replacementTask.markDone();
+        }
+
+        tasks.set(index, replacementTask);
+        assert tasks.get(index) == replacementTask : "Replacement task should be stored at selected index";
+        return replacementTask;
     }
 
     /**

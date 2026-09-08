@@ -43,6 +43,8 @@ public class Parser {
             return Command.DELETE;
         } else if (input.startsWith("bye")) {
             return Command.BYE;
+        } else if (input.startsWith("edit")) {
+            return Command.EDIT;
         }
 
         return Command.UNKNOWN;

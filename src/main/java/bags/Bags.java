@@ -26,6 +26,8 @@ public class Bags {
 
     private boolean isAddingTask;
     private boolean isEchoMode;
+    private boolean isEditingMode;
+    private String editingCommand;
 
     /**
      * Creates a Bags application and loads existing tasks from storage.
@@ -72,6 +74,11 @@ public class Bags {
             return response;
         }
 
+        if (isEditingMode) {
+            String response = processEditingTaskMode(trimmedInput);
+            return response;
+        }
+
         Command command = parser.parseCommand(trimmedInput);
         assert command != null : "Parsed command must not be null";
 
@@ -88,6 +95,31 @@ public class Bags {
             return "Exited editing mode.";
         }
         return addTask(input);
+    }
+
+    private String processEditingTaskMode(String input) throws BagsException {
+        assert isEditingMode : "Should only process editing task mode when flag is true";
+        assert editingCommand != null : "Edit command must exist while editing a task";
+
+        if (input.equals("exit")) {
+            isEditingMode = false;
+            editingCommand = null;
+            return "Exited editing mode without changing the task.";
+        }
+
+        Tasktype taskType = parser.parseTaskType(input);
+        if (taskType == null) {
+            throw new BagsException("Enter a todo, deadline, or event task, or enter exit to cancel.");
+        }
+
+        Task replacementTask = createTask(taskType, input);
+        Task updatedTask = tasks.edit(editingCommand, replacementTask);
+
+        isEditingMode = false;
+        editingCommand = null;
+        saveTasks();
+
+        return "Got it, I've updated the following task:\n" + updatedTask;
     }
 
     private String processEchoMode(String input) {
@@ -130,6 +162,8 @@ public class Bags {
                 return deleteTask(input);
             case SEARCH:
                 return searchTasks(input);
+            case EDIT:
+                return startEditingTask(input);
             case BYE:
                 saveTasks();
                 return "Bye. Hope to see you again soon!";
@@ -181,6 +215,28 @@ public class Bags {
             default:
                 throw new BagsException("Not a valid task type, only event, to do or deadline are valid.");
         }
+    }
+
+    /**
+     * Selects a task and enters editing mode for its replacement.
+     *
+     * @param input the user's edit command containing the task number
+     * @return instructions for entering a replacement task
+     * @throws BagsException if the task number is invalid
+     */
+    private String startEditingTask(String input) throws BagsException {
+        Task task = tasks.getTask(input);
+
+        isEditingMode = true;
+        editingCommand = input;
+
+        return "Editing this task:\n"
+                + task
+                + "\nEnter a replacement task."
+                + "\nFormat: todo <task name>"
+                + "\n        deadline <name> /by <year-month-day> <hour:minutes>"
+                + "\n        event <name> /from <year-month-day> <hour:minutes> /to <year-month-day> <hour:minutes>"
+                + "\nEnter exit to cancel.";
     }
 
     /**
