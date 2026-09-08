@@ -13,6 +13,7 @@ public enum Command {
     SEARCH,
     BYE,
     EMPTY,
+    EDIT,
     UNKNOWN
 }
 
