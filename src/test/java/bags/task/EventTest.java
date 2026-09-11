@@ -80,4 +80,14 @@ class EventTest {
 
         assertTrue(exception.getMessage().contains("correct format"));
     }
+
+    @Test
+    void constructor_startAfterEnd_throwsException() {
+        BagsException exception = assertThrows(
+                BagsException.class,
+                () -> new Event("Project meeting", "2026-09-13 11:00", "2026-09-13 10:00")
+        );
+
+        assertEquals("Start date can't be after the end date.", exception.getMessage());
+    }
 }

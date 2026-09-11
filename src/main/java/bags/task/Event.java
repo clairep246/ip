@@ -43,6 +43,10 @@ public class Event extends Task {
                     "Please key in date in correct format: year-month-date hh:mm in 24h");
         }
 
+        if (this.from.isAfter(this.to)) {
+            throw new BagsException("Start date can't be after the end date.");
+        }
+
         this.formattedFrom = this.from.format(OUTPUT_FORMATTER);
         this.formattedTo = this.to.format(OUTPUT_FORMATTER);
     }
