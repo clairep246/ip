@@ -15,7 +15,7 @@ import javafx.scene.layout.HBox;
 
 
 /**
- * Represents a dialog box containing a message and a profile picture.
+ * Represents a dialog box containing a conversation message.
  */
 public class DialogBox extends HBox {
 
@@ -27,7 +27,6 @@ public class DialogBox extends HBox {
 
     private DialogBox(String text, Image img) {
         assert text != null : "Dialog text must not be null";
-        assert img != null : "Dialog image must not be null";
 
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(
@@ -44,12 +43,16 @@ public class DialogBox extends HBox {
                 : "Display picture must be loaded from FXML";
 
         dialog.setText(text);
-        displayPicture.setImage(img);
+        if (img == null) {
+            displayPicture.setManaged(false);
+            displayPicture.setVisible(false);
+        } else {
+            displayPicture.setImage(img);
+        }
     }
 
     /**
-     * Flips the dialog box such that the ImageView is on the left and text
-     * is on the right.
+     * Arranges the Bags icon to the left of its message.
      */
     private void flip() {
         assert dialog != null : "Dialog label must be initialized";
@@ -61,7 +64,7 @@ public class DialogBox extends HBox {
                 FXCollections.observableArrayList(this.getChildren());
         FXCollections.reverse(tmp);
         this.getChildren().setAll(tmp);
-        dialog.getStyleClass().add("reply-label");
+        dialog.getStyleClass().add("bags-label");
     }
 
 
@@ -69,7 +72,7 @@ public class DialogBox extends HBox {
      * Creates a dialog box for Bags.
      *
      * @param text the message from Bags
-     * @param img the profile picture for Bags
+     * @param img the icon for Bags
      * @return a dialog box for Bags
      */
     public static DialogBox getBagsDialog(String text, Image img) {
@@ -86,13 +89,31 @@ public class DialogBox extends HBox {
      * Creates a dialog box for the user.
      *
      * @param text the message from the user
-     * @param img the user's profile picture
      * @return a dialog box for the user
      */
-    public static DialogBox getUserDialog(String text, Image img) {
+    public static DialogBox getUserDialog(String text) {
         assert text != null : "User dialog text must not be null";
-        assert img != null : "User profile picture must not be null";
 
-        return new DialogBox(text, img);
+        DialogBox db = new DialogBox(text, null);
+        db.getStyleClass().add("user-dialog");
+        db.dialog.getStyleClass().add("user-label");
+
+        return db;
+    }
+
+    /**
+     * Creates a dialog box for an error message.
+     *
+     * @param text the error message from Bags
+     * @return a dialog box for the error message
+     */
+    public static DialogBox getErrorDialog(String text) {
+        assert text != null : "Error dialog text must not be null";
+
+        DialogBox db = new DialogBox("⚠ " + text, null);
+        db.setAlignment(Pos.TOP_LEFT);
+        db.dialog.getStyleClass().add("error-label");
+
+        return db;
     }
 }

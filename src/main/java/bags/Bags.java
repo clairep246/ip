@@ -94,6 +94,13 @@ public class Bags {
             isAddingTask = false;
             return "Exited editing mode.";
         }
+
+        Tasktype taskType = parser.parseTaskType(input);
+        if (taskType == null) {
+            throw new BagsException("Invalid task type! :( "
+                    + "Enter a todo, deadline, or event task, or type exit to cancel.");
+        }
+
         return addTask(input);
     }
 
@@ -122,14 +129,14 @@ public class Bags {
         return "Got it, I've updated the following task:\n" + updatedTask;
     }
 
-    private String processEchoMode(String input) {
+    private String processEchoMode(String input) throws BagsException {
         assert isEchoMode : "Should only process echo mode when flag is true";
         if (input.equals("exit")) {
             isEchoMode = false;
             return "Exited echo mode.";
         }
         if (input.isEmpty()) {
-            return "Please enter a word, I can't echo silence :(";
+            throw new BagsException("Enter a word for me to echo! I can't echo silence :(");
         }
         return input;
     }
@@ -230,13 +237,17 @@ public class Bags {
         isEditingMode = true;
         editingCommand = input;
 
-        return "Editing this task:\n"
-                + task
-                + "\nEnter a replacement task."
-                + "\nFormat: todo <task name>"
-                + "\n        deadline <name> /by <year-month-day> <hour:minutes>"
-                + "\n        event <name> /from <year-month-day> <hour:minutes> /to <year-month-day> <hour:minutes>"
-                + "\nEnter exit to cancel.";
+        return """
+                Editing this task:
+                %s
+
+                Enter a replacement task using the same task type:
+                • todo <task name>
+                • deadline <task name> /by YYYY-MM-DD HH:MM
+                • event <task name> /from YYYY-MM-DD HH:MM /to YYYY-MM-DD HH:MM
+
+                Type exit to cancel.
+                """.formatted(task);
     }
 
     /**

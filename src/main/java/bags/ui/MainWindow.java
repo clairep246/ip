@@ -16,7 +16,6 @@ public class MainWindow {
 
     private static final String BYE_COMMAND = "bye";
     private static final String BAGS_IMAGE_PATH = "/images/Response.png";
-    private static final String USER_IMAGE_PATH = "/images/User.png";
 
     @FXML
     private TextField userInput;
@@ -32,7 +31,6 @@ public class MainWindow {
 
     private Bags bags;
     private Image bagsImage;
-    private Image userImage;
 
     /**
      * Initializes the JavaFX interface components, loads resources, and displays greeting.
@@ -51,10 +49,7 @@ public class MainWindow {
     private void loadImages() {
         assert getClass().getResourceAsStream(BAGS_IMAGE_PATH) != null
                 : "Bags response image resource missing: " + BAGS_IMAGE_PATH;
-        assert getClass().getResourceAsStream(USER_IMAGE_PATH) != null
-                : "User image resource missing: " + USER_IMAGE_PATH;
         this.bagsImage = new Image(this.getClass().getResourceAsStream(BAGS_IMAGE_PATH));
-        this.userImage = new Image(this.getClass().getResourceAsStream(USER_IMAGE_PATH));
     }
 
     /**
@@ -74,7 +69,7 @@ public class MainWindow {
                 userInput.setDisable(true);
             }
         } catch (BagsException e) {
-            addBagsMessage("Error: " + e.getMessage());
+            addErrorMessage(e.getMessage());
         } finally {
             userInput.clear();
         }
@@ -86,7 +81,12 @@ public class MainWindow {
     }
 
     private void addUserMessage(String message) {
-        DialogBox dialogBox = DialogBox.getUserDialog(message, userImage);
+        DialogBox dialogBox = DialogBox.getUserDialog(message);
+        dialogContainer.getChildren().add(dialogBox);
+    }
+
+    private void addErrorMessage(String message) {
+        DialogBox dialogBox = DialogBox.getErrorDialog(message);
         dialogContainer.getChildren().add(dialogBox);
     }
 }
