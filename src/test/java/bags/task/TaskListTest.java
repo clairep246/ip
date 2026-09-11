@@ -2,9 +2,11 @@ package bags.task;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -60,6 +62,88 @@ class TaskListTest {
         assertEquals(1, taskList.getSize());
         assertEquals(todo, tasks.get(0));
         assertEquals(todo.parseEvent(), readingFileRecords.get(0));
+    }
+
+    @Test
+    void getTask_existingTask_returnsSelectedTask() throws BagsException {
+        TaskList taskList = createTaskList();
+
+        Task task = taskList.getTask("get 2");
+
+        assertEquals("Do homework", task.getDescription());
+    }
+
+    @Test
+    void saveRecords_multipleTaskTypes_returnsAllFormattedRecords()
+            throws BagsException {
+        TaskList taskList = new TaskList();
+        taskList.add(new ToDo("Read book"));
+        taskList.add(new Deadlines("Submit report", "2026-09-12 23:59"));
+        taskList.add(new Event("Project meeting", "2026-09-13 10:00", "2026-09-13 11:00"));
+        taskList.markDone("done 2");
+
+        List<String> records = taskList.saveRecords();
+
+        assertEquals(List.of(
+                "T | [ ] | Read book",
+                "D | [X] | Submit report | 2026-09-12 23:59",
+                "E | [ ] | Project meeting | 2026-09-13 10:00 | 2026-09-13 11:00"
+        ), records);
+    }
+
+    @Test
+    void search_caseInsensitiveKeyword_returnsMatchingTasks() throws BagsException {
+        TaskList taskList = createTaskList();
+
+        String result = taskList.search("search BOOK");
+
+        assertEquals("Here are the matching tasks:" + System.lineSeparator()
+                + "1.[T][ ] Read book", result);
+    }
+
+    @Test
+    void search_noMatchingKeyword_returnsNoMatchesMessage() throws BagsException {
+        TaskList taskList = createTaskList();
+
+        String result = taskList.search("search groceries");
+
+        assertEquals("No matching tasks found.", result);
+    }
+
+    @Test
+    void search_missingKeyword_throwsException() throws BagsException {
+        TaskList taskList = createTaskList();
+
+        BagsException exception = assertThrows(
+                BagsException.class, () -> taskList.search("search")
+        );
+
+        assertTrue(exception.getMessage().contains("keyword"));
+    }
+
+    @Test
+    void edit_completedTask_preservesCompletionStatus() throws BagsException {
+        TaskList taskList = createTaskList();
+        taskList.markDone("done 1");
+        ToDo replacementTask = new ToDo("Read chapter");
+
+        Task updatedTask = taskList.edit("edit 1", replacementTask);
+
+        assertSame(replacementTask, updatedTask);
+        assertEquals("Read chapter", taskList.getTask("get 1").getDescription());
+        assertTrue(updatedTask.isDone());
+    }
+
+    @Test
+    void edit_differentTaskType_throwsException() throws BagsException {
+        TaskList taskList = createTaskList();
+        Deadlines replacementTask = new Deadlines("Submit report", "2026-09-12 23:59");
+
+        BagsException exception = assertThrows(
+                BagsException.class, () -> taskList.edit("edit 1", replacementTask)
+        );
+
+        assertTrue(exception.getMessage().contains("same type"));
     }
 
     /**

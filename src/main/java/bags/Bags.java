@@ -33,7 +33,16 @@ public class Bags {
      * Creates a Bags application and loads existing tasks from storage.
      */
     public Bags() {
-        storage = new Storage(DEFAULT_STORAGE_PATH);
+        this(DEFAULT_STORAGE_PATH);
+    }
+
+    /**
+     * Creates a Bags application that stores tasks at the supplied path.
+     *
+     * @param storagePath location of the task save file
+     */
+    Bags(String storagePath) {
+        storage = new Storage(storagePath);
         parser = new Parser();
 
         try {
