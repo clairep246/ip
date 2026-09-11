@@ -100,4 +100,20 @@ public class DialogBox extends HBox {
 
         return db;
     }
+
+    /**
+     * Creates a dialog box for an error message.
+     *
+     * @param text the error message from Bags
+     * @return a dialog box for the error message
+     */
+    public static DialogBox getErrorDialog(String text) {
+        assert text != null : "Error dialog text must not be null";
+
+        DialogBox db = new DialogBox("⚠ " + text, null);
+        db.setAlignment(Pos.TOP_LEFT);
+        db.dialog.getStyleClass().add("error-label");
+
+        return db;
+    }
 }

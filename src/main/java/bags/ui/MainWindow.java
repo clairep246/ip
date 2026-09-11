@@ -69,7 +69,7 @@ public class MainWindow {
                 userInput.setDisable(true);
             }
         } catch (BagsException e) {
-            addBagsMessage("Error: " + e.getMessage());
+            addErrorMessage(e.getMessage());
         } finally {
             userInput.clear();
         }
@@ -82,6 +82,11 @@ public class MainWindow {
 
     private void addUserMessage(String message) {
         DialogBox dialogBox = DialogBox.getUserDialog(message);
+        dialogContainer.getChildren().add(dialogBox);
+    }
+
+    private void addErrorMessage(String message) {
+        DialogBox dialogBox = DialogBox.getErrorDialog(message);
         dialogContainer.getChildren().add(dialogBox);
     }
 }
