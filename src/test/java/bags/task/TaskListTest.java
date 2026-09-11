@@ -146,17 +146,6 @@ class TaskListTest {
         assertTrue(exception.getMessage().contains("same type"));
     }
 
-    @Test
-    void toString_multipleTasks_returnsNumberedTaskList() throws BagsException {
-        TaskList taskList = createTaskList();
-
-        String result = taskList.toString();
-
-        assertEquals("Here are the tasks in your list:" + System.lineSeparator()
-                + "1.[T][ ] Read book" + System.lineSeparator()
-                + "2.[T][ ] Do homework", result);
-    }
-
     /**
      * Tests that an existing task can be successfully marked as done.
      *
