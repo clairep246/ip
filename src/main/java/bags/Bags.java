@@ -53,7 +53,8 @@ public class Bags {
             }
         } catch (BagsException e) {
             tasks = new TaskList();
-            startupMessage = "Unable to load saved tasks. Starting a new session. Please hold on for a while!" + e.getMessage();
+            startupMessage = "Unable to load saved tasks. Starting a new session. "
+                    + "Please hold on for a while!" + e.getMessage();
         }
 
     }
@@ -167,13 +168,13 @@ public class Bags {
             case ADD_TASK:
                 isAddingTask = true;
                 return """
-                Enter your task.
-                Format for each task type, follow the format closely:
-                 1. todo <task name>
-                 2. deadline <name> /by <year-month-day> <hour:minutes>
-                 3. event <name> /from <year-month-day> <hour:minutes> <name> /to <year-month-day> <hour:minutes>
-                To exit enter exit.
-                """;
+                    Enter your task.
+                    Format for each task type, follow the format closely:
+                     1. todo <task name>
+                     2. deadline <name> /by <year-month-day> <hour:minutes>
+                     3. event <name> /from <year-month-day> <hour:minutes> <name> /to <year-month-day> <hour:minutes>
+                    To exit enter exit.
+                    """;
             case LIST:
                 return listItems();
             case MARK:

@@ -70,13 +70,13 @@ class BagsTest {
     }
 
     @Test
-    void processCommand_addMode_invalidTaskType_throwsAndKeepsModeActive()
+    void processCommand_invalidAddTypeKeepsModeActive()
             throws BagsException {
         Bags bags = createBags();
         bags.processCommand("add task");
 
-        BagsException exception = assertThrows(
-                BagsException.class, () -> bags.processCommand("reminder Buy milk")
+        BagsException exception = assertThrows(BagsException.class, () ->
+                bags.processCommand("reminder Buy milk")
         );
 
         assertTrue(exception.getMessage().contains("Invalid task type"));
@@ -105,9 +105,8 @@ class BagsTest {
         bags.processCommand("exit");
 
         assertTrue(bags.processCommand("edit 1").contains("Editing this task"));
-        BagsException exception = assertThrows(
-                BagsException.class,
-                () -> bags.processCommand("deadline Submit report /by 2026-09-12 23:59")
+        BagsException exception = assertThrows(BagsException.class, () ->
+                bags.processCommand("deadline Submit report /by 2026-09-12 23:59")
         );
         assertTrue(exception.getMessage().contains("same type"));
         assertTrue(bags.processCommand("todo Read chapter").contains("updated"));

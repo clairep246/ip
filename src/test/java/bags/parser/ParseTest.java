@@ -146,9 +146,8 @@ public class ParseTest {
     void parseTask_invalidDateRecord_throwsException() {
         Parser parser = new Parser();
 
-        BagsException exception = assertThrows(
-                BagsException.class,
-                () -> parser.parseTask("D | [ ] | Submit report | not-a-date")
+        BagsException exception = assertThrows(BagsException.class, () ->
+                parser.parseTask("D | [ ] | Submit report | not-a-date")
         );
 
         assertTrue(exception.getMessage().contains("correct format"));

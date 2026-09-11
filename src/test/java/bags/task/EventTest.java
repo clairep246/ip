@@ -39,9 +39,8 @@ class EventTest {
 
     @Test
     void createTask_missingDescription_throwsException() {
-        BagsException exception = assertThrows(
-                BagsException.class,
-                () -> Event.createTask("event /from 2026-09-13 10:00 /to 2026-09-13 11:00")
+        BagsException exception = assertThrows(BagsException.class, () ->
+                Event.createTask("event /from 2026-09-13 10:00 /to 2026-09-13 11:00")
         );
 
         assertTrue(exception.getMessage().contains("Missing task description"));
@@ -49,12 +48,11 @@ class EventTest {
 
     @Test
     void createTask_missingOrMisorderedTimeKeywords_throwsException() {
-        BagsException missingKeyword = assertThrows(
-                BagsException.class, () -> Event.createTask("event Project meeting")
+        BagsException missingKeyword = assertThrows(BagsException.class, () ->
+                Event.createTask("event Project meeting")
         );
-        BagsException misorderedKeywords = assertThrows(
-                BagsException.class,
-                () -> Event.createTask("event Project meeting /to 2026-09-13 11:00"
+        BagsException misorderedKeywords = assertThrows(BagsException.class, () ->
+                Event.createTask("event Project meeting /to 2026-09-13 11:00"
                         + " /from 2026-09-13 10:00")
         );
 
@@ -64,8 +62,8 @@ class EventTest {
 
     @Test
     void createTask_missingTimeframe_throwsException() {
-        BagsException exception = assertThrows(
-                BagsException.class, () -> Event.createTask("event Project meeting /from /to")
+        BagsException exception = assertThrows(BagsException.class, () ->
+                Event.createTask("event Project meeting /from /to")
         );
 
         assertTrue(exception.getMessage().contains("Missing timeframe"));
@@ -73,9 +71,8 @@ class EventTest {
 
     @Test
     void constructor_invalidDate_throwsException() {
-        BagsException exception = assertThrows(
-                BagsException.class,
-                () -> new Event("Project meeting", "invalid-date", "2026-09-13 11:00")
+        BagsException exception = assertThrows(BagsException.class, () ->
+                new Event("Project meeting", "invalid-date", "2026-09-13 11:00")
         );
 
         assertTrue(exception.getMessage().contains("correct format"));
@@ -83,9 +80,8 @@ class EventTest {
 
     @Test
     void constructor_startAfterEnd_throwsException() {
-        BagsException exception = assertThrows(
-                BagsException.class,
-                () -> new Event("Project meeting", "2026-09-13 11:00", "2026-09-13 10:00")
+        BagsException exception = assertThrows(BagsException.class, () ->
+                new Event("Project meeting", "2026-09-13 11:00", "2026-09-13 10:00")
         );
 
         assertEquals("Start date can't be after the end date.", exception.getMessage());

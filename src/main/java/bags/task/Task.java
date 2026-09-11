@@ -34,7 +34,6 @@ public abstract class Task {
     public void markUndone() {
         this.isDone = false;
     }
-    
 
     /**
      * Returns the type of this task.
