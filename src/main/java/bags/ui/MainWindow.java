@@ -44,6 +44,11 @@ public class MainWindow {
 
         addBagsMessage("Hello! I'm Bags. Nice to meet you!");
         addBagsMessage("What can I do for you?");
+
+        String startupMessage = bags.getStartupMessage();
+        if (startupMessage != null) {
+            addErrorMessage(startupMessage);
+        }
     }
 
     private void loadImages() {

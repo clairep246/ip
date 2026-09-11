@@ -23,6 +23,7 @@ public class Bags {
     private final Storage storage;
     private final Parser parser;
     private TaskList tasks;
+    private String startupMessage;
 
     private boolean isAddingTask;
     private boolean isEchoMode;
@@ -47,8 +48,12 @@ public class Bags {
 
         try {
             tasks = new TaskList(storage.loadTasks(parser));
+            if (storage.isSaveFileMissing()) {
+                startupMessage = "No saved task file was found. Starting a new session. Please wait for a moment!";
+            }
         } catch (BagsException e) {
             tasks = new TaskList();
+            startupMessage = "Unable to load saved tasks. Starting a new session. Please hold on for a while!" + e.getMessage();
         }
 
     }
@@ -69,8 +74,7 @@ public class Bags {
         String trimmedInput = input.trim();
 
         if (isEchoMode) {
-            String response = processEchoMode(trimmedInput);
-            return response;
+            return processEchoMode(trimmedInput);
         }
 
         if (trimmedInput.isEmpty()) {
@@ -79,13 +83,11 @@ public class Bags {
         }
 
         if (isAddingTask) {
-            String response = processAddingTaskMode(trimmedInput);
-            return response;
+            return processAddingTaskMode(trimmedInput);
         }
 
         if (isEditingMode) {
-            String response = processEditingTaskMode(trimmedInput);
-            return response;
+            return processEditingTaskMode(trimmedInput);
         }
 
         Command command = parser.parseCommand(trimmedInput);
@@ -95,6 +97,13 @@ public class Bags {
         assert response != null : "Command execution response should not be null";
 
         return response;
+    }
+
+    /**
+     * Returns the startup alert for a save-file problem, if one occurred.
+     */
+    public String getStartupMessage() {
+        return startupMessage;
     }
 
     private String processAddingTaskMode(String input) throws BagsException {
@@ -337,7 +346,7 @@ public class Bags {
     /**
      * Saves all current tasks to the storage file.
      */
-    private void saveTasks() {
+    private void saveTasks() throws BagsException {
         assert storage != null : "Storage component must exist to save tasks";
         assert tasks != null : "TaskList must exist to retrieve records for saving";
         storage.saveRecords(tasks.saveRecords());

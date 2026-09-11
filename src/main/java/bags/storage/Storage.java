@@ -18,6 +18,7 @@ import bags.task.Task;
 public class Storage {
 
     private final File saveFile;
+    private boolean isSaveFileMissing;
 
     /**
      * Creates storage for the supplied save-file path.
@@ -34,13 +35,16 @@ public class Storage {
      * Saves every supplied task record, overwriting the previous content.
      *
      * @param taskRecords records the tasks to be saved
+     * @throws BagsException if the task records cannot be saved
      */
-    public void saveRecords(List<String> taskRecords) {
+    public void saveRecords(List<String> taskRecords) throws BagsException {
         assert taskRecords != null : "Task records must not be null";
 
         File parentDir = saveFile.getParentFile();
         if (parentDir != null && !parentDir.exists()) {
-            parentDir.mkdirs();
+            if (!parentDir.mkdirs()) {
+                throw new BagsException("Unable to create the folder for saved tasks.");
+            }
         }
 
         try (FileWriter writer = new FileWriter(saveFile)) {
@@ -49,7 +53,7 @@ public class Storage {
                 writer.write(record + "\n");
             }
         } catch (IOException e) {
-            System.out.println("Something went wrong while saving: " + e.getMessage());
+            throw new BagsException("Unable to save tasks: " + e.getMessage());
         }
     }
 
@@ -88,12 +92,25 @@ public class Storage {
     }
 
     /**
+     * Returns whether the configured save file was absent during loading.
+     */
+    public boolean isSaveFileMissing() {
+        return isSaveFileMissing;
+    }
+
+    /**
      * Reads the raw lines from the save file.
      *
      * @return the records read from the save file
      */
-    private List<String> loadTaskRecords() {
+    private List<String> loadTaskRecords() throws BagsException {
         List<String> taskRecords = new ArrayList<>();
+        isSaveFileMissing = false;
+
+        if (!saveFile.exists()) {
+            isSaveFileMissing = true;
+            return taskRecords;
+        }
 
         try (Scanner scanner = new Scanner(saveFile)) {
             while (scanner.hasNextLine()) {
@@ -102,7 +119,7 @@ public class Storage {
                 taskRecords.add(record);
             }
         } catch (FileNotFoundException e) {
-            System.out.println("No previous save file found. Creating a new session!");
+            throw new BagsException("Unable to read saved tasks: " + e.getMessage());
         }
 
         return taskRecords;

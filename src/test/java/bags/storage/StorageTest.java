@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -100,25 +98,17 @@ class StorageTest {
      * @throws Exception if an unexpected file operation error occurs
      */
     @Test
-    void save_directoryAsFile_handlesIoException() throws Exception {
+    void save_directoryAsFile_throwsException() throws Exception {
         Path directory = tempDir.resolve("Bags");
         Files.createDirectory(directory);
 
         Storage storage = new Storage(directory.toString());
 
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        PrintStream originalOut = System.out;
+        BagsException exception = assertThrows(
+                BagsException.class, () -> storage.saveRecords(List.of("T | [ ] | Read book"))
+        );
 
-        try {
-            System.setOut(new PrintStream(output));
-
-            storage.saveRecords(List.of("T | [ ] | Read book"));
-
-            assertTrue(output.toString().contains(
-                    "Something went wrong while saving:"));
-        } finally {
-            System.setOut(originalOut);
-        }
+        assertTrue(exception.getMessage().contains("Unable to save tasks"));
     }
 
     /**
@@ -198,6 +188,7 @@ class StorageTest {
         List<Task> tasks = storage.loadTasks(parser);
 
         assertTrue(tasks.isEmpty());
+        assertTrue(storage.isSaveFileMissing());
     }
 
     @Test

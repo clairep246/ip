@@ -35,6 +35,27 @@ class BagsTest {
     }
 
     @Test
+    void constructor_missingSaveFile_returnsStartupAlert() {
+        Bags bags = createBags();
+
+        assertTrue(bags.getStartupMessage().contains("No saved task file"));
+    }
+
+    @Test
+    void processCommand_saveFailure_throwsException() throws Exception {
+        Path storagePath = tempDir.resolve("Bags");
+        Files.createDirectory(storagePath);
+        Bags bags = new Bags(storagePath.toString());
+        bags.processCommand("add task");
+
+        BagsException exception = assertThrows(
+                BagsException.class, () -> bags.processCommand("todo Read book")
+        );
+
+        assertTrue(exception.getMessage().contains("Unable to save tasks"));
+    }
+
+    @Test
     void processCommand_addMode_addsSupportedTaskTypesAndExits() throws BagsException {
         Bags bags = createBags();
 
