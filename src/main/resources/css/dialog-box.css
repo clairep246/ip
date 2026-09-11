@@ -1,27 +1,28 @@
 .label {
-    -fx-background-color: linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%);
-    -fx-border-color: linear-gradient(to right, #a6c0fe 0%, #f68084 100%);
-    -fx-border-width: 2px;
-
-    -fx-background-radius: 1em 1em 0 1em;
-    -fx-border-radius: 1em 1em 0 1em;
-
-    -fx-padding: 6px 10px 6px 10px;
-
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 13px;
+    -fx-padding: 8px 12px;
 }
 
+.user-dialog {
+    -fx-alignment: top-right;
+}
 
-.reply-label {
-    -fx-background-radius: 1em 1em 1em 0;
-    -fx-border-radius: 1em 1em 1em 0;
+.user-label {
+    -fx-background-color: #2563eb;
+    -fx-background-radius: 14px 14px 2px 14px;
+    -fx-text-fill: white;
+}
+
+.bags-label {
+    -fx-background-color: #f1f5f9;
+    -fx-background-radius: 14px 14px 14px 2px;
+    -fx-border-color: #d8e1ec;
+    -fx-border-radius: 14px 14px 14px 2px;
+    -fx-border-width: 1px;
+    -fx-text-fill: #1e293b;
 }
 
 #displayPicture {
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.3, 0, 2);
-
-    -fx-scale-x: 1;
-    -fx-scale-y: 1;
-    -fx-rotate: 0;
 }
-
-
