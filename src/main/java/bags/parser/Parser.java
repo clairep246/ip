@@ -10,9 +10,6 @@ import bags.task.ToDo;
 /**
  * Interprets user commands and converts saved task records back into tasks.
  *
- * <p>AI was used to assist in generating and improving the parser methods.
- * The generated code was reviewed and adapted to fit the application's
- * requirements.</p>
  */
 public class Parser {
 
