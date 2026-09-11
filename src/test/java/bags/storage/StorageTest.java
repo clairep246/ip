@@ -2,6 +2,7 @@ package bags.storage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayOutputStream;
@@ -13,6 +14,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+import bags.exception.BagsException;
 import bags.parser.Parser;
 import bags.task.Task;
 
@@ -56,6 +58,39 @@ class StorageTest {
         List<String> savedRecords = Files.readAllLines(file);
 
         assertEquals(records, savedRecords);
+    }
+
+    @Test
+    void saveRecords_existingRecords_overwritesPreviousContent() throws Exception {
+        Path file = tempDir.resolve("Bags.txt");
+        Files.write(file, List.of("T | [ ] | Old task"));
+        Storage storage = new Storage(file.toString());
+
+        storage.saveRecords(List.of("T | [X] | New task"));
+
+        assertEquals(List.of("T | [X] | New task"), Files.readAllLines(file));
+    }
+
+    @Test
+    void saveRecords_missingParentDirectory_createsFileAndDirectory() throws Exception {
+        Path file = tempDir.resolve("data").resolve("Bags.txt");
+        Storage storage = new Storage(file.toString());
+
+        storage.saveRecords(List.of("T | [ ] | Read book"));
+
+        assertTrue(Files.exists(file));
+        assertEquals(List.of("T | [ ] | Read book"), Files.readAllLines(file));
+    }
+
+    @Test
+    void saveRecords_emptyRecords_clearsExistingFile() throws Exception {
+        Path file = tempDir.resolve("Bags.txt");
+        Files.write(file, List.of("T | [ ] | Read book"));
+        Storage storage = new Storage(file.toString());
+
+        storage.saveRecords(List.of());
+
+        assertTrue(Files.readAllLines(file).isEmpty());
     }
 
     /**
@@ -163,6 +198,30 @@ class StorageTest {
         List<Task> tasks = storage.loadTasks(parser);
 
         assertTrue(tasks.isEmpty());
+    }
+
+    @Test
+    void loadTasks_emptyFile_returnsEmptyList() throws Exception {
+        Path file = tempDir.resolve("Bags.txt");
+        Files.createFile(file);
+        Storage storage = new Storage(file.toString());
+
+        List<Task> tasks = storage.loadTasks(new Parser());
+
+        assertTrue(tasks.isEmpty());
+    }
+
+    @Test
+    void loadTasks_invalidDateRecord_throwsException() throws Exception {
+        Path file = tempDir.resolve("Bags.txt");
+        Files.write(file, List.of("D | [ ] | Submit report | invalid-date"));
+        Storage storage = new Storage(file.toString());
+
+        BagsException exception = assertThrows(
+                BagsException.class, () -> storage.loadTasks(new Parser())
+        );
+
+        assertTrue(exception.getMessage().contains("correct format"));
     }
 
     /**
