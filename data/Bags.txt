@@ -3,3 +3,4 @@ D | [ ] | reading | 2026-01-01 12:00
 D | [ ] | /homework | 2027-01-01 14:00
 T | [X] | shopping with Mia
 T | [ ] | running for 2.4km
+D | [ ] | read | 2027-01-01 14:00
