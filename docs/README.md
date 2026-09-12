@@ -17,7 +17,7 @@ Try these commands first:
 
 ### Adding tasks
 
-Enter `add task` to start adding task mode.Enter `exit` to leave the adding task mode.
+Enter `add task` to start adding task mode.Enter `exit` to leave the adding task mode. Follow the format closely!
 
 | Type of task                                                          | Purpose                                  |
 |-----------------------------------------------------------------------|------------------------------------------|
@@ -29,7 +29,7 @@ Enter `add task` to start adding task mode.Enter `exit` to leave the adding task
 
 Use this command to display all saved tasks.
 
-### Marking a task as done: `mark <task number`
+### Marking a task as done: `mark <task number>`
 
 Use this command to mark a task as completed.
 
@@ -41,15 +41,6 @@ Use this command to mark a completed task as incomplete again.
 
 Enter `edit <task number>` to enter editing mode. The replacement must have the same type as the original task. 
 Enter `exit` instead of a replacement to cancel the edit.
-
-**Format:** `edit <task number>`
-
-**Example:**
-
-```text
-edit 1
-todo Read chapters 3 and 4
-```
 
 ### Finding tasks: `search <keyword>`
 
@@ -63,15 +54,6 @@ Use this command to permanently remove a task from the list.
 ### Echo mode: `echo`
 
 Enter `echo` to make Bags repeat each message you enter. Enter `exit` to leave echo mode.
-
-**Format:** `echo`
-
-**Example:**
-
-```text
-echo
-Hello, Bags!
-```
 
 ### Saving and ending the session: `bye`
 
