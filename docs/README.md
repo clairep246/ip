@@ -1,17 +1,70 @@
 # Bags User Guide
 
-**Bags** is a chatbot that helps you keep track of to-do tasks, deadlines, and events.
+**Bags** is a chatbot that helps you keep track of to-do tasks, deadlines,
+and events.
 
-## How to Use Bags
+![Bags application window](Ui.png)
 
-Type a command in the command box and press <kbd>Enter</kbd> to run it. Commands are case-sensitive.
+## Quick Start
 
-Try these commands first:
+1. Install JDK 25 or later.
+2. Download `bags.jar` from the [latest release](https://github.com/clairep246/ip/releases/latest).
+3. Put `bags.jar` in the folder where you want Bags to store its data.
+4. Open a terminal in that folder and run:
 
-- `add task` starts task-entry mode.
-- `list` shows every task in your list.
-- `search shop` finds tasks whose descriptions contain `report`.
-- `bye` saves your tasks and ends the session.
+   ```
+   java -jar bags.jar
+   ```
+
+5. Wait for the Bags window to appear. If it does not start, confirm that
+   `bags.jar` is in the current folder and rerun the command.
+6. Enter a command and press <kbd>Enter</kbd> or click **Send**.
+7. Try these commands first:
+
+   ```
+   add task
+   todo read the user guide
+   exit
+   list
+   ```
+
+## Understanding Bags
+
+This session shows your active tasks. Enter commands at the bottom of the
+window; Bags replies in the conversation area.
+
+### Command notation
+
+This guide uses the following notation:
+
+- `<description>` represents a value that you supply.
+- `<task number>` represents the displayed number of a task.
+- Enter each command on one line.
+- Commands and markers such as `/by`, `/from`, and `/to` are case-sensitive.
+- Dates and times use the `YYYY-MM-DD HH:MM` format.
+
+For example, in `deadline <description> /by <YYYY-MM-DD HH:MM>`, replace the
+items in angle brackets with your own values, but type `deadline` and `/by`
+exactly as shown.
+
+### Task types and statuses
+
+Tasks show a number, type, status, and description. Dated tasks also show
+their date and time. For example:
+
+`2.[D][X] submit report (by: 15/10/2026 6:00pm)`
+
+| Symbol | Meaning |
+| --- | --- |
+| `2.` | The task number used by commands such as `mark` and `delete`. |
+| `[T]` | To-do task. |
+| `[D]` | Deadline task. |
+| `[E]` | Event task. |
+| `[ ]` | Incomplete task. |
+| `[X]` | Completed task. |
+
+Task numbers begin at 1. Deleting a task renumbers the tasks that follow it.
+New tasks are incomplete.
 
 ## Features
 
