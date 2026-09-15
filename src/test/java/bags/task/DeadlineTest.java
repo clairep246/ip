@@ -20,7 +20,7 @@ class DeadlineTest {
         Deadline deadline = new Deadline("Submit report", "2026-09-12 23:59");
 
         assertEquals(LocalDateTime.of(2026, 9, 12, 23, 59), deadline.getDeadline());
-        assertEquals("[D][ ] Submit report (by: 12/09/2026 11:59pm)", deadline.toString());
+        assertEquals("[D][ ] Submit report (by: 12/09/2026 11:59PM)", deadline.toString());
         assertEquals("D | [ ] | Submit report | 2026-09-12 23:59", deadline.parseEvent());
     }
 

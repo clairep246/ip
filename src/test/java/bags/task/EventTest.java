@@ -21,7 +21,7 @@ class EventTest {
 
         assertEquals(LocalDateTime.of(2026, 9, 13, 10, 0), event.getFrom());
         assertEquals(LocalDateTime.of(2026, 9, 13, 11, 0), event.getTo());
-        assertEquals("[E][ ] Project meeting (from: 13/09/2026 10:00am to: 13/09/2026 11:00am)",
+        assertEquals("[E][ ] Project meeting (from: 13/09/2026 10:00AM to: 13/09/2026 11:00AM)",
                 event.toString());
         assertEquals("E | [ ] | Project meeting | 2026-09-13 10:00 | 2026-09-13 11:00",
                 event.parseEvent());

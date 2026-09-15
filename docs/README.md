@@ -37,7 +37,7 @@ window; Bags replies in the conversation area.
 
 This guide uses the following notation:
 
-- `<description>` represents a value that you supply.
+- `<description>` represents a value that you enter.
 - `<task number>` represents the displayed number of a task.
 - Enter each command on one line.
 - Commands and markers such as `/by`, `/from`, and `/to` are case-sensitive.
@@ -52,7 +52,7 @@ exactly as shown.
 Tasks show a number, type, status, and description. Dated tasks also show
 their date and time. For example:
 
-`2.[D][X] submit report (by: 15/10/2026 6:00pm)`
+`2.[D][X] submit report (by: 15/10/2026 6:00PM)`
 
 | Symbol | Meaning |
 | --- | --- |
@@ -63,8 +63,6 @@ their date and time. For example:
 | `[ ]` | Incomplete task. |
 | `[X]` | Completed task. |
 
-Task numbers begin at 1. Deleting a task renumbers the tasks that follow it.
-New tasks are incomplete.
 
 ## Features
 

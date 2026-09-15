@@ -3,6 +3,7 @@ package bags.task;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Locale;
 
 import bags.exception.BagsException;
 
@@ -14,7 +15,7 @@ public class Deadline extends Task {
     private static final DateTimeFormatter INPUT_FORMATTER =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     private static final DateTimeFormatter OUTPUT_FORMATTER =
-            DateTimeFormatter.ofPattern("dd/MM/yyyy h:mma");
+            DateTimeFormatter.ofPattern("dd/MM/yyyy h:mma", Locale.ENGLISH);
 
     private final LocalDateTime deadline;
     private final String formattedDeadline;
