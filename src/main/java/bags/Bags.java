@@ -151,7 +151,7 @@ public class Bags {
 
     private String startEchoMode() {
         isEchoMode = true;
-        return "🗣️ From now on, I'll echo what you put in the bag. To exit, enter exit.";
+        return "🗣 From now on, I'll echo what you put in the bag. To exit, enter exit.";
     }
 
     private String startEditingTask(String input) throws BagsException {

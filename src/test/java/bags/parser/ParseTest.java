@@ -33,13 +33,6 @@ import bags.task.Todo;
  */
 public class ParseTest {
 
-    /**
-     * Tests that valid records from the task storage file are correctly
-     * parsed into the appropriate task types with the expected
-     * descriptions, completion status, and date-time formats.
-     *
-     * @throws BagsException if an error occurs while parsing a task record.
-     */
     @Test
     void parseTask_validReadingFileRecords_createsCorrectTasks()
             throws BagsException {

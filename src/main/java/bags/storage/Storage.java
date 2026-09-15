@@ -69,7 +69,6 @@ public class Storage {
 
         List<Task> tasks = new ArrayList<>();
 
-        //loadTaskRecords is called to return the lines from save file
         for (String record : loadTaskRecords()) {
             assert record != null : "Loaded task record must not be null";
 

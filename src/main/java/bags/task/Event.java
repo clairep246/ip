@@ -110,7 +110,7 @@ public class Event extends Task {
     }
 
     /**
-     * Builds a string literal given a specific range from a referenced
+     * Builds a string given a specific range from a referenced
      * list of words.
      *
      * @param words the referenced word list

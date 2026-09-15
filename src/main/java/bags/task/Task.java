@@ -27,10 +27,16 @@ public abstract class Task {
         this.isDone = false;
     }
 
+    /**
+     * Marks this task as completed.
+     */
     public void markDone() {
         this.isDone = true;
     }
 
+    /**
+     * Marks this task as incomplete.
+     */
     public void markUndone() {
         this.isDone = false;
     }

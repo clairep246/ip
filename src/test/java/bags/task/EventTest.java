@@ -80,7 +80,7 @@ class EventTest {
     }
 
     @Test
-    void constructor_startAfterEnd_throwsException() {
+    void constructor_startDateAfterEndDate_throwsException() {
         BagsException exception = assertThrows(BagsException.class, () ->
                 new Event("Project meeting", "2026-09-13 11:00", "2026-09-13 10:00")
         );

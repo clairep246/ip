@@ -23,13 +23,6 @@ import bags.exception.BagsException;
  */
 class TaskListTest {
 
-    /**
-     * Creates a task list containing two sample Todo tasks for use
-     * in the test cases.
-     *
-     * @return a task list containing two Todo tasks.
-     * @throws BagsException if an error occurs while creating a task.
-     */
     private TaskList createTaskList() throws BagsException {
         TaskList taskList = new TaskList();
 
@@ -39,13 +32,6 @@ class TaskListTest {
         return taskList;
     }
 
-    /**
-     * Tests that a task can be successfully added to an empty task list
-     * and that the corresponding parsed task record is added to the
-     * reading file record.
-     *
-     * @throws BagsException if an error occurs while adding the task.
-     */
     @Test
     void addMethod_emptyList_successfullyAddsTask() throws BagsException {
         TaskList taskList = new TaskList();
@@ -145,11 +131,6 @@ class TaskListTest {
         assertTrue(exception.getMessage().contains("same type"));
     }
 
-    /**
-     * Tests that an existing task can be successfully marked as done.
-     *
-     * @throws BagsException if an error occurs while marking the task.
-     */
     @Test
     void markDone_existingTask_marksCorrectTaskAsDone()
             throws BagsException {
@@ -160,12 +141,6 @@ class TaskListTest {
         assertTrue(task.isDone());
     }
 
-    /**
-     * Tests that attempting to mark a task as done without providing
-     * a task number throws an appropriate exception.
-     *
-     * @throws BagsException if an unexpected application error occurs.
-     */
     @Test
     void markDone_missingTaskNumber_exceptionThrown()
             throws BagsException {
@@ -178,11 +153,6 @@ class TaskListTest {
         assertTrue(exception.getMessage().contains("forget a task number"));
     }
 
-    /**
-     * Tests that task number zero is rejected when marking a task as done.
-     *
-     * @throws BagsException if an unexpected application error occurs.
-     */
     @Test
     void markDone_taskZero_rejectsInput() throws BagsException {
         TaskList taskList = createTaskList();
@@ -194,12 +164,6 @@ class TaskListTest {
         assertTrue(exception.getMessage().contains("Task does not exist"));
     }
 
-    /**
-     * Tests that a task number greater than the task list size is rejected
-     * when marking a task as done.
-     *
-     * @throws BagsException if an unexpected application error occurs.
-     */
     @Test
     void markDone_taskNumberGreaterThanListSize_rejectsInput()
             throws BagsException {
@@ -212,12 +176,6 @@ class TaskListTest {
         assertTrue(exception.getMessage().contains("Task does not exist"));
     }
 
-    /**
-     * Tests that a non-numeric task number is rejected when marking
-     * a task as done.
-     *
-     * @throws BagsException if an unexpected application error occurs.
-     */
     @Test
     void markDone_nonNumericInput_rejectsInput()
             throws BagsException {
@@ -230,12 +188,6 @@ class TaskListTest {
         assertTrue(exception.getMessage().contains("Invalid task number"));
     }
 
-    /**
-     * Tests that a completed task can be successfully marked as undone
-     * and that the corresponding reading file record is updated.
-     *
-     * @throws BagsException if an error occurs while updating the task.
-     */
     @Test
     void markUndone_addedTask_marksCorrectTaskUndone()
             throws BagsException {
@@ -250,12 +202,6 @@ class TaskListTest {
         assertEquals(task.parseEvent(), readingFileRecords.get(0));
     }
 
-    /**
-     * Tests that attempting to mark a task as undone without providing
-     * a task number throws an appropriate exception.
-     *
-     * @throws BagsException if an error occurs.
-     */
     @Test
     void markUndone_missingTaskNumber_exceptionThrown()
             throws BagsException {
@@ -268,11 +214,6 @@ class TaskListTest {
         assertTrue(exception.getMessage().contains("forget a task number"));
     }
 
-    /**
-     * Tests that task number zero is rejected when marking a task as undone.
-     *
-     * @throws BagsException if an error occurs.
-     */
     @Test
     void markUndone_taskZero_rejectsInput() throws BagsException {
         TaskList taskList = createTaskList();
@@ -284,12 +225,6 @@ class TaskListTest {
         assertTrue(exception.getMessage().contains("Task does not exist"));
     }
 
-    /**
-     * Tests that a task number greater than the task list size is rejected
-     * when marking a task as undone.
-     *
-     * @throws BagsException if an error occurs.
-     */
     @Test
     void markUndone_taskNumberGreaterThanListSize_rejectsInput()
             throws BagsException {
@@ -302,12 +237,6 @@ class TaskListTest {
         assertTrue(exception.getMessage().contains("Task does not exist"));
     }
 
-    /**
-     * Tests that a non-numeric task number is rejected when marking
-     * a task as undone.
-     *
-     * @throws BagsException if an error occurs.
-     */
     @Test
     void markUndone_nonNumericTaskNumber_rejectsInput()
             throws BagsException {
@@ -320,12 +249,6 @@ class TaskListTest {
         assertTrue(exception.getMessage().contains("Invalid task number"));
     }
 
-    /**
-     * Tests that an existing task can be deleted and that the correct
-     * task is removed from the task list.
-     *
-     * @throws BagsException if an error occurs.
-     */
     @Test
     void deleteMethod_deleteOne_removesCorrectTask()
             throws BagsException {
@@ -341,12 +264,6 @@ class TaskListTest {
         );
     }
 
-    /**
-     * Tests that attempting to delete a task without providing
-     * a task number throws an exception.
-     *
-     * @throws BagsException if an error occurs.
-     */
     @Test
     void deleteMethod_missingTaskNumber_exceptionThrown()
             throws BagsException {
@@ -359,11 +276,6 @@ class TaskListTest {
         assertTrue(exception.getMessage().contains("forget a task number"));
     }
 
-    /**
-     * Tests that task number zero is rejected when deleting a task.
-     *
-     * @throws BagsException if an unexpected application error occurs.
-     */
     @Test
     void deleteMethod_taskZero_rejectsInput()
             throws BagsException {
@@ -376,12 +288,6 @@ class TaskListTest {
         assertTrue(exception.getMessage().contains("Task does not exist"));
     }
 
-    /**
-     * Tests that a task number greater than the task list size is rejected
-     * when deleting a task.
-     *
-     * @throws BagsException if an unexpected application error occurs.
-     */
     @Test
     void deleteMethod_taskNumberGreaterThanListSize_rejectsInput()
             throws BagsException {
@@ -394,12 +300,6 @@ class TaskListTest {
         assertTrue(exception.getMessage().contains("Task does not exist"));
     }
 
-    /**
-     * Tests that a non-numeric task number is rejected when deleting
-     * a task.
-     *
-     * @throws BagsException if an error occurs.
-     */
     @Test
     void deleteMethod_nonNumericTaskInput_rejectsInput()
             throws BagsException {

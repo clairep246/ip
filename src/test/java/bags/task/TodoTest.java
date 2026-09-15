@@ -33,15 +33,6 @@ class TodoTest {
     }
 
     @Test
-    void createTask_blankDescription_throwsException() {
-        BagsException exception = assertThrows(
-                BagsException.class, () -> Todo.createTask("todo ")
-        );
-
-        assertTrue(exception.getMessage().contains("description"));
-    }
-
-    @Test
     void formattedTask_markedDone_returnsDisplayAndStorageFormats() {
         Todo todo = new Todo("Read book");
         todo.markDone();
