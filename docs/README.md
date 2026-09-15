@@ -3,8 +3,6 @@
 **Bags** is a chatbot that helps you keep track of to-do tasks, deadlines,
 and events.
 
-![Bags application window](Ui.png)
-
 ## Quick Start
 
 1. Install JDK 25 or later.
@@ -41,7 +39,7 @@ This guide uses the following notation:
 - `<task number>` represents the displayed number of a task.
 - Enter each command on one line.
 - Commands and markers such as `/by`, `/from`, and `/to` are case-sensitive.
-- Dates and times use the `YYYY-MM-DD HH:MM` format.
+- Dates and times use the `YYYY-MM-DD HH:MM` in 24h format eg `2026-01-01 14:00`.
 
 For example, in `deadline <description> /by <YYYY-MM-DD HH:MM>`, replace the
 items in angle brackets with your own values, but type `deadline` and `/by`
