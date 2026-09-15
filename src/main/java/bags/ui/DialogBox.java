@@ -51,9 +51,6 @@ public class DialogBox extends HBox {
         }
     }
 
-    /**
-     * Arranges the Bags icon to the left of its message.
-     */
     private void flip() {
         assert dialog != null : "Dialog label must be initialized";
         assert getChildren().size() >= 2

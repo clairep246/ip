@@ -30,7 +30,7 @@ public class Event extends Task {
      * @throws BagsException if either date-time format is invalid or end date is before start date
      */
     public Event(String description, String from, String to) throws BagsException {
-        super(description, Tasktype.EVENT);
+        super(description, TaskType.EVENT);
         assert description != null : "Task description must not be null";
         assert from != null : "Event start time must not be null";
         assert to != null : "Event end time must not be null";

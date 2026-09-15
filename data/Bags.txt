@@ -1,5 +1,4 @@
-T | [ ] | reading
-T | [X] | shopping with Mia
+T | [X] | shopping with John
 T | [ ] | running for 2.4km
 D | [ ] | read | 2027-01-01 14:00
 E | [ ] | marathon | 2027-01-02 09:00 | 2027-01-02 12:00

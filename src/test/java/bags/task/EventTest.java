@@ -34,6 +34,7 @@ class EventTest {
 
         assertEquals("Project meeting", event.getDescription());
         assertEquals(LocalDateTime.of(2026, 9, 13, 10, 0), event.getFrom());
+        assertEquals(TaskType.EVENT, event.getType());
         assertEquals(LocalDateTime.of(2026, 9, 13, 11, 0), event.getTo());
     }
 
@@ -84,6 +85,7 @@ class EventTest {
                 new Event("Project meeting", "2026-09-13 11:00", "2026-09-13 10:00")
         );
 
-        assertEquals("Hmm, the event can't end before it starts. Check the dates and try again.", exception.getMessage());
+        assertEquals("Hmm, the event can't end before it starts. Check the dates and try again.",
+                exception.getMessage());
     }
 }

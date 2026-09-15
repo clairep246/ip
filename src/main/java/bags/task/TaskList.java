@@ -135,7 +135,7 @@ public class TaskList {
     }
 
     /**
-     * Parses the command string to extract and validate a 0-based task index.
+     * Parses the command string to extract and validate a task index.
      *
      * @param command raw command input containing the task number
      * @return 0-based index of the selected task

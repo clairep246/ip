@@ -4,13 +4,13 @@ package bags.task;
  * Represents the base template for all task types in the Bags application.
  *
  * <p>This abstract class stores the common properties and behaviours
- * shared by different task types such as ToDo, Deadline, and Event.</p>
+ * shared by different task types such as Todo, Deadline, and Event.</p>
  */
 public abstract class Task {
 
     protected String description;
     protected boolean isDone;
-    protected Tasktype type;
+    protected TaskType type;
 
     /**
      * Creates a task with the given description and type.
@@ -18,7 +18,7 @@ public abstract class Task {
      * @param description text describing the task
      * @param type category of the task
      */
-    public Task(String description, Tasktype type) {
+    public Task(String description, TaskType type) {
         assert description != null : "Task description must not be null";
         assert type != null : "Task type must not be null";
 
@@ -40,7 +40,7 @@ public abstract class Task {
      *
      * @return the task type
      */
-    public Tasktype getType() {
+    public TaskType getType() {
         return this.type;
     }
 

@@ -10,23 +10,23 @@ import org.junit.jupiter.api.Test;
 import bags.exception.BagsException;
 
 /**
- * Tests the {@link ToDo} class.
+ * Tests the {@link Todo} class.
  */
-class ToDoTest {
+class TodoTest {
 
     @Test
     void createTask_validCommand_createsTaskWithDescription() throws BagsException {
-        ToDo todo = ToDo.createTask("todo Read chapter one");
+        Todo todo = Todo.createTask("todo Read chapter one");
 
         assertEquals("Read chapter one", todo.getDescription());
-        assertEquals(Tasktype.TODO, todo.getType());
+        assertEquals(TaskType.TODO, todo.getType());
         assertFalse(todo.isDone());
     }
 
     @Test
     void createTask_missingDescription_throwsException() {
         BagsException exception = assertThrows(
-                BagsException.class, () -> ToDo.createTask("todo")
+                BagsException.class, () -> Todo.createTask("todo")
         );
 
         assertTrue(exception.getMessage().contains("description"));
@@ -35,7 +35,7 @@ class ToDoTest {
     @Test
     void createTask_blankDescription_throwsException() {
         BagsException exception = assertThrows(
-                BagsException.class, () -> ToDo.createTask("todo ")
+                BagsException.class, () -> Todo.createTask("todo ")
         );
 
         assertTrue(exception.getMessage().contains("description"));
@@ -43,7 +43,7 @@ class ToDoTest {
 
     @Test
     void formattedTask_markedDone_returnsDisplayAndStorageFormats() {
-        ToDo todo = new ToDo("Read book");
+        Todo todo = new Todo("Read book");
         todo.markDone();
 
         assertEquals("[T][X] Read book", todo.toString());

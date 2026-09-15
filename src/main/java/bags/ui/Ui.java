@@ -4,11 +4,6 @@ import java.util.Scanner;
 
 /**
  * Handles the chatbot's general messages and prompts shown to the user.
- *
- * <p>AI was used to assist in generating this class and moving
- * UI-related methods from the main Bags class into this Ui class.
- * The generated code was reviewed and adapted to fit the application's
- * requirements.</p>
  */
 public class Ui {
 

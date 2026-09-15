@@ -9,7 +9,7 @@ import bags.exception.BagsException;
 /**
  * Represents a task with a deadline.
  */
-public class Deadlines extends Task {
+public class Deadline extends Task {
 
     private static final DateTimeFormatter INPUT_FORMATTER =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -26,8 +26,8 @@ public class Deadlines extends Task {
      * @param deadline deadline string in {@code yyyy-MM-dd HH:mm} format
      * @throws BagsException if the deadline format is invalid
      */
-    public Deadlines(String description, String deadline) throws BagsException {
-        super(description, Tasktype.DEADLINE);
+    public Deadline(String description, String deadline) throws BagsException {
+        super(description, TaskType.DEADLINE);
         assert description != null : "Task description must not be null";
         assert deadline != null : "Deadline must not be null";
 
@@ -47,7 +47,7 @@ public class Deadlines extends Task {
      * @return the created deadline task
      * @throws BagsException if the description or deadline is missing, or the format is invalid
      */
-    public static Deadlines createTask(String command) throws BagsException {
+    public static Deadline createTask(String command) throws BagsException {
         assert command != null : "Command string must not be null";
 
         String[] words = command.split(" ");
@@ -70,7 +70,7 @@ public class Deadlines extends Task {
             throw new BagsException("Hmm, I need a deadline after /by. Add /by <deadline> after the task name.");
         }
 
-        return new Deadlines(description, deadlineInfo);
+        return new Deadline(description, deadlineInfo);
     }
 
     /**

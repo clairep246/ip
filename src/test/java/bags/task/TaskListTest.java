@@ -24,17 +24,17 @@ import bags.exception.BagsException;
 class TaskListTest {
 
     /**
-     * Creates a task list containing two sample ToDo tasks for use
+     * Creates a task list containing two sample Todo tasks for use
      * in the test cases.
      *
-     * @return a task list containing two ToDo tasks.
+     * @return a task list containing two Todo tasks.
      * @throws BagsException if an error occurs while creating a task.
      */
     private TaskList createTaskList() throws BagsException {
         TaskList taskList = new TaskList();
 
-        taskList.add(new ToDo("Read book"));
-        taskList.add(new ToDo("Do homework"));
+        taskList.add(new Todo("Read book"));
+        taskList.add(new Todo("Do homework"));
 
         return taskList;
     }
@@ -52,7 +52,7 @@ class TaskListTest {
 
         assertEquals(0, taskList.getSize());
 
-        ToDo todo = new ToDo("Read book");
+        Todo todo = new Todo("Read book");
         taskList.add(todo);
 
         List<Task> tasks = taskList.getTasks();
@@ -76,8 +76,8 @@ class TaskListTest {
     void saveRecords_multipleTaskTypes_returnsAllFormattedRecords()
             throws BagsException {
         TaskList taskList = new TaskList();
-        taskList.add(new ToDo("Read book"));
-        taskList.add(new Deadlines("Submit report", "2026-09-12 23:59"));
+        taskList.add(new Todo("Read book"));
+        taskList.add(new Deadline("Submit report", "2026-09-12 23:59"));
         taskList.add(new Event("Project meeting", "2026-09-13 10:00", "2026-09-13 11:00"));
         taskList.markDone("done 2");
 
@@ -124,7 +124,7 @@ class TaskListTest {
     void edit_completedTask_preservesCompletionStatus() throws BagsException {
         TaskList taskList = createTaskList();
         taskList.markDone("done 1");
-        ToDo replacementTask = new ToDo("Read chapter");
+        Todo replacementTask = new Todo("Read chapter");
 
         Task updatedTask = taskList.edit("edit 1", replacementTask);
 
@@ -136,7 +136,7 @@ class TaskListTest {
     @Test
     void edit_differentTaskType_throwsException() throws BagsException {
         TaskList taskList = createTaskList();
-        Deadlines replacementTask = new Deadlines("Submit report", "2026-09-12 23:59");
+        Deadline replacementTask = new Deadline("Submit report", "2026-09-12 23:59");
 
         BagsException exception = assertThrows(
                 BagsException.class, () -> taskList.edit("edit 1", replacementTask)

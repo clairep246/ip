@@ -5,15 +5,15 @@ import bags.exception.BagsException;
 /**
  * Represents a to-do task.
  */
-public class ToDo extends Task {
+public class Todo extends Task {
 
     /**
      * Creates a to-do task.
      *
      * @param description text describing the task
      */
-    public ToDo(String description) {
-        super(description, Tasktype.TODO);
+    public Todo(String description) {
+        super(description, TaskType.TODO);
         assert description != null : "Description must not be null";
     }
 
@@ -24,13 +24,11 @@ public class ToDo extends Task {
      * @return the created to-do task
      * @throws BagsException if the description is missing
      */
-    public static ToDo createTask(String command) throws BagsException {
+    public static Todo createTask(String command) throws BagsException {
         assert command != null : "Command string must not be null";
-
         String[] words = command.split(" ");
         if (words.length < 2) {
-            throw new BagsException(
-                    "Oops! Your task is missing a description. Add some details after todo.");
+            throw new BagsException("Oops! Your task is missing a description. Add some details after todo.");
         }
 
         StringBuilder name = new StringBuilder();
@@ -40,11 +38,9 @@ public class ToDo extends Task {
 
         String description = name.toString().trim();
         if (description.isEmpty()) {
-            throw new BagsException(
-                    "Hmm, I still need a task description. Add some details after todo.");
+            throw new BagsException("Hmm, I still need a task description. Add some details after todo.");
         }
-
-        return new ToDo(description);
+        return new Todo(description);
     }
 
     /**
@@ -64,6 +60,6 @@ public class ToDo extends Task {
      */
     @Override
     public String parseEvent() {
-        return "T | " + "[" + getStatusIcon() + "] | " + description;
+        return "T | [" + getStatusIcon() + "] | " + description;
     }
 }

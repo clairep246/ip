@@ -32,7 +32,7 @@ public class Storage {
     }
 
     /**
-     * Saves every supplied task record, overwriting the previous content.
+     * Saves every supplied task record, overwriting the previous content in the file.
      *
      * @param taskRecords records the tasks to be saved
      * @throws BagsException if the task records cannot be saved

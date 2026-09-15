@@ -11,13 +11,13 @@ import org.junit.jupiter.api.Test;
 import bags.exception.BagsException;
 
 /**
- * Tests the {@link Deadlines} class.
+ * Tests the {@link Deadline} class.
  */
-class DeadlinesTest {
+class DeadlineTest {
 
     @Test
     void constructor_validDeadline_parsesDateAndFormatsTask() throws BagsException {
-        Deadlines deadline = new Deadlines("Submit report", "2026-09-12 23:59");
+        Deadline deadline = new Deadline("Submit report", "2026-09-12 23:59");
 
         assertEquals(LocalDateTime.of(2026, 9, 12, 23, 59), deadline.getDeadline());
         assertEquals("[D][ ] Submit report (by: 12/09/2026 11:59pm)", deadline.toString());
@@ -26,16 +26,17 @@ class DeadlinesTest {
 
     @Test
     void createTask_validCommand_createsDeadline() throws BagsException {
-        Deadlines deadline = Deadlines.createTask("deadline Submit report /by 2026-09-12 23:59");
+        Deadline deadline = Deadline.createTask("deadline Submit report /by 2026-09-12 23:59");
 
         assertEquals("Submit report", deadline.getDescription());
+        assertEquals(TaskType.DEADLINE, deadline.getType());
         assertEquals(LocalDateTime.of(2026, 9, 12, 23, 59), deadline.getDeadline());
     }
 
     @Test
     void createTask_missingDescription_throwsException() {
         BagsException exception = assertThrows(
-                BagsException.class, () -> Deadlines.createTask("deadline /by 2026-09-12 23:59")
+                BagsException.class, () -> Deadline.createTask("deadline /by 2026-09-12 23:59")
         );
 
         assertTrue(exception.getMessage().contains("Missing task description"));
@@ -44,7 +45,7 @@ class DeadlinesTest {
     @Test
     void createTask_missingByKeyword_throwsException() {
         BagsException exception = assertThrows(
-                BagsException.class, () -> Deadlines.createTask("deadline Submit report")
+                BagsException.class, () -> Deadline.createTask("deadline Submit report")
         );
 
         assertTrue(exception.getMessage().contains("Missing /by"));
@@ -53,7 +54,7 @@ class DeadlinesTest {
     @Test
     void constructor_invalidDeadline_throwsException() {
         BagsException exception = assertThrows(
-                BagsException.class, () -> new Deadlines("Submit report", "not-a-date")
+                BagsException.class, () -> new Deadline("Submit report", "not-a-date")
         );
 
         assertTrue(exception.getMessage().contains("correct format"));
