@@ -25,10 +25,12 @@ Prerequisites: JDK 25, update Intellij to the most recent version.
 **Warning:** Keep the `src\main\java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.
 
 **AI use**
-AI was used for the following purposes
-- Autocomplete coding 
-- Generate test case files for earlier stages.
-- Generate JavaDoc comments which were further improved. 
-- Create GUI and refactor classes to fit FXML files for GUI development. 
-- Add assertions and refactor classes to fit code quality. 
-- Add extensions to improve GUI and improve testing quality. 
+All code generated were reviewed and further improved by me. I made use of Codex
+to help with the codebase. AI was used for the following purposes: 
+- Autocompleting coding and fixing coding errors. 
+- Generating test case files. 
+- Generating JavaDoc comments. 
+- Creating GUI and refactoring classes to fit FXML files for GUI development. 
+- Adding assertions and refactoring classes to fit code quality. 
+- Adding extensions to improve GUI and improve testing quality.
+- Refactoring methods that were too lengthy and deeply nested to improve code quality. 

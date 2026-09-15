@@ -135,7 +135,7 @@ public class TaskList {
     }
 
     /**
-     * Parses the command string to extract and validate a 0-based task index.
+     * Parses the command string to extract and validate a task index.
      *
      * @param command raw command input containing the task number
      * @return 0-based index of the selected task
@@ -147,21 +147,21 @@ public class TaskList {
         String[] words = command.split(" ");
         if (words.length < 2) {
             throw new BagsException(
-                    "Missing task number. Please enter value from 1 to " + tasks.size());
+                    "Hmm, did you forget a task number? Please enter a value from 1 to "
+                            + tasks.size());
         }
 
         try {
             int taskNumber = Integer.parseInt(words[1]);
             if (taskNumber <= 0 || taskNumber > tasks.size()) {
                 throw new BagsException(
-                        "Task does not exist. Please only input number 1 to " + tasks.size());
+                    "Oops! Task does not exist in your bag. Please enter a number from 1 to " + tasks.size());
             }
 
-            int index = taskNumber - 1;
-            return index;
+            return taskNumber - 1;
         } catch (NumberFormatException e) {
             throw new BagsException(
-                    "Invalid task number! Please enter a valid number from 1 to " + tasks.size());
+                    "Hmm, Invalid task number. Please enter a number from 1 to " + tasks.size());
         }
     }
 
@@ -189,12 +189,12 @@ public class TaskList {
      */
     public String search(String command) throws BagsException {
         if (command == null) {
-            throw new BagsException("Search command cannot be null.");
+            throw new BagsException("Oops! I can't search an empty command.");
         }
 
         String[] parts = command.split(" ", 2);
         if (parts.length < 2 || parts[1].trim().isEmpty()) {
-            throw new BagsException("Please enter a keyword to search for.");
+            throw new BagsException("Hmm, did you forget a keyword? Try searching your bag again.");
         }
 
         String searchKeyword = parts[1].trim().toLowerCase();
@@ -205,10 +205,10 @@ public class TaskList {
                 .toList();
 
         if (matchingTasks.isEmpty()) {
-            return "No matching tasks found.";
+            return "🔎 Oops! I can't find any matching tasks in the bag. Wanna add a task?";
         }
 
-        StringBuilder output = new StringBuilder("Here are the matching tasks:");
+        StringBuilder output = new StringBuilder("🔎 I rummaged through your bag and found these:");
         for (int i = 0; i < matchingTasks.size(); i++) {
             Task task = matchingTasks.get(i);
             output.append(System.lineSeparator())
@@ -239,7 +239,7 @@ public class TaskList {
         assert originalTask != null : "Task retrieved at valid index should not be null";
 
         if (originalTask.getType() != replacementTask.getType()) {
-            throw new BagsException("The replacement task must have the same type as the original task.");
+            throw new BagsException("Oops! The replacement task must have the same type as the original task.");
         }
 
         if (originalTask.isDone()) {
@@ -258,7 +258,7 @@ public class TaskList {
      */
     @Override
     public String toString() {
-        StringBuilder output = new StringBuilder("Here are the tasks in your list:");
+        StringBuilder output = new StringBuilder("🎒 Let me unpack the bag's contents... here you go!");
         for (int i = 0; i < tasks.size(); i++) {
             Task task = tasks.get(i);
             output.append(System.lineSeparator())
@@ -266,6 +266,13 @@ public class TaskList {
                     .append(".")
                     .append(task);
         }
+        output.append(System.lineSeparator())
+                .append(System.lineSeparator())
+                .append("You have ")
+                .append(tasks.size())
+                .append(tasks.size() == 1 ? " item" : " items")
+                .append(" in your bag.");
+
         return output.toString();
     }
 }

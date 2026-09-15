@@ -25,22 +25,12 @@ import bags.task.Task;
  * errors are encountered.
  * </p>
  *
- * <p>
- * AI was used to assist in generating the test cases and test scenarios.
- * The generated tests were reviewed and adapted to ensure that they are
- * relevant to the expected behaviour of the {@link Storage} class.
- * </p>
  */
 class StorageTest {
 
     @TempDir
     Path tempDir;
 
-    /**
-     * Tests that valid task records are correctly written to a file.
-     *
-     * @throws Exception if an unexpected file operation error occurs
-     */
     @Test
     void save_validRecords_writesRecordsToFile() throws Exception {
         Path file = tempDir.resolve("Bags.txt");

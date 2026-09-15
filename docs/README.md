@@ -10,14 +10,14 @@ Try these commands first:
 
 - `add task` starts task-entry mode.
 - `list` shows every task in your list.
-- `search report` finds tasks whose descriptions contain `report`.
+- `search shop` finds tasks whose descriptions contain `report`.
 - `bye` saves your tasks and ends the session.
 
 ## Features
 
 ### Adding tasks
 
-Enter `add task` to start adding task mode.Enter `exit` to leave the adding task mode. Follow the format closely!
+Enter `add task` to start task-entry mode. Enter `exit` to leave task-entry mode. Follow the format closely.
 
 | Type of task                                                          | Purpose                                  |
 |-----------------------------------------------------------------------|------------------------------------------|
@@ -39,8 +39,8 @@ Use this command to mark a completed task as incomplete again.
 
 ### Editing a task: `edit <task number>`
 
-Enter `edit <task number>` to enter editing mode. The replacement must have the same type as the original task. 
-Enter `exit` instead of a replacement to cancel the edit.
+Enter `edit <task number>` to enter editing mode. Replace the selected task with a task of the same type, using
+the same formats shown in [Adding tasks](#adding-tasks). Enter `exit` instead of a replacement to cancel the edit.
 
 ### Finding tasks: `search <keyword>`
 

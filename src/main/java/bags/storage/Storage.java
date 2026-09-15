@@ -32,7 +32,7 @@ public class Storage {
     }
 
     /**
-     * Saves every supplied task record, overwriting the previous content.
+     * Saves every supplied task record, overwriting the previous content in the file.
      *
      * @param taskRecords records the tasks to be saved
      * @throws BagsException if the task records cannot be saved
@@ -43,7 +43,7 @@ public class Storage {
         File parentDir = saveFile.getParentFile();
         if (parentDir != null && !parentDir.exists()) {
             if (!parentDir.mkdirs()) {
-                throw new BagsException("Unable to create the folder for saved tasks.");
+                throw new BagsException("Oops! I couldn't create the folder for your saved tasks.");
             }
         }
 
@@ -53,7 +53,7 @@ public class Storage {
                 writer.write(record + "\n");
             }
         } catch (IOException e) {
-            throw new BagsException("Unable to save tasks: " + e.getMessage());
+            throw new BagsException("Oops! Unable to save tasks in your bag: " + e.getMessage());
         }
     }
 
@@ -69,7 +69,6 @@ public class Storage {
 
         List<Task> tasks = new ArrayList<>();
 
-        //loadTaskRecords is called to return the lines from save file
         for (String record : loadTaskRecords()) {
             assert record != null : "Loaded task record must not be null";
 
@@ -119,7 +118,7 @@ public class Storage {
                 taskRecords.add(record);
             }
         } catch (FileNotFoundException e) {
-            throw new BagsException("Unable to read saved tasks: " + e.getMessage());
+            throw new BagsException("Oops! I couldn't unpack your saved tasks: " + e.getMessage());
         }
 
         return taskRecords;

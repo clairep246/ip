@@ -51,9 +51,6 @@ public class DialogBox extends HBox {
         }
     }
 
-    /**
-     * Arranges the Bags icon to the left of its message.
-     */
     private void flip() {
         assert dialog != null : "Dialog label must be initialized";
         assert getChildren().size() >= 2
@@ -105,13 +102,15 @@ public class DialogBox extends HBox {
      * Creates a dialog box for an error message.
      *
      * @param text the error message from Bags
+     * @param img the icon for Bags
      * @return a dialog box for the error message
      */
-    public static DialogBox getErrorDialog(String text) {
+    public static DialogBox getErrorDialog(String text, Image img) {
         assert text != null : "Error dialog text must not be null";
+        assert img != null : "Bags profile picture must not be null";
 
-        DialogBox db = new DialogBox("⚠ " + text, null);
-        db.setAlignment(Pos.TOP_LEFT);
+        DialogBox db = new DialogBox("⚠ " + text, img);
+        db.flip();
         db.dialog.getStyleClass().add("error-label");
 
         return db;

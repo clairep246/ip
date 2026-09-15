@@ -41,6 +41,7 @@
                 AnchorPane.rightAnchor="0.0" />
 
         <ScrollPane fx:id="scrollPane"
+                    fitToWidth="true"
                     hbarPolicy="NEVER"
                     prefHeight="557.0"
                     prefWidth="400.0"

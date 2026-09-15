@@ -1,11 +1,11 @@
 package bags.parser;
 
 import bags.exception.BagsException;
-import bags.task.Deadlines;
+import bags.task.Deadline;
 import bags.task.Event;
 import bags.task.Task;
-import bags.task.Tasktype;
-import bags.task.ToDo;
+import bags.task.TaskType;
+import bags.task.Todo;
 
 /**
  * Interprets user commands and converts saved task records back into tasks.
@@ -24,27 +24,9 @@ public class Parser {
 
         if (input.trim().isEmpty()) {
             return Command.EMPTY;
-        } else if (input.startsWith("add task")) {
-            return Command.ADD_TASK;
-        } else if (input.startsWith("list")) {
-            return Command.LIST;
-        } else if (input.startsWith("mark")) {
-            return Command.MARK;
-        } else if (input.startsWith("unmark")) {
-            return Command.UNMARK;
-        } else if (input.startsWith("echo")) {
-            return Command.ECHO;
-        } else if (input.startsWith("search")) {
-            return Command.SEARCH;
-        } else if (input.startsWith("delete")) {
-            return Command.DELETE;
-        } else if (input.startsWith("bye")) {
-            return Command.BYE;
-        } else if (input.startsWith("edit")) {
-            return Command.EDIT;
         }
 
-        return Command.UNKNOWN;
+        return Command.parseInput(input);
     }
 
     /**
@@ -53,18 +35,10 @@ public class Parser {
      * @param input user command
      * @return the parsed task type, or {@code null} if unrecognized
      */
-    public Tasktype parseTaskType(String input) {
+    public TaskType parseTaskType(String input) {
         assert input != null : "Task type input must not be null";
 
-        if (input.startsWith("todo")) {
-            return Tasktype.TODO;
-        } else if (input.startsWith("deadline")) {
-            return Tasktype.DEADLINE;
-        } else if (input.startsWith("event")) {
-            return Tasktype.EVENT;
-        }
-
-        return null;
+        return TaskType.parseInput(input);
     }
 
     /**
@@ -83,23 +57,19 @@ public class Parser {
             return null;
         }
 
-        String type = parts[0].trim();
+        TaskType taskType = TaskType.parseKey(parts[0].trim());
         String status = parts[1].trim();
 
-        if (type.equals("T")) {
-            return createTask(new ToDo(parts[2].trim()), status);
+        if (taskType == null) {
+            return null;
         }
 
-        if (type.equals("D") && parts.length >= 4) {
-            return createTask(
-                    new Deadlines(parts[2].trim(), parts[3].trim()),
-                    status);
-        }
-
-        if (type.equals("E") && parts.length >= 5) {
-            return createTask(
-                    new Event(parts[2].trim(), parts[3].trim(), parts[4].trim()),
-                    status);
+        if (taskType == TaskType.TODO) {
+            return createTask(new Todo(parts[2].trim()), status);
+        } else if (taskType == TaskType.DEADLINE && parts.length >= 4) {
+            return createTask(new Deadline(parts[2].trim(), parts[3].trim()), status);
+        } else if (taskType == TaskType.EVENT && parts.length >= 5) {
+            return createTask(new Event(parts[2].trim(), parts[3].trim(), parts[4].trim()), status);
         }
 
         return null;

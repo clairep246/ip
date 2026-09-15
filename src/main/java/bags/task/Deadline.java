@@ -9,7 +9,7 @@ import bags.exception.BagsException;
 /**
  * Represents a task with a deadline.
  */
-public class Deadlines extends Task {
+public class Deadline extends Task {
 
     private static final DateTimeFormatter INPUT_FORMATTER =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -26,8 +26,8 @@ public class Deadlines extends Task {
      * @param deadline deadline string in {@code yyyy-MM-dd HH:mm} format
      * @throws BagsException if the deadline format is invalid
      */
-    public Deadlines(String description, String deadline) throws BagsException {
-        super(description, Tasktype.DEADLINE);
+    public Deadline(String description, String deadline) throws BagsException {
+        super(description, TaskType.DEADLINE);
         assert description != null : "Task description must not be null";
         assert deadline != null : "Deadline must not be null";
 
@@ -36,7 +36,7 @@ public class Deadlines extends Task {
             this.formattedDeadline = this.deadline.format(OUTPUT_FORMATTER);
         } catch (DateTimeParseException e) {
             throw new BagsException(
-                    "Please key in date in correct format: year-month-date hh:mm in 24h");
+                    "Oops! Please key in date in correct format: YYYY-MM-DD HH:MM in 24-hour time.");
         }
     }
 
@@ -47,30 +47,30 @@ public class Deadlines extends Task {
      * @return the created deadline task
      * @throws BagsException if the description or deadline is missing, or the format is invalid
      */
-    public static Deadlines createTask(String command) throws BagsException {
+    public static Deadline createTask(String command) throws BagsException {
         assert command != null : "Command string must not be null";
 
         String[] words = command.split(" ");
         if (words.length < 2) {
-            throw new BagsException("Missing task description! Add some info after task type");
+            throw new BagsException("Oops! Missing task description. Add some details after deadline.");
         }
 
         int byIndex = findByIndex(words);
         if (byIndex == -1) {
-            throw new BagsException("Missing /by. Please add in /by <end date>");
+            throw new BagsException("Hmm, Missing /by. Add /by <end date> to your deadline.");
         }
 
         String description = buildText(words, 1, byIndex);
         if (description.isEmpty()) {
-            throw new BagsException("Missing task description! Add some info after task type");
+            throw new BagsException("Oops! Missing task description. Add some details after deadline.");
         }
 
         String deadlineInfo = buildText(words, byIndex + 1, words.length);
         if (deadlineInfo.isEmpty()) {
-            throw new BagsException("Missing deadline after /by! Add /by <deadline> after task name");
+            throw new BagsException("Hmm, I need a deadline after /by. Add /by <deadline> after the task name.");
         }
 
-        return new Deadlines(description, deadlineInfo);
+        return new Deadline(description, deadlineInfo);
     }
 
     /**

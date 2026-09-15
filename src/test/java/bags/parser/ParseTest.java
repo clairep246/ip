@@ -16,30 +16,23 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import bags.exception.BagsException;
-import bags.task.Deadlines;
+import bags.task.Deadline;
 import bags.task.Event;
 import bags.task.Task;
-import bags.task.Tasktype;
-import bags.task.ToDo;
+import bags.task.TaskType;
+import bags.task.Todo;
 
 /**
  * Tests the {@link Parser} class for converting stored task records
  * into their equivalent {@link Task} objects.
  *
  * <p>
- * These tests verify that ToDo, Deadline, and Event task records are
+ * These tests verify that Todo, Deadline, and Event task records are
  * correctly parsed into the correct format.
  * </p>
  */
 public class ParseTest {
 
-    /**
-     * Tests that valid records from the task storage file are correctly
-     * parsed into the appropriate task types with the expected
-     * descriptions, completion status, and date-time formats.
-     *
-     * @throws BagsException if an error occurs while parsing a task record.
-     */
     @Test
     void parseTask_validReadingFileRecords_createsCorrectTasks()
             throws BagsException {
@@ -61,13 +54,13 @@ public class ParseTest {
             tasks.add(task);
         }
 
-        // ToDo task
-        assertInstanceOf(ToDo.class, tasks.get(0));
+        // Todo task
+        assertInstanceOf(Todo.class, tasks.get(0));
         assertEquals("Read book", tasks.get(0).getDescription());
         assertFalse(tasks.get(0).isDone());
 
         // Deadline task
-        assertInstanceOf(Deadlines.class, tasks.get(1));
+        assertInstanceOf(Deadline.class, tasks.get(1));
         assertEquals("Submit assignment", tasks.get(1).getDescription());
         assertFalse(tasks.get(1).isDone());
 
@@ -116,9 +109,9 @@ public class ParseTest {
     void parseTaskType_supportedAndUnsupportedTypes_returnsExpectedType() {
         Parser parser = new Parser();
 
-        assertEquals(Tasktype.TODO, parser.parseTaskType("todo Read book"));
-        assertEquals(Tasktype.DEADLINE, parser.parseTaskType("deadline Submit report"));
-        assertEquals(Tasktype.EVENT, parser.parseTaskType("event Project meeting"));
+        assertEquals(TaskType.TODO, parser.parseTaskType("todo Read book"));
+        assertEquals(TaskType.DEADLINE, parser.parseTaskType("deadline Submit report"));
+        assertEquals(TaskType.EVENT, parser.parseTaskType("event Project meeting"));
         assertNull(parser.parseTaskType("reminder Buy milk"));
     }
 
@@ -128,7 +121,7 @@ public class ParseTest {
 
         Task task = parser.parseTask("T | [X] | Read book");
 
-        assertInstanceOf(ToDo.class, task);
+        assertInstanceOf(Todo.class, task);
         assertTrue(task.isDone());
         assertEquals("Read book", task.getDescription());
     }
