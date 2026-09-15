@@ -84,6 +84,6 @@ class EventTest {
                 new Event("Project meeting", "2026-09-13 11:00", "2026-09-13 10:00")
         );
 
-        assertEquals("Start date can't be after the end date.", exception.getMessage());
+        assertEquals("Hmm, the event can't end before it starts. Check the dates and try again.", exception.getMessage());
     }
 }

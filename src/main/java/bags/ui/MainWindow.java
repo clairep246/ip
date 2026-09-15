@@ -42,7 +42,7 @@ public class MainWindow {
         loadImages();
         this.bags = new Bags();
 
-        addBagsMessage("Hello! I'm Bags. Nice to meet you!");
+        addBagsMessage("🎒 Hi! I'm your trusty bag, here to store all your tasks.");
         addBagsMessage("What can I do for you?");
 
         String startupMessage = bags.getStartupMessage();

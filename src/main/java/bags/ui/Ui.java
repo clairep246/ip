@@ -55,7 +55,7 @@ public class Ui {
         showDivider();
         System.out.println(BANNER);
         showDivider();
-        System.out.println("Hello! I'm Bags. Nice to meet you!");
+        System.out.println("🎒 Hi! I'm your trusty bag, here to store all your tasks.");
         showPrompt();
     }
 

@@ -43,7 +43,7 @@ public class Storage {
         File parentDir = saveFile.getParentFile();
         if (parentDir != null && !parentDir.exists()) {
             if (!parentDir.mkdirs()) {
-                throw new BagsException("Unable to create the folder for saved tasks.");
+                throw new BagsException("Oops! I couldn't create the folder for your saved tasks.");
             }
         }
 
@@ -53,7 +53,7 @@ public class Storage {
                 writer.write(record + "\n");
             }
         } catch (IOException e) {
-            throw new BagsException("Unable to save tasks: " + e.getMessage());
+            throw new BagsException("Oops! Unable to save tasks in your bag: " + e.getMessage());
         }
     }
 
@@ -119,7 +119,7 @@ public class Storage {
                 taskRecords.add(record);
             }
         } catch (FileNotFoundException e) {
-            throw new BagsException("Unable to read saved tasks: " + e.getMessage());
+            throw new BagsException("Oops! I couldn't unpack your saved tasks: " + e.getMessage());
         }
 
         return taskRecords;

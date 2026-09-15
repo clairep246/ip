@@ -96,7 +96,7 @@ class TaskListTest {
 
         String result = taskList.search("search BOOK");
 
-        assertEquals("Here are the matching tasks:" + System.lineSeparator()
+        assertEquals("🔎 I rummaged through your bag and found these:" + System.lineSeparator()
                 + "1.[T][ ] Read book", result);
     }
 
@@ -106,7 +106,7 @@ class TaskListTest {
 
         String result = taskList.search("search groceries");
 
-        assertEquals("No matching tasks found.", result);
+        assertEquals("🔎 Oops! I can't find any matching tasks in the bag. Wanna add a task?", result);
     }
 
     @Test

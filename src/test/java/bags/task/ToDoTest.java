@@ -29,7 +29,7 @@ class ToDoTest {
                 BagsException.class, () -> ToDo.createTask("todo")
         );
 
-        assertTrue(exception.getMessage().contains("Missing task description"));
+        assertTrue(exception.getMessage().contains("description"));
     }
 
     @Test
@@ -38,7 +38,7 @@ class ToDoTest {
                 BagsException.class, () -> ToDo.createTask("todo ")
         );
 
-        assertTrue(exception.getMessage().contains("Missing task description"));
+        assertTrue(exception.getMessage().contains("description"));
     }
 
     @Test

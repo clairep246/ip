@@ -40,11 +40,11 @@ public class Event extends Task {
             this.to = LocalDateTime.parse(to, INPUT_FORMATTER);
         } catch (DateTimeParseException e) {
             throw new BagsException(
-                    "Please key in date in correct format: year-month-date hh:mm in 24h");
+                    "Oops! Please key in date in correct format: YYYY-MM-DD HH:MM in 24-hour time.");
         }
 
         if (this.from.isAfter(this.to)) {
-            throw new BagsException("Start date can't be after the end date.");
+            throw new BagsException("Hmm, the event can't end before it starts. Check the dates and try again.");
         }
 
         this.formattedFrom = this.from.format(OUTPUT_FORMATTER);
@@ -65,7 +65,7 @@ public class Event extends Task {
         String[] words = command.split(" ");
         if (words.length < 2) {
             throw new BagsException(
-                    "Missing task description! Add task info after task type");
+                    "Oops! Missing task description. Add some details after event.");
         }
 
         int fromIndex = findIndex(words, "/from");
@@ -73,13 +73,13 @@ public class Event extends Task {
 
         if (fromIndex == -1 || toIndex == -1 || toIndex < fromIndex) {
             throw new BagsException(
-                    "Missing /from or /to! Add /from <start> /to <end> after task name");
+                    "Hmm, Missing /from or /to. Add both after the event name.");
         }
 
         String description = buildText(words, 1, fromIndex);
         if (description.isEmpty()) {
             throw new BagsException(
-                    "Missing task description! Add task info after task type");
+                    "Oops! Missing task description. Add some details after event.");
         }
 
         String fromString = buildText(words, fromIndex + 1, toIndex);
@@ -87,7 +87,7 @@ public class Event extends Task {
 
         if (fromString.isEmpty() || toString.isEmpty()) {
             throw new BagsException(
-                    "Missing timeframe after /from or /to! Maybe you forgot the dates");
+                    "Hmm, Missing timeframe after /from or /to. Maybe the dates slipped out of the bag?");
         }
 
         return new Event(description, fromString, toString);

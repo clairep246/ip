@@ -59,13 +59,13 @@ class BagsTest {
     void processCommand_addMode_addsSupportedTaskTypesAndExits() throws BagsException {
         Bags bags = createBags();
 
-        assertTrue(bags.processCommand("add task").contains("Enter your task"));
-        assertTrue(bags.processCommand("todo Read book").contains("I've added"));
+        assertTrue(bags.processCommand("add task").contains("What would you like me to pack"));
+        assertTrue(bags.processCommand("todo Read book").contains("Safely packed"));
         assertTrue(bags.processCommand("deadline Submit report /by 2026-09-12 23:59")
-                .contains("I've added"));
+                .contains("Safely packed"));
         assertTrue(bags.processCommand("event Project meeting /from 2026-09-13 10:00"
-                + " /to 2026-09-13 11:00").contains("I've added"));
-        assertEquals("Exited editing mode.", bags.processCommand("exit"));
+                + " /to 2026-09-13 11:00").contains("Safely packed"));
+        assertEquals("Okay, I've closed the bag for now.", bags.processCommand("exit"));
 
     }
 
@@ -79,22 +79,22 @@ class BagsTest {
                 bags.processCommand("reminder Buy milk")
         );
 
-        assertTrue(exception.getMessage().contains("Invalid task type"));
-        assertTrue(bags.processCommand("todo Buy milk").contains("I've added"));
+        assertTrue(exception.getMessage().contains("can't pack that task type"));
+        assertTrue(bags.processCommand("todo Buy milk").contains("Safely packed"));
     }
 
     @Test
     void processCommand_echoMode_echosInputAndRejectsSilence() throws BagsException {
         Bags bags = createBags();
 
-        assertTrue(bags.processCommand("echo").contains("echo your input"));
+        assertTrue(bags.processCommand("echo").contains("echo what you put"));
 
         BagsException exception = assertThrows(
                 BagsException.class, () -> bags.processCommand("   ")
         );
 
         assertTrue(exception.getMessage().contains("can't echo silence"));
-        assertEquals("Exited echo mode.", bags.processCommand("exit"));
+        assertEquals("Okay, I've closed the bag for now.", bags.processCommand("exit"));
     }
 
     @Test
@@ -104,7 +104,7 @@ class BagsTest {
         bags.processCommand("todo Read book");
         bags.processCommand("exit");
 
-        assertTrue(bags.processCommand("edit 1").contains("Editing this task"));
+        assertTrue(bags.processCommand("edit 1").contains("Let's repack this task"));
         BagsException exception = assertThrows(BagsException.class, () ->
                 bags.processCommand("deadline Submit report /by 2026-09-12 23:59")
         );
@@ -124,8 +124,8 @@ class BagsTest {
         assertTrue(bags.processCommand("mark 1").contains("marked this task as done"));
         assertTrue(bags.processCommand("search book").contains("Read book"));
         assertTrue(bags.processCommand("unmark 1").contains("marked this task as undone"));
-        assertTrue(bags.processCommand("delete 1").contains("deleted"));
-        assertEquals("Bye. Hope to see you again soon!", bags.processCommand("bye"));
+        assertTrue(bags.processCommand("delete 1").contains("removed"));
+        assertEquals("See you soon! :)", bags.processCommand("bye"));
 
         assertEquals(List.of(), Files.readAllLines(storagePath));
         assertThrows(BagsException.class, () -> bags.processCommand("list"));

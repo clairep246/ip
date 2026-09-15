@@ -36,7 +36,7 @@ public class Deadlines extends Task {
             this.formattedDeadline = this.deadline.format(OUTPUT_FORMATTER);
         } catch (DateTimeParseException e) {
             throw new BagsException(
-                    "Please key in date in correct format: year-month-date hh:mm in 24h");
+                    "Oops! Please key in date in correct format: YYYY-MM-DD HH:MM in 24-hour time.");
         }
     }
 
@@ -52,22 +52,22 @@ public class Deadlines extends Task {
 
         String[] words = command.split(" ");
         if (words.length < 2) {
-            throw new BagsException("Missing task description! Add some info after task type");
+            throw new BagsException("Oops! Missing task description. Add some details after deadline.");
         }
 
         int byIndex = findByIndex(words);
         if (byIndex == -1) {
-            throw new BagsException("Missing /by. Please add in /by <end date>");
+            throw new BagsException("Hmm, Missing /by. Add /by <end date> to your deadline.");
         }
 
         String description = buildText(words, 1, byIndex);
         if (description.isEmpty()) {
-            throw new BagsException("Missing task description! Add some info after task type");
+            throw new BagsException("Oops! Missing task description. Add some details after deadline.");
         }
 
         String deadlineInfo = buildText(words, byIndex + 1, words.length);
         if (deadlineInfo.isEmpty()) {
-            throw new BagsException("Missing deadline after /by! Add /by <deadline> after task name");
+            throw new BagsException("Hmm, I need a deadline after /by. Add /by <deadline> after the task name.");
         }
 
         return new Deadlines(description, deadlineInfo);

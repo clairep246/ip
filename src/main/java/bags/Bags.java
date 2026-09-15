@@ -68,8 +68,8 @@ public class Bags {
      */
     public String processCommand(String input) throws BagsException {
         if (input == null) {
-            throw new BagsException("No command entered. Were you missing a command?"
-                    + "Enter a command to get started!");
+            throw new BagsException("📭 Your message seems to have slipped out of the bag—"
+                    + "try typing a command.");
         }
 
         String trimmedInput = input.trim();
@@ -79,8 +79,8 @@ public class Bags {
         }
 
         if (trimmedInput.isEmpty()) {
-            throw new BagsException("No command entered. Were you missing a command? "
-                    + "Type a command to get started! ");
+            throw new BagsException("📭 Your message seems to have slipped out of the bag—"
+                    + "try typing a command.");
         }
 
         if (isAddingTask) {
@@ -111,13 +111,13 @@ public class Bags {
         assert isAddingTask : "Should only process adding task mode when flag is true";
         if (input.equals("exit")) {
             isAddingTask = false;
-            return "Exited editing mode.";
+            return "Okay, I've closed the bag for now.";
         }
 
         Tasktype taskType = parser.parseTaskType(input);
         if (taskType == null) {
-            throw new BagsException("Invalid task type! :( "
-                    + "Enter a todo, deadline, or event task, or type exit to cancel.");
+            throw new BagsException("I can't pack that task type. Enter a todo, deadline, or event task, "
+                    + "or type exit to cancel.");
         }
 
         return addTask(input);
@@ -130,12 +130,12 @@ public class Bags {
         if (input.equals("exit")) {
             isEditingMode = false;
             editingCommand = null;
-            return "Exited editing mode without changing the task.";
+            return "Okay, I've closed the bag without changing the task.";
         }
 
         Tasktype taskType = parser.parseTaskType(input);
         if (taskType == null) {
-            throw new BagsException("Enter a todo, deadline, or event task, or enter exit to cancel.");
+            throw new BagsException("Hmm, I need a todo, deadline, or event task to repack. Enter exit to cancel.");
         }
 
         Task replacementTask = createTask(taskType, input);
@@ -145,17 +145,17 @@ public class Bags {
         editingCommand = null;
         saveTasks();
 
-        return "Got it, I've updated the following task:\n" + updatedTask;
+        return "✅ All repacked! Here's the updated task:\n" + updatedTask;
     }
 
     private String processEchoMode(String input) throws BagsException {
         assert isEchoMode : "Should only process echo mode when flag is true";
         if (input.equals("exit")) {
             isEchoMode = false;
-            return "Exited echo mode.";
+            return "Okay, I've closed the bag for now.";
         }
         if (input.isEmpty()) {
-            throw new BagsException("Enter a word for me to echo! I can't echo silence :(");
+            throw new BagsException("📭 I can't echo silence. Try putting a word in the bag!");
         }
         return input;
     }
@@ -168,7 +168,7 @@ public class Bags {
             case ADD_TASK:
                 isAddingTask = true;
                 return """
-                    Enter your task.
+                    📥 What would you like me to pack into your bag?
                     Format for each task type, follow the format closely:
                      1. todo <task name>
                      2. deadline <name> /by <year-month-day> <hour:minutes>
@@ -183,7 +183,7 @@ public class Bags {
                 return unmarkDone(input);
             case ECHO:
                 isEchoMode = true;
-                return "From now on I will echo your input. To exit enter exit.";
+                return "🗣️From now on, I'll echo what you put in the bag. To exit, enter exit.";
             case DELETE:
                 return deleteTask(input);
             case SEARCH:
@@ -192,9 +192,9 @@ public class Bags {
                 return startEditingTask(input);
             case BYE:
                 saveTasks();
-                return "Bye. Hope to see you again soon!";
+                return "See you soon! :)";
             default:
-                throw new BagsException("The command does not exist. Please try again :(");
+                throw new BagsException("🤔 I don't know what you mean. Try again?");
         }
     }
 
@@ -219,11 +219,11 @@ public class Bags {
 
         saveTasks();
 
-        return "Got it, I've added the following task to the list:\n"
+        return "📥 Safely packed into your bag:\n"
                 + task
-                + "\nNow you have "
+                + "\n🎒 Your bag now holds "
                 + tasks.getSize()
-                + " tasks in your list.\n"
+                + (tasks.getSize() == 1 ? " item.\n" : " items.\n")
                 + "\nEnter another task or enter exit to leave editing mode.";
     }
 
@@ -239,7 +239,7 @@ public class Bags {
             case EVENT:
                 return Event.createTask(input);
             default:
-                throw new BagsException("Not a valid task type, only event, to do or deadline are valid.");
+                throw new BagsException("⚠️ I can only pack todo, deadline, or event tasks.");
         }
     }
 
@@ -257,7 +257,7 @@ public class Bags {
         editingCommand = input;
 
         return """
-                Editing this task:
+                🧳 Let's repack this task:
                 %s
 
                 Enter a replacement task using the same task type:
@@ -277,7 +277,7 @@ public class Bags {
      */
     private String listItems() throws BagsException {
         if (tasks.isEmpty()) {
-            throw new BagsException("Your list empty. Please add some tasks!");
+            throw new BagsException("📭 Your bag is empty. Wanna add a task?");
         }
         return tasks.toString();
     }
@@ -293,7 +293,7 @@ public class Bags {
         Task task = tasks.markDone(input);
         assert task != null : "Task returned after markDone should not be null";
         saveTasks();
-        return "Ok! I've marked this task as done:\n" + task;
+        return "✅ Nice work! I've marked this task as done and tied it up in your bag:\n" + task;
     }
 
     /**
@@ -307,7 +307,7 @@ public class Bags {
         Task task = tasks.markUndone(input);
         assert task != null : "Task returned after markUndone should not be null";
         saveTasks();
-        return "Alright! I've marked this task as undone:\n" + task;
+        return "🔓 No worries! I've marked this task as undone and taken it back out for you:\n" + task;
     }
 
     /**
@@ -325,11 +325,11 @@ public class Bags {
         assert tasks.getSize() == initialSize - 1 : "TaskList size should decrease by 1 after deletion";
 
         saveTasks();
-        return "Got it! I've deleted the following task:\n"
+        return "🗑️ Done! I've removed this from your bag:\n"
                 + task
-                + "\nYou now have "
+                + "\n🎒 Your bag now holds "
                 + tasks.getSize()
-                + " tasks in your task list.";
+                + (tasks.getSize() == 1 ? " item." : " items.");
     }
 
     /**
