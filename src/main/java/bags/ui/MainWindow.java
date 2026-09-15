@@ -91,7 +91,7 @@ public class MainWindow {
     }
 
     private void addErrorMessage(String message) {
-        DialogBox dialogBox = DialogBox.getErrorDialog(message);
+        DialogBox dialogBox = DialogBox.getErrorDialog(message, bagsImage);
         dialogContainer.getChildren().add(dialogBox);
     }
 }

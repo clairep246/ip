@@ -147,7 +147,7 @@ public class TaskList {
         String[] words = command.split(" ");
         if (words.length < 2) {
             throw new BagsException(
-                    "Hmm, did you forget a task number? Missing task number. Please enter a value from 1 to "
+                    "Hmm, did you forget a task number? Please enter a value from 1 to "
                             + tasks.size());
         }
 
@@ -158,8 +158,7 @@ public class TaskList {
                     "Oops! Task does not exist in your bag. Please enter a number from 1 to " + tasks.size());
             }
 
-            int index = taskNumber - 1;
-            return index;
+            return taskNumber - 1;
         } catch (NumberFormatException e) {
             throw new BagsException(
                     "Hmm, Invalid task number. Please enter a number from 1 to " + tasks.size());

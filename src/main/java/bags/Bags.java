@@ -155,7 +155,7 @@ public class Bags {
             return "Okay, I've closed the bag for now.";
         }
         if (input.isEmpty()) {
-            throw new BagsException("📭 I can't echo silence. Try putting a word in the bag!");
+            throw new BagsException(" I can't echo silence. Try putting a word in the bag!");
         }
         return input;
     }
@@ -169,11 +169,13 @@ public class Bags {
                 isAddingTask = true;
                 return """
                     📥 What would you like me to pack into your bag?
-                    Format for each task type, follow the format closely:
-                     1. todo <task name>
-                     2. deadline <name> /by <year-month-day> <hour:minutes>
-                     3. event <name> /from <year-month-day> <hour:minutes> <name> /to <year-month-day> <hour:minutes>
-                    To exit enter exit.
+
+                    Enter a task using one of these formats:
+                    • todo <task name>
+                    • deadline <task name> /by YYYY-MM-DD HH:MM
+                    • event <task name> /from YYYY-MM-DD HH:MM /to YYYY-MM-DD HH:MM
+
+                    Type exit to cancel.
                     """;
             case LIST:
                 return listItems();
@@ -257,7 +259,7 @@ public class Bags {
         editingCommand = input;
 
         return """
-                🧳 Let's repack this task:
+                ✍️ Let's repack this task:
                 %s
 
                 Enter a replacement task using the same task type:
@@ -307,7 +309,7 @@ public class Bags {
         Task task = tasks.markUndone(input);
         assert task != null : "Task returned after markUndone should not be null";
         saveTasks();
-        return "🔓 No worries! I've marked this task as undone and taken it back out for you:\n" + task;
+        return "❌ No worries! I've marked this task as undone and taken it back out for you:\n" + task;
     }
 
     /**
@@ -325,7 +327,7 @@ public class Bags {
         assert tasks.getSize() == initialSize - 1 : "TaskList size should decrease by 1 after deletion";
 
         saveTasks();
-        return "🗑️ Done! I've removed this from your bag:\n"
+        return "🗑 Done! I've removed this from your bag:\n"
                 + task
                 + "\n🎒 Your bag now holds "
                 + tasks.getSize()

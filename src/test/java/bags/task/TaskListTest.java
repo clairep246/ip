@@ -175,7 +175,7 @@ class TaskListTest {
                 BagsException.class, () -> taskList.markDone("done")
         );
 
-        assertTrue(exception.getMessage().contains("Missing task number"));
+        assertTrue(exception.getMessage().contains("forget a task number"));
     }
 
     /**
@@ -265,7 +265,7 @@ class TaskListTest {
                 BagsException.class, () -> taskList.markUndone("undone")
         );
 
-        assertTrue(exception.getMessage().contains("Missing task number"));
+        assertTrue(exception.getMessage().contains("forget a task number"));
     }
 
     /**
@@ -356,7 +356,7 @@ class TaskListTest {
                 BagsException.class, () -> taskList.delete("delete")
         );
 
-        assertTrue(exception.getMessage().contains("Missing task number"));
+        assertTrue(exception.getMessage().contains("forget a task number"));
     }
 
     /**
