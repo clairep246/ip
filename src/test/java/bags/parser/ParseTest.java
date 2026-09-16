@@ -143,6 +143,6 @@ public class ParseTest {
                 parser.parseTask("D | [ ] | Submit report | not-a-date")
         );
 
-        assertTrue(exception.getMessage().contains("correct format"));
+        assertTrue(exception.getMessage().contains("Invalid date"));
     }
 }

@@ -3,6 +3,7 @@ package bags.task;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 import java.util.Locale;
 
 import bags.exception.BagsException;
@@ -13,7 +14,8 @@ import bags.exception.BagsException;
 public class Deadline extends Task {
 
     private static final DateTimeFormatter INPUT_FORMATTER =
-            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm")
+                    .withResolverStyle(ResolverStyle.STRICT);
     private static final DateTimeFormatter OUTPUT_FORMATTER =
             DateTimeFormatter.ofPattern("dd/MM/yyyy h:mma", Locale.ENGLISH);
 
@@ -37,7 +39,7 @@ public class Deadline extends Task {
             this.formattedDeadline = this.deadline.format(OUTPUT_FORMATTER);
         } catch (DateTimeParseException e) {
             throw new BagsException(
-                    "Oops! Please key in date in correct format: YYYY-MM-DD HH:MM in 24-hour time.");
+                    "Oops! Invalid date. Use YYYY-MM-DD HH:MM in 24-hour time.");
         }
     }
 

@@ -73,10 +73,10 @@ class EventTest {
     @Test
     void constructor_invalidDate_throwsException() {
         BagsException exception = assertThrows(BagsException.class, () ->
-                new Event("Project meeting", "invalid-date", "2026-09-13 11:00")
+                new Event("Project meeting", "2026-13-30 10:00", "2026-09-13 11:00")
         );
 
-        assertTrue(exception.getMessage().contains("correct format"));
+        assertTrue(exception.getMessage().contains("Invalid date"));
     }
 
     @Test

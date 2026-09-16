@@ -202,7 +202,7 @@ class StorageTest {
                 BagsException.class, () -> storage.loadTasks(new Parser())
         );
 
-        assertTrue(exception.getMessage().contains("correct format"));
+        assertTrue(exception.getMessage().contains("Invalid date"));
     }
 
     /**

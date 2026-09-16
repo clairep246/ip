@@ -35,6 +35,25 @@ class BagsTest {
     }
 
     @Test
+    void processCommand_taskTypeOutsideAddMode_promptsForTaskMode() {
+        Bags bags = createBags();
+
+        String[] taskCommands = {
+            "todo Read book",
+            "deadline Submit report /by 2026-09-12 23:59",
+            "event Project meeting /from 2026-09-13 10:00 /to 2026-09-13 11:00"
+        };
+
+        for (String taskCommand : taskCommands) {
+            BagsException exception = assertThrows(
+                    BagsException.class, () -> bags.processCommand(taskCommand)
+            );
+
+            assertTrue(exception.getMessage().contains("enter task-entry mode first"));
+        }
+    }
+
+    @Test
     void constructor_missingSaveFile_returnsStartupAlert() {
         Bags bags = createBags();
 

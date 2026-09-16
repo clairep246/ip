@@ -54,9 +54,9 @@ class DeadlineTest {
     @Test
     void constructor_invalidDeadline_throwsException() {
         BagsException exception = assertThrows(
-                BagsException.class, () -> new Deadline("Submit report", "not-a-date")
+                BagsException.class, () -> new Deadline("Submit report", "2026-02-30 10:00")
         );
 
-        assertTrue(exception.getMessage().contains("correct format"));
+        assertTrue(exception.getMessage().contains("Invalid date"));
     }
 }

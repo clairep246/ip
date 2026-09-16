@@ -91,6 +91,11 @@ public class Bags {
             return processEditingTaskMode(trimmedInput);
         }
 
+        if (parser.parseTaskType(trimmedInput) != null) {
+            throw new BagsException(
+                    "Please enter task-entry mode first by typing add task.");
+        }
+
         Command command = parser.parseCommand(trimmedInput);
         assert command != null : "Parsed command must not be null";
 

@@ -61,6 +61,24 @@ their date and time. For example:
 | `[ ]` | Incomplete task. |
 | `[X]` | Completed task. |
 
+## Command Summary
+
+| Command                                                               | Purpose                                   |
+|-----------------------------------------------------------------------|-------------------------------------------|
+| `add task`                                                            | Start task-entry mode.                    |
+| `todo <description>`                                                  | Add a to-do while in task-entry mode.     |
+| `deadline <description> /by <YYYY-MM-DD HH:MM>`                       | Add a deadline while in task-entry mode.  |
+| `event <description> /from <YYYY-MM-DD HH:MM> /to <YYYY-MM-DD HH:MM>` | Add an event while in task-entry mode.    |
+| `list`                                                                | Display all tasks.                        |
+| `mark <task number>`                                                  | Mark a task as done.                      |
+| `unmark <task number>`                                                | Mark a task as not done.                  |
+| `edit <task number>`                                                  | Replace a task with one of the same type. |
+| `search <keyword>`                                                    | Find tasks by description.                |
+| `delete <task number>`                                                | Delete a task.                            |
+| `echo`                                                                | Start echo mode.                          |
+| `exit`                                                                | Leave task-entry, edit, or echo mode.     |
+| `bye`                                                                 | Save tasks and end the session.           |
+
 
 ## Features
 
@@ -108,20 +126,3 @@ Enter `echo` to make Bags repeat each message you enter. Enter `exit` to leave e
 
 Use this command to save your tasks and end the session.
 
-## Command Summary
-
-| Command                                                               | Purpose                                   |
-|-----------------------------------------------------------------------|-------------------------------------------|
-| `add task`                                                            | Start task-entry mode.                    |
-| `todo <description>`                                                  | Add a to-do while in task-entry mode.     |
-| `deadline <description> /by <YYYY-MM-DD HH:MM>`                       | Add a deadline while in task-entry mode.  |
-| `event <description> /from <YYYY-MM-DD HH:MM> /to <YYYY-MM-DD HH:MM>` | Add an event while in task-entry mode.    |
-| `list`                                                                | Display all tasks.                        |
-| `mark <task number>`                                                  | Mark a task as done.                      |
-| `unmark <task number>`                                                | Mark a task as not done.                  |
-| `edit <task number>`                                                  | Replace a task with one of the same type. |
-| `search <keyword>`                                                    | Find tasks by description.                |
-| `delete <task number>`                                                | Delete a task.                            |
-| `echo`                                                                | Start echo mode.                          |
-| `exit`                                                                | Leave task-entry, edit, or echo mode.     |
-| `bye`                                                                 | Save tasks and end the session.           |
