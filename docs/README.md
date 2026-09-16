@@ -84,7 +84,11 @@ their date and time. For example:
 
 ### Adding tasks
 
-Enter `add task` to start task-entry mode. Enter `exit` to leave task-entry mode. Follow the format closely.
+> **Important:** You must enter task-entry mode with `add task` before using
+> `todo`, `deadline`, or `event` to add a task.
+
+Enter `add task` to start task-entry mode. Enter `exit` to leave task-entry
+mode. Follow the format closely.
 
 | Type of task                                                          | Purpose                                  |
 |-----------------------------------------------------------------------|------------------------------------------|
@@ -125,4 +129,3 @@ Enter `echo` to make Bags repeat each message you enter. Enter `exit` to leave e
 ### Saving and ending the session: `bye`
 
 Use this command to save your tasks and end the session.
-
